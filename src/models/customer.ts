@@ -2,10 +2,11 @@ export interface Customer {
   id?: number;
   fName: string;
   lName: string;
+  email: string;
   password: string;
   phone: string;
-  birthday: Date;
-  subStart: Date;
-  subEnd: Date;
+  birthday: Date | null;
+  subStart: Date | null;
+  subEnd: Date | null;
   isVerified:boolean
 }

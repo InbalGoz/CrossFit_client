@@ -1,33 +1,33 @@
-import React , { useState } from 'react';
-import Button from '@mui/material/Button';
+import React , { useState , useEffect} from 'react';
+import {Button , TextField , Grid , Box , Typography , Container} from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TopBar from '../components/TopBar';
-//import TopBarSign from '../components/auth/TopBarSign';
 import { Link as ToLink } from 'react-router-dom';
 
 const theme = createTheme();
 
 const Login = () => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-      });
+  const [formData, setFormData] = useState({
+      email: '',
+      password: ''
+  });
     
-      const { email, password } = formData;
+  const { email, password } = formData;
     
-      const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-        setFormData({ ...formData, [event.target.name]: event.target.value });
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+
+  const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+  };
+
+  useEffect(()=>{
+    console.log("form",formData)
+  },[formData])
     
-      const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
+     /* const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const data = new FormData(event.currentTarget);
@@ -38,10 +38,10 @@ const Login = () => {
     
         //login(email, password);
         
-      };
+      };*/
+
   return (
     <>
-    
     <TopBar/>
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
@@ -63,7 +63,7 @@ const Login = () => {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email"
               name="email"
               autoComplete="email"
               autoFocus
@@ -80,10 +80,6 @@ const Login = () => {
               autoComplete="current-password"
               onChange={onChange}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -92,12 +88,7 @@ const Login = () => {
             >
              <ToLink to='/home' style={{ textDecoration: 'none' , color:'white'}}> Login </ToLink> 
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" variant="body2">
                 <ToLink to='/register' style={{ textDecoration: 'none' , color:'blue'}}> {"Don't have an account? Sign Up"}</ToLink>

@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import LandingPage from './pages/Landing';
 import Admin from './pages/Admin';
+import Notifications from './pages/Notifications';
 import './App.css';
 
 const App: React.FC = () => {
@@ -17,6 +18,7 @@ const App: React.FC = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/home" element={<Home />} />
+              <Route path="/notifications" element={<Notifications />} />
               <Route path="/admin/:adminActions" element={<Admin />} />
             </Routes>
          </main>

@@ -64,9 +64,9 @@ const Header = () => {
         open={isMenuOpen}
         onClose={handleMenuClose}
        >
-         <MenuItem onClick={handleMenuClose}><Link to='/admin/customers'>Customers</Link></MenuItem>
-         <MenuItem onClick={handleMenuClose}><Link to='/admin/classes'>Classes</Link></MenuItem>
-        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+         <MenuItem onClick={handleMenuClose}><Link to='/admin/customers' style={{ textDecoration: 'none' , color:'black'}}>Customers</Link></MenuItem>
+         <MenuItem onClick={handleMenuClose}><Link to='/admin/lessons' style={{ textDecoration: 'none' , color:'black'}}>Lessons</Link></MenuItem>
+        <MenuItem onClick={handleMenuClose}><Link to='/' style={{ textDecoration: 'none' , color:'black'}}>LogOut</Link></MenuItem>
        </Menu>
   )
 
@@ -87,7 +87,7 @@ const Header = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleMenuClose}><Link to='/' style={{ textDecoration: 'none' , color:'black'}}>LogOut</Link></MenuItem>
     </Menu>
   );
 
@@ -103,11 +103,7 @@ const Header = () => {
             <IconButton size="medium" aria-label="show 4 new mails" color="inherit">
               <CalendarMonthIcon/>
             </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
+            <Link to='/notifications' style={{ textDecoration: 'none' , color:'white'}}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -117,6 +113,7 @@ const Header = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            </Link>
             <IconButton
               size="large"
               edge="end"

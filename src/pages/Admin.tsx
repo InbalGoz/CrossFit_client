@@ -1,8 +1,8 @@
 import React, {} from 'react';
 import {useParams} from 'react-router-dom'
 import Header from '../components/Header';
-import CustomerTable from '../components/CustomerTable';
-import Classes from '../components/Classes';
+import CustomerTable from '../components/admin/CustomerTable';
+import Lessons from '../components/admin/Lessons';
 import { useEffect } from 'react';
 
 const Admin = () => {
@@ -16,7 +16,7 @@ const Admin = () => {
       <Header/>
       <div>
           {(adminActions === 'customers' && <CustomerTable/>) ||
-           (adminActions === 'classes' && <Classes/>)
+           (adminActions === 'lessons' && <Lessons/>)
           }
       </div>
     </>

@@ -1,50 +1,58 @@
-import React from "react";
-import  { useState } from 'react';
+import React , { useState ,useEffect } from "react";
 import { Container ,Typography,  Box, Grid, Button ,TextField } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TopBar from '../components/TopBar';
 import { Link as ToLink } from 'react-router-dom';
-// import axios from 'axios';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Customer } from '../models/customer';
 
+// import axios from 'axios';
 
 const theme = createTheme();
 
-
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+
+  //const [value, setValue] = useState<Date | null>(null);
+
+  const initialCustomer : Customer ={
+    fName: '',
+    lName: '',
+    email:'',
     password: '',
-    password2: '',
-  });
+    phone: '',
+    birthday: null,
+    subStart: null,
+    subEnd: null,
+    isVerified: false
+  }
+
+  const [formData, setFormData] = useState(initialCustomer);
 
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
     setFormData({ ...formData, [event.target.name]: event.currentTarget.value });
-  }
+  };
 
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
+  useEffect(()=>{
+   console.log("form", formData)
+  },[formData]);
+
+  /*const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
     const target = event.target as HTMLInputElement
     const name = event.target.value;
     setFormData({ ...formData, name: name });
-  }
+  }*/
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-    
-    if (password !== password2) {
-      console.log("Passwords do not match")
-     // setAlert('Passwords do not match', 'danger');
-    } else {
-      //register({name, email, password});
-      //axios
-    }
-
+    //send data to db
   };
 
-  const { name, email, password, password2  } = formData;
+  const { fName, lName , email , password, phone , birthday , subStart , subEnd , isVerified } = formData;
   return (
     <>
     <TopBar/>
@@ -74,7 +82,7 @@ const Register = () => {
                   id="fName"
                   label="First Name"
                   autoFocus
-                  onChange={onNameChange}
+                  onChange={onChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -85,17 +93,17 @@ const Register = () => {
                   fullWidth
                   id="lName"
                   label="Last Name"
-                  onChange={onNameChange}
+                  onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} >
                 <TextField
+                  autoComplete="email"
+                  name="email"
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  label="Email"
                   onChange={onChange}
                 />
               </Grid>
@@ -111,18 +119,38 @@ const Register = () => {
                   onChange={onChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              
+              <Grid item xs={12} sm={6}>
                 <TextField
+                  autoComplete="name"
+                  name="phone"
                   required
                   fullWidth
-                  name="password2"
-                  label="Confirm Password"
-                  type="password"
-                  id="password2"
-                  autoComplete="new-password"
+                  id="phone"
+                  label="Phone"
                   onChange={onChange}
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                     label="Birth Day"
+                     value={birthday}
+                     onChange={(newValue) => {
+                      //setValue(newValue);
+                      setFormData(prevData => {
+                        return{
+                         ...prevData,
+                         birthday:newValue
+                        }
+                      })
+
+                      }}
+                     renderInput={(params) => <TextField fullWidth {...params} />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              
             </Grid>
             <Button
               type="submit"
@@ -149,5 +177,18 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Register;
+
+
+/*
+<TextField
+                    id="date"
+                    label="Birthday"
+                    type="date"
+                    defaultValue={birthDay}
+                    fullWidth
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                />*/
 
