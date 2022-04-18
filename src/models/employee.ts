@@ -5,5 +5,5 @@ export interface Employee {
   password: string;
   phone: string;
   isAdmin: boolean;
-  lessons: any[];
+  lessons?: any[];
 }

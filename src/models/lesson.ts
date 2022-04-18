@@ -3,5 +3,5 @@ export interface Lesson {
     date:Date;
     employeeId:number;
     lessonTypeId:number
-    employees:any[]
+    employees?:any[]
 }
