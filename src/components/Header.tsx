@@ -100,9 +100,11 @@ const Header = () => {
              </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Link to='/scheduler' style={{ textDecoration: 'none' , color:'white'}}>
             <IconButton size="medium" aria-label="show 4 new mails" color="inherit">
               <CalendarMonthIcon/>
             </IconButton>
+            </Link>
             <Link to='/notifications' style={{ textDecoration: 'none' , color:'white'}}>
             <IconButton
               size="large"
