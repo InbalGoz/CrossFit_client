@@ -1,6 +1,6 @@
 export interface Lesson {
     id?:number;
-    date:Date;
+    date:Date | null;
     employeeId:number;
     lessonTypeId:number
     employees?:any[]

@@ -6,7 +6,16 @@ import Home from './pages/Home';
 import LandingPage from './pages/Landing';
 import Admin from './pages/Admin';
 import Notifications from './pages/Notifications';
+import SchedulerPage from './pages/SchedulerPage';
 import './App.css';
+
+
+import { AppointmentModel, ViewState, SchedulerDateTime } from '@devexpress/dx-react-scheduler';
+
+interface Props {
+  //children: React.ReactNode;
+  children: any;
+}
 
 const App: React.FC = () => {
   return (
@@ -19,6 +28,7 @@ const App: React.FC = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/home" element={<Home />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/scheduler" element={<SchedulerPage  />} />
               <Route path="/admin/:adminActions" element={<Admin />} />
             </Routes>
          </main>
