@@ -10,13 +10,6 @@ import SchedulerPage from './pages/SchedulerPage';
 import './App.css';
 
 
-import { AppointmentModel, ViewState, SchedulerDateTime } from '@devexpress/dx-react-scheduler';
-
-interface Props {
-  //children: React.ReactNode;
-  children: any;
-}
-
 const App: React.FC = () => {
   return (
     <>

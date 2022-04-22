@@ -4,41 +4,67 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TopBar from '../components/TopBar';
-import { Link as ToLink } from 'react-router-dom';
+import { Link as ToLink , Navigate } from 'react-router-dom';
+import {Customer} from '../models/customer';
+
+
+//redux
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getCustomer , getAllCustomers } from '../store/actions/authActions';
 
 const theme = createTheme();
 
-const Login = () => {
+const Login: React.FC = () => {
+
+  const [customer_id , setCustomer_id] = useState(1);
+
+  const dispatch = useAppDispatch();
+  const allCustomers = useAppSelector(state => state.customer.all_customers);
+  const oneCustomer = useAppSelector(state => state.customer.customer);
+
   const [formData, setFormData] = useState({
       email: '',
       password: ''
   });
-    
+
   const { email, password } = formData;
-    
+   
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [event.target.name]: event.target.value });
 
+   //get the user from db and check if he exist
   const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+    event.preventDefault();
+    try{
+
+      //mine:get al users, loop them all, if the customer exist with the same mail, get is id and send it
+      dispatch(getAllCustomers());
+      console.log("allCustomers", allCustomers)
+      const specificCustomer = allCustomers.filter((customer:Customer) => customer.email === formData.email)[0]
+
+      console.log("specificCustomer", specificCustomer)
+
+      //setCustomer_id(cur_id);
+     // dispatch(getCustomer(cur_id))
+
+     /* if(oneCustomer.email){
+         <Navigate to="/register" />
+      }else{
+        //alert
+        console.log("no such customer")
+      }*/
+    }catch(error){
+      console.log("error",error)
+    }
+
   };
 
   useEffect(()=>{
     console.log("form",formData)
   },[formData])
-    
-     /* const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        const data = new FormData(event.currentTarget);
-        console.log({
-          email: data.get('email'),
-          password: data.get('password'),
-        });
-    
-        //login(email, password);
-        
-      };*/
+   
+  
+ 
 
   return (
     <>
@@ -86,7 +112,7 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-             <ToLink to='/home' style={{ textDecoration: 'none' , color:'white'}}> Login </ToLink> 
+             Login
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -105,4 +131,16 @@ const Login = () => {
 }
 
 export default Login;
+
+//<ToLink to='/register' style={{ textDecoration: 'none' , color:'blue'}}> {"Don't have an account? Sign Up"}</ToLink>
+//<ToLink to='/home' style={{ textDecoration: 'none' , color:'white'}}> Login </ToLink> 
+/*
+ const data = new FormData(event.currentTarget);
+
+    console.log({
+      email: data.get('email'),
+      password: data.get('password'),
+    });
+
+    //dispatch(login(email, password)); */
 

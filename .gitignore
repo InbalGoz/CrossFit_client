@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 
+/hold.tsx
+
 # testing
 /coverage
 

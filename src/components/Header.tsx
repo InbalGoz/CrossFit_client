@@ -14,10 +14,12 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Link } from 'react-router-dom';
 
+interface Props{
+  isAdmin:any;
+}
 
-
-const Header = () => {
-  const [isAdmin , setIsAdmin] = useState(true);
+const Header: React.FC<Props> = ({ isAdmin }) => {
+  //const [isAdmin , setIsAdmin] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 

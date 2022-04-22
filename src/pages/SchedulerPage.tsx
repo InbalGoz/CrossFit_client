@@ -1,6 +1,8 @@
-import * as React from 'react';
+import React , {useState , useEffect} from 'react';
+import {useParams} from 'react-router-dom'
 import { Scheduler } from "@aldabil/react-scheduler";
 import Header from '../components/Header';
+import axios from 'axios';
 
 export const EVENTS = [
   {
@@ -71,10 +73,25 @@ export const EVENTS = [
   }
 ];
 
+
 const SchedulerPage:React.FC = ()=> {
+
+  const { id } = useParams();
+  const [isAdmin , setAdmin] = useState(false);
+
+  const getUser = async () =>{
+    const { data } = await axios.get(`/api/users/${id}`);
+
+    console.log("data",data);
+  }
+
+  useEffect(()=>{
+    getUser();
+  })
+
   return (
     <>
-    <Header/>
+    <Header isAdmin={isAdmin}/>
     <Scheduler
       view="week"
       events={EVENTS}

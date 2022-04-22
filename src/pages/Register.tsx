@@ -10,13 +10,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Customer } from '../models/customer';
 
-// import axios from 'axios';
+
+//redux
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { register } from '../store/actions/authActions';
 
 const theme = createTheme();
 
-const Register = () => {
+const Register: React.FC = () => {
 
-  //const [value, setValue] = useState<Date | null>(null);
+  //const [customer_id , setCustomer_id] = useState(1);
+  const dispatch = useAppDispatch();
+
+  //const allCustomers = useAppSelector(state => state.customer.all_customers);
+  //const oneCustomer = useAppSelector(state => state.customer.customer);
 
   const initialCustomer : Customer ={
     fName: '',
@@ -27,11 +34,13 @@ const Register = () => {
     birthday: null,
     subStart: null,
     subEnd: null,
+    //isAdmin: false,
     isVerified: false
-  }
+  };
 
   const [formData, setFormData] = useState(initialCustomer);
 
+  const { fName, lName , email , password, phone , birthday , subStart , subEnd , isVerified } = formData;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
     setFormData({ ...formData, [event.target.name]: event.currentTarget.value });
@@ -41,18 +50,17 @@ const Register = () => {
    console.log("form", formData)
   },[formData]);
 
-  /*const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
-    const target = event.target as HTMLInputElement
-    const name = event.target.value;
-    setFormData({ ...formData, name: name });
-  }*/
-
-  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
     event.preventDefault();
-    //send data to db
+    try{
+      dispatch(register(formData));
+
+    }catch(error){
+      console.log("error",error)
+    }
   };
 
-  const { fName, lName , email , password, phone , birthday , subStart , subEnd , isVerified } = formData;
+ 
   return (
     <>
     <TopBar/>
@@ -177,18 +185,9 @@ const Register = () => {
   )
 }
 
+
+
 export default Register;
 
 
-/*
-<TextField
-                    id="date"
-                    label="Birthday"
-                    type="date"
-                    defaultValue={birthDay}
-                    fullWidth
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                />*/
 

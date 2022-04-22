@@ -3,6 +3,8 @@ import { Typography ,Grid, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import backGroundImage from '../assets/p_9.avif';
 
+
+
 const root : Object ={
     minHeight: '100vh',
     backgroundImage: `url(${backGroundImage})`,
@@ -11,7 +13,6 @@ const root : Object ={
 };
 
 const Landing = () => {
-
 
   return (
     <>
