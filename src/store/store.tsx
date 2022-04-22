@@ -1,11 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { customerSlice } from '../store/slices/customerSlice';
-
+import { lessonSlice } from '../store/slices/lessonsSlice';
+import { lessonTypeSlice } from '../store/slices/lessonTypeSlice';
+import { employeeSlice } from '../store/slices/employeeSlice';
+import { notificationSlice } from '../store/slices/notificationSlice';
 
 
 const store = configureStore({
     reducer: {
-        customer:customerSlice.reducer
+        customer:customerSlice.reducer,
+        employee:employeeSlice.reducer,
+        lesson: lessonSlice.reducer,
+        lessonType:lessonTypeSlice.reducer,
+        notification:notificationSlice.reducer,
     },
 });
 
@@ -18,24 +25,3 @@ export type AppDispatch = typeof store.dispatch;
 
 export default store;
 
-
-
-/*
-import { configureStore } from '@reduxjs/toolkit';
-import { applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
-import rootReducer from './store/reducers';
-
-const initialState = {};
-
-const middleware = [thunk];
-const composedEnhancer = composeWithDevTools(applyMiddleware(...middleware));
-
-const store = configureStore({
-    reducer: rootReducer,
-    preloadedState: initialState,  
-    middleware: [...middleware],
-    //middleware: composeWithDevTools(applyMiddleware(...middleware)),
-});
-*/

@@ -17,6 +17,11 @@ import LessonTypeForm from './LessonTypeForm';
 import LessonForm from './LessonForm';
 import EditIcon from '@mui/icons-material/Edit';
 
+//redux
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getAllLessons , deleteLesson} from '../../store/actions/lessonActions';
+import { useEffect } from 'react';
+
 function generate(element: React.ReactElement) {
   return [0, 1, 2].map((value) =>
     React.cloneElement(element, {
@@ -51,37 +56,7 @@ const lessonsTypes = types.map((lessontype,index) => (
 ));
 
 
-const lessons = ['Yoga', 'Pilates', 'Circuit Training'];
-const renderLessons = lessons.map((lesson,index) => (
-  <>
-  <ListItem
-       
-       secondaryAction={
-      <IconButton edge="end" aria-label="delete">
-            <DeleteIcon />
-      </IconButton>
-      }
-  >
-     <ListItemAvatar>
-        <Avatar>
-           <FitnessCenterIcon />
-        </Avatar>
-      </ListItemAvatar>
-          <ListItemText
-            primary= {lesson}
-            secondary={"level = entry level"}
-                //secondary={secondary ? 'Secondary text' : null}
-          />
-        <IconButton >
-            <ForwardToInboxIcon />
-        </IconButton>
-     <IconButton >
-          <EditIcon />
-     </IconButton>
-  </ListItem>
- </>
-  
-));
+
 
 const Demo = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -103,6 +78,9 @@ const style = {
 
 const Lessons: React.FC = () => {
 
+  const dispatch = useAppDispatch();
+  const allLessons = useAppSelector(state => state.lesson.all_lessons);
+
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
 
@@ -114,6 +92,53 @@ const Lessons: React.FC = () => {
   const [openLesson, setOpenLesson] = useState(false);
   const lessonFormClose = () => setOpenLesson(false);
   const lessonFormShow = () => setOpenLesson(true);
+
+  useEffect(() => {
+    dispatch(getAllLessons());
+    console.log("allLessons", allLessons)
+  },[])
+
+  //lesson_id -> number
+  const handleDelteLesson = (lesson_id:String) =>{
+    allLessons.forEach((lesson) => {
+      if(lesson._id === lesson_id){
+        console.log('id',lesson._id)
+        dispatch(deleteLesson(lesson._id))
+      }
+    })
+    
+  }
+  
+ const renderLessons = allLessons.map((lesson,index) => (
+  <>
+  <ListItem
+       
+       secondaryAction={
+      <IconButton edge="end" aria-label="delete" onClick={()=>handleDelteLesson(lesson._id)}>
+            <DeleteIcon />
+      </IconButton>
+      }
+  >
+     <ListItemAvatar>
+        <Avatar>
+           <FitnessCenterIcon />
+        </Avatar>
+      </ListItemAvatar>
+          <ListItemText
+            primary= {lesson.lessonTypeId}
+            secondary={`${lesson.date} ${lesson.employeeId}`}
+                //secondary={secondary ? 'Secondary text' : null}
+          />
+        <IconButton >
+            <ForwardToInboxIcon />
+        </IconButton>
+     <IconButton >
+          <EditIcon />
+     </IconButton>
+  </ListItem>
+ </>
+  
+));
 
   const handleAddLessonTypeClick = (event:any) =>{
      console.log("hello")

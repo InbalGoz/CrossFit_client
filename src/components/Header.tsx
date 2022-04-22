@@ -12,7 +12,11 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate } from 'react-router-dom';
+
+//redux
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { logOut } from '../store/actions/authActions';
 
 interface Props{
   isAdmin:any;
@@ -20,6 +24,9 @@ interface Props{
 
 const Header: React.FC<Props> = ({ isAdmin }) => {
   //const [isAdmin , setIsAdmin] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -40,12 +47,22 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
+   // handleMobileMenuClose();
   };
 
   const handleMobileMenuOpen = (event:any) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleLogOutClose = () =>{
+
+    //logout
+    dispatch(logOut());
+    navigate('/');
+
+    setAnchorEl(null);
+    //handleMobileMenuClose();
+  }
 
   const menuId = 'primary-search-account-menu';
 
@@ -68,7 +85,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
        >
          <MenuItem onClick={handleMenuClose}><Link to='/admin/customers' style={{ textDecoration: 'none' , color:'black'}}>Customers</Link></MenuItem>
          <MenuItem onClick={handleMenuClose}><Link to='/admin/lessons' style={{ textDecoration: 'none' , color:'black'}}>Lessons</Link></MenuItem>
-        <MenuItem onClick={handleMenuClose}><Link to='/' style={{ textDecoration: 'none' , color:'black'}}>LogOut</Link></MenuItem>
+        <MenuItem onClick={handleLogOutClose}>LogOut</MenuItem>
        </Menu>
   )
 
@@ -89,7 +106,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}><Link to='/' style={{ textDecoration: 'none' , color:'black'}}>LogOut</Link></MenuItem>
+      <MenuItem onClick={handleLogOutClose}>LogOut</MenuItem>
     </Menu>
   );
 

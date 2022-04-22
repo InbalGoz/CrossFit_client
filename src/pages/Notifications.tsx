@@ -8,7 +8,7 @@ import axios from 'axios';
 const Notifications = () => {
 
   const { id } = useParams();
-  const [isAdmin , setAdmin] = useState(false);
+  const [isAdmin , setAdmin] = useState(true);
 
   const getUser = async () =>{
     const { data } = await axios.get(`/api/users/${id}`);

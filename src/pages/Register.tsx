@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TopBar from '../components/TopBar';
-import { Link as ToLink } from 'react-router-dom';
+import { Link as ToLink , useNavigate} from 'react-router-dom';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -20,6 +20,7 @@ const theme = createTheme();
 const Register: React.FC = () => {
 
   //const [customer_id , setCustomer_id] = useState(1);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   //const allCustomers = useAppSelector(state => state.customer.all_customers);
@@ -46,18 +47,43 @@ const Register: React.FC = () => {
     setFormData({ ...formData, [event.target.name]: event.currentTarget.value });
   };
 
-  useEffect(()=>{
+  /*useEffect(()=>{
    console.log("form", formData)
-  },[formData]);
+  },[formData]);*/
+
+  const checkData = () =>{
+    let counter = 0;
+    if(formData.fName === '' || formData.lName === '' || formData.email === '' || formData.password === '' || formData.phone === '' || formData.birthday === null){
+        counter ++
+    }
+    
+    console.log("counter", counter)
+    if(counter > 0){
+      return false;
+    }else{
+      return true; 
+    }    
+  }
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
     event.preventDefault();
-    try{
-      dispatch(register(formData));
 
-    }catch(error){
-      console.log("error",error)
+    //first chaech if al the data is filled
+    const isAllDataFilled = checkData();
+
+    if(isAllDataFilled === true){
+      try{
+        dispatch(register(formData));
+        //check if the email is already there if yes send alert
+        navigate('/home');
+
+     }catch(error){
+       console.log("error",error)
+     }
+    }else{
+      alert("fill all data")
     }
+    
   };
 
  
@@ -167,7 +193,7 @@ const Register: React.FC = () => {
               onClick={handleSubmit}
               sx={{ mt: 3, mb: 2 }}
             >
-             <ToLink to='/home' style={{ textDecoration: 'none' , color:'white'}}>Register</ToLink>
+             Register
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

@@ -5,20 +5,31 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+//redux
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { createLesson } from '../../store/actions/lessonActions';
+
 interface Props {
   handleAddLessonClick: any;
 }
 
 const LessonForm:React.FC<Props> = ({ handleAddLessonClick }) => {
 
+  const dispatch = useAppDispatch();
+
   const initialLesson : Lesson ={
+    _id:'',
     date: null,
     employeeId: 0,
     lessonTypeId: 0,
     employees: [],
   } ;
 
+  //bring all  employees and lessonstype
+  //employeeId - select
+  //lessonTypeId - select
   //employees checkbox
+  
 
   const [formData, setFormData] = useState(initialLesson);
 
@@ -30,6 +41,7 @@ const LessonForm:React.FC<Props> = ({ handleAddLessonClick }) => {
   const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         //send to data base
+        dispatch(createLesson(formData));
   };
 
   return (

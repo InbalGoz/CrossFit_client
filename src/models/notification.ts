@@ -3,5 +3,5 @@ export interface Notification {
   title: string;
   desc: string;
   isRead: boolean;
-  createdAt: Date;
+  createdAt: Date | null;
 }

@@ -30,6 +30,21 @@ export const register = (formData:any) : ThunkAction<void,RootState,unknown,AnyA
   }
 };
 
+export const logIn = (token:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+    const res = await customerService.getOneCustomer(token);
+    dispatch(customerActions.login(token))
+  }
+};
+
+
+export const logOut = () : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+   // const res = await customerService.(token);
+    dispatch(customerActions.logout(null));//check 
+  }
+};
+
 
 
 

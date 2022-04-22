@@ -10,7 +10,7 @@ const Admin = () => {
     const { adminActions } = useParams();
 
   const { id } = useParams();
-  const [isAdmin , setAdmin] = useState(false);
+  const [isAdmin , setAdmin] = useState(true);
 
   const getUser = async () =>{
     const { data } = await axios.get(`/api/users/${id}`);

@@ -4,20 +4,20 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TopBar from '../components/TopBar';
-import { Link as ToLink , Navigate } from 'react-router-dom';
+import { Link as ToLink , useNavigate } from 'react-router-dom';
 import {Customer} from '../models/customer';
 
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getCustomer , getAllCustomers } from '../store/actions/authActions';
+import { getCustomer , getAllCustomers , logIn } from '../store/actions/authActions';
 
 const theme = createTheme();
 
 const Login: React.FC = () => {
 
   const [customer_id , setCustomer_id] = useState(1);
-
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const allCustomers = useAppSelector(state => state.customer.all_customers);
   const oneCustomer = useAppSelector(state => state.customer.customer);
@@ -36,23 +36,12 @@ const Login: React.FC = () => {
   const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try{
-
       //mine:get al users, loop them all, if the customer exist with the same mail, get is id and send it
-      dispatch(getAllCustomers());
-      console.log("allCustomers", allCustomers)
-      const specificCustomer = allCustomers.filter((customer:Customer) => customer.email === formData.email)[0]
 
-      console.log("specificCustomer", specificCustomer)
+     // dispatch(logIn());
 
-      //setCustomer_id(cur_id);
-     // dispatch(getCustomer(cur_id))
-
-     /* if(oneCustomer.email){
-         <Navigate to="/register" />
-      }else{
-        //alert
-        console.log("no such customer")
-      }*/
+      // if everything is good ->  go to home screen
+      navigate('/home');
     }catch(error){
       console.log("error",error)
     }
@@ -64,7 +53,6 @@ const Login: React.FC = () => {
   },[formData])
    
   
- 
 
   return (
     <>

@@ -3,8 +3,10 @@ import { RootState } from '../store';
 import { Customer } from '../../models/customer';
 
 
+
 interface CustomerSliceState {
- all_customers: Customer[];   
+ all_customers: Customer[];
+ token: any;  
  customer:{
     id?: number;
     fName: string;
@@ -17,11 +19,12 @@ interface CustomerSliceState {
     subEnd: Date | null;
     //isAdmin: boolean,
     isVerified:boolean
- } 
+  }; 
 };
 
 const initialState : CustomerSliceState = {
-   all_customers: [], 
+   all_customers: [],
+   token: localStorage.getItem('token'),
    customer: {
     fName: '',
     lName: '',
@@ -44,10 +47,19 @@ export const customerSlice = createSlice({
             state.all_customers = action.payload;
         },
         setCustomer( state , action:PayloadAction<Customer>){
+           // state.token = action.payload;
             state.customer = action.payload;
         },
         registration(state , action){
+            
+        // localStorage.setItem('token', action.payload.token);//added
+            
+        },
+        login(state , action){
             //state.customer = action.payload;
-        }
+        },
+        logout(state , action){
+            localStorage.removeItem(action.payload.token);
+        },
     }
-})
+});

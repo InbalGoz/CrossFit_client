@@ -77,7 +77,7 @@ export const EVENTS = [
 const SchedulerPage:React.FC = ()=> {
 
   const { id } = useParams();
-  const [isAdmin , setAdmin] = useState(false);
+  const [isAdmin , setAdmin] = useState(true);
 
   const getUser = async () =>{
     const { data } = await axios.get(`/api/users/${id}`);
