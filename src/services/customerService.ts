@@ -21,7 +21,7 @@ async function getAll(): Promise<Customer[]> {
     : resService.handleErr(res);
 }
 
-async function getOneCustomer(customer_id: number): Promise<Customer | null> {
+async function getOneCustomer(customer_id: number): Promise<Customer> {
   const res: Res = await axios.get(`${BASE_URL}`);
   return res.data.scucess
     ? resService.handleSucess(res)
