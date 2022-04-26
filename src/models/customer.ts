@@ -9,5 +9,5 @@ export interface Customer {
   subStart: Date | null;
   subEnd: Date | null;
   //isAdmin: boolean,
-  isVerified:boolean
+  isVerified: boolean;
 }
