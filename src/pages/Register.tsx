@@ -24,7 +24,7 @@ const Register: React.FC = () => {
   const dispatch = useAppDispatch();
 
   //const allCustomers = useAppSelector(state => state.customer.all_customers);
-  //const oneCustomer = useAppSelector(state => state.customer.customer);
+  const oneCustomer = useAppSelector(state => state.customer.customer);
 
   const initialCustomer : Customer ={
     fName: '',
@@ -75,7 +75,7 @@ const Register: React.FC = () => {
       try{
         dispatch(register(formData));
         //check if the email is already there if yes send alert
-        navigate('/home');
+        navigate(`/home/${oneCustomer.id}`);
 
      }catch(error){
        console.log("error",error)

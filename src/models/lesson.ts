@@ -5,4 +5,5 @@ export interface Lesson {
     employeeId:number;
     lessonTypeId:number;
     employees?:any[];
+    coustomers?:any[];
 }

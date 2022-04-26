@@ -1,25 +1,46 @@
-import React,{Fragment} from 'react';
+import React,{Fragment, useState , useEffect} from 'react';
 import { Typography, Button, Paper , Table , TableBody , TableCell , TableContainer, TableHead , TableRow} from '@mui/material';
+
+//redux
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getAllCustomers } from '../../store/actions/authActions';
 
 const CustomerTable = () => {
 
+  const [coustomers , setCustomers] = useState([]);
+  const dispatch = useAppDispatch();
+  const allCustomers = useAppSelector(state => state.customer.all_customers);
+
   const cellStyle={fontSize:'15pt'}
+
+  const fetchCustomers = () => {
+    const newAllCustomers:any = allCustomers.filter(
+      (customer) => customer.isVerified === false
+    );
+    setCustomers(newAllCustomers);
+  }
+
+  useEffect(()=>{
+    dispatch(getAllCustomers());
+    fetchCustomers();
+  });
 
   // const submitStyle = {backgroundColor:'rgba(0, 102, 255,0.8)', fontSize:'20px'}
 
-   const addRows = (
+   const addRows = coustomers.map((customer:any) => (
       <TableRow>
         <TableCell style={cellStyle}>1</TableCell>
-        <TableCell style={cellStyle}>Inbal</TableCell>
-        <TableCell style={cellStyle}>{"Gozland"}</TableCell>
-        <TableCell style={cellStyle}>{"0501234567"}</TableCell>
-        <TableCell style={cellStyle}>{"email"}</TableCell>
+        <TableCell style={cellStyle}>{customer.fName}</TableCell>
+        <TableCell style={cellStyle}>{customer.lName}</TableCell>
+        <TableCell style={cellStyle}>{customer.phone}</TableCell>
+        <TableCell style={cellStyle}>{customer.email}</TableCell>
         <TableCell>
-         <Button>
-          Pending
+         <Button onClick={()=> customer.isVerified = true}>
+          {customer.isVerified === false && 'Panding'}
          </Button>
         </TableCell>
       </TableRow>
+   )
    ); 
 
   

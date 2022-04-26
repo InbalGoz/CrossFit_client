@@ -6,6 +6,7 @@ export const customerService = {
   getAll,
   getOneCustomer,
   sendCustomerData,
+  deleteCustomer,
 };
 
 //const BASE_URL = `${devConfig.base_url}`;

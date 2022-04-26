@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import RecommendedLessons from '../components/RecommendedLessons';
 
+
+
 const Home = () => {
 
   const { id } = useParams();

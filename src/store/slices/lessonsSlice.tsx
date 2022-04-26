@@ -11,6 +11,8 @@ interface LessonsSliceState {
         employeeId:number;
         lessonTypeId:number;
         employees?:any[];
+
+        coustomers?:any[];
      }; 
 };
    
@@ -18,10 +20,12 @@ const initialState : LessonsSliceState = {
     all_lessons: [],
      lesson: {
          _id:'',
+        // id:0,
         date: null,
         employeeId:0,
         lessonTypeId:0,
         employees:[],
+        coustomers:[],
     } 
 };
 

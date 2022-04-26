@@ -19,7 +19,7 @@ const App: React.FC = () => {
               <Route  path="/" element={<LandingPage />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/home" element={<Home />} />
+              <Route path="/home/" element={<Home />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/scheduler" element={<SchedulerPage  />} />
               <Route path="/admin/:adminActions" element={<Admin />} />
@@ -31,3 +31,5 @@ const App: React.FC = () => {
 }
 
 export default App;
+
+// <Route path="/home/:id" element={<Home />} />

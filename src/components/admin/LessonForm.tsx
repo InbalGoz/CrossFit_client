@@ -40,6 +40,7 @@ const LessonForm:React.FC<Props> = ({ handleAddLessonClick }) => {
   
   const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        
         //send to data base
         dispatch(createLesson(formData));
   };

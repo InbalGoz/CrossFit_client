@@ -3,6 +3,7 @@ import { AnyAction , ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import  { Customer } from "../../models/customer";
 import { customerService } from "../../services/customerService";
+import setAuthToken from "../../utils/setAuthToken";
 
 export const customerActions = customerSlice.actions;
 
@@ -27,13 +28,26 @@ export const register = (formData:any) : ThunkAction<void,RootState,unknown,AnyA
   return async (dispatch,getState)=>{
     const res = await customerService.sendCustomerData(formData);
     dispatch(customerActions.registration(res))
+   // dispatch(loadUser());//token
   }
 };
+
+/*export const loadUser = () : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+    if(localStorage.token){
+      setAuthToken(localStorage.token);
+    }
+
+    //const res = await customerService.sendCustomerData(formData);
+    dispatch(customerActions.registration(res))
+  }
+};*/
 
 export const logIn = (token:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
   return async (dispatch,getState)=>{
     const res = await customerService.getOneCustomer(token);
     dispatch(customerActions.login(token))
+    // dispatch(loadUser());//token
   }
 };
 
