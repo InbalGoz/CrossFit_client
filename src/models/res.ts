@@ -3,7 +3,7 @@ export interface Res {
 }
 
 interface Data {
-  scucess: boolean;
+  success: boolean;
   data?: any;
   err: any;
 }

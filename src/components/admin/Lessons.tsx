@@ -1,6 +1,6 @@
 import React , { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box , TextField , Modal , Button, ListItemButton} from '@mui/material';
+import { Box , Modal , Button} from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+//import AssignmentIcon from '@mui/icons-material/Assignment';
 import LessonTypeForm from './LessonTypeForm';
 import LessonForm from './LessonForm';
 import EditIcon from '@mui/icons-material/Edit';
@@ -80,6 +80,7 @@ const Lessons: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const allLessons = useAppSelector(state => state.lesson.all_lessons);
+ // const {lesson} = useAppSelector(state => state.lesson);
 
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
@@ -99,11 +100,11 @@ const Lessons: React.FC = () => {
   },[])
 
   //lesson_id -> number
-  const handleDelteLesson = (lesson_id:String) =>{
+  const handleDelteLesson = (lesson_id:number|undefined) =>{
     allLessons.forEach((lesson) => {
-      if(lesson._id === lesson_id){
-        console.log('id',lesson._id)
-        dispatch(deleteLesson(lesson._id))
+      if(lesson.id === lesson_id){
+        console.log('id',lesson.id)
+        dispatch(deleteLesson(lesson_id))
       }
     })
     
@@ -114,7 +115,7 @@ const Lessons: React.FC = () => {
   <ListItem
        
        secondaryAction={
-      <IconButton edge="end" aria-label="delete" onClick={()=>handleDelteLesson(lesson._id)}>
+      <IconButton edge="end" aria-label="delete" onClick={()=>handleDelteLesson(lesson.id)}>
             <DeleteIcon />
       </IconButton>
       }

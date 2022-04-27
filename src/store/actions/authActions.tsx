@@ -26,7 +26,7 @@ export const getCustomer = (customer_id:number) : ThunkAction<void,RootState,unk
 
 export const register = (formData:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
   return async (dispatch,getState)=>{
-    const res = await customerService.sendCustomerData(formData);
+    const res = await customerService.registerCustomer(formData);
     dispatch(customerActions.registration(res))
    // dispatch(loadUser());//token
   }
@@ -41,12 +41,13 @@ export const register = (formData:any) : ThunkAction<void,RootState,unknown,AnyA
     //const res = await customerService.sendCustomerData(formData);
     dispatch(customerActions.registration(res))
   }
-};*/
+};
+*/
 
-export const logIn = (token:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
+export const logIn = (formData:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
   return async (dispatch,getState)=>{
-    const res = await customerService.getOneCustomer(token);
-    dispatch(customerActions.login(token))
+    const res = await customerService.loginCustomer(formData);
+    dispatch(customerActions.login(res))
     // dispatch(loadUser());//token
   }
 };

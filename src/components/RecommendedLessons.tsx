@@ -3,6 +3,8 @@ import { List, Grid , Typography , ListItem , ListItemText } from '@mui/material
 import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from '@mui/material/IconButton';
 
+import { Lesson } from '../models/lesson';
+
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAllLessons } from '../store/actions/lessonActions';
@@ -12,26 +14,31 @@ import { useParams } from 'react-router-dom';
 
 const RecommendedLessons: React.FC = () => {
   const {id} = useParams();
-  const [lessons , setLessons] = useState([]);
+  //const [lessons , setLessons] = useState<Array<Lesson>>([]);
   const dispatch = useAppDispatch();
   const all_lessons = useAppSelector(state => state.lesson.all_lessons);
 
-  const fetchlessons = () =>{
-   const new_all_lessons: any = all_lessons.filter(
-      ( lesson ) => !lesson.coustomers?.includes(id)
-      );
-     setLessons(new_all_lessons) ;
-  };
-
+  
 
   useEffect(()=>{
     dispatch(getAllLessons());
-    fetchlessons();
-  })
+
+    console.log("all_lessons" , all_lessons)
+
+   // const fetchlessons = () =>{
+     // const new_all_lessons: any = all_lessons.filter(
+       // // ( lesson ) => !lesson.coustomers?.includes(id)
+        // );
+       // setLessons(new_all_lessons) ;
+       //setLessons(all_lessons) ;
+     //};
+
+   // fetchlessons();
+  },[])//all_lessons , id , dispatch
 
  
-
-  const lessonsListItems = lessons.map((le:any)=> (
+ // const lessonsListItems = lessons.map((le:any)=> (
+  const lessonsListItems = all_lessons.map((le:any)=> (
       <ListItem
           key={le.lessonTypeId}
           disableGutters

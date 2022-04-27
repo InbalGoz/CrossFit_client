@@ -3,22 +3,29 @@ import React , {useState , useEffect} from 'react';
 import {useParams} from 'react-router-dom'
 import NotificationCard from '../components/NotificationCard';
 import Header from '../components/Header';
-import axios from 'axios';
+
+
+//redux
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getAllNotificationsById } from '../store/actions/notificationActions';
+
 
 const Notifications = () => {
 
   const { id } = useParams();
+  const dispatch = useAppDispatch();
   const [isAdmin , setAdmin] = useState(true);
+  const all_notifications = useAppSelector(state => state.notification.all_notifications);
 
-  const getUser = async () =>{
-    const { data } = await axios.get(`/api/users/${id}`);
 
-    console.log("data",data);
-  }
+ useEffect(()=>{
+   dispatch(getAllNotificationsById());
+ })
 
-  useEffect(()=>{
-    getUser();
-  })
+ const notificationsCards = all_notifications.map((notification:any)=> (
+  <NotificationCard/> 
+ ))
+
 
   const root: Object = {
         marginTop: 30,
@@ -34,7 +41,7 @@ const Notifications = () => {
         <Typography component="h1" variant="h3" sx={{fontFamily:'Nunito'}}>
             Inbox
         </Typography>
-        <NotificationCard/>
+        {notificationsCards}
     </Box>
     </>  
   )

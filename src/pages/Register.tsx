@@ -14,17 +14,17 @@ import { Customer } from '../models/customer';
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { register } from '../store/actions/authActions';
+import { customerSlice } from "../store/slices/customerSlice";
 
 const theme = createTheme();
 
 const Register: React.FC = () => {
 
-  //const [customer_id , setCustomer_id] = useState(1);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  //const allCustomers = useAppSelector(state => state.customer.all_customers);
-  const oneCustomer = useAppSelector(state => state.customer.customer);
+  //const oneCustomer = useAppSelector(state => state.customer.customer);
+  const { customer } = useAppSelector(state => state.customer);
 
   const initialCustomer : Customer ={
     fName: '',
@@ -47,9 +47,6 @@ const Register: React.FC = () => {
     setFormData({ ...formData, [event.target.name]: event.currentTarget.value });
   };
 
-  /*useEffect(()=>{
-   console.log("form", formData)
-  },[formData]);*/
 
   const checkData = () =>{
     let counter = 0;
@@ -73,9 +70,13 @@ const Register: React.FC = () => {
 
     if(isAllDataFilled === true){
       try{
+
+
         dispatch(register(formData));
+        
         //check if the email is already there if yes send alert
-        navigate(`/home/${oneCustomer.id}`);
+       // navigate(`/home`);
+        navigate(`/home/${customer.id}`);
 
      }catch(error){
        console.log("error",error)
@@ -197,9 +198,7 @@ const Register: React.FC = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                <ToLink to='/login' style={{ textDecoration: 'none' , color:'blue'}}> Already have an account? Sign in</ToLink>
-                </Link>
+                <ToLink to='/login' style={{ color:'blue'}}> Already have an account? Sign in</ToLink>
               </Grid>
             </Grid>
           </Box>
@@ -214,6 +213,11 @@ const Register: React.FC = () => {
 
 
 export default Register;
+
+/*
+ <Link href="#" variant="body2">
+                <ToLink to='/login' style={{ textDecoration: 'none' , color:'blue'}}> Already have an account? Sign in</ToLink>
+                </Link>*/
 
 
 

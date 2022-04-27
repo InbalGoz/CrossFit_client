@@ -5,6 +5,7 @@ import { resService } from './resService';
 
 export const notificationService = {
   getAll,
+  getAllById,
   getOneNotification,
   sendNotificationData,
   editOneNotification,
@@ -14,8 +15,17 @@ export const notificationService = {
 const BASE_URL = `${devConfig.base_url}/notifications`;
 
 async function getAll(): Promise<Notification[]> {
-  const res: any = axios.get(`${BASE_URL}`).then((res) => res.data);
-  return res;
+  const res: any = axios.get(`${BASE_URL}`);
+  return res.data.success
+    ? resService.handleSuccess(res)
+    : resService.handleErr(res);
+}
+
+async function getAllById(customer_id:string): Promise<Notification[]> {
+  const res: any = axios.get(`${BASE_URL}`);
+  return res.data.success
+    ? resService.handleSuccess(res)
+    : resService.handleErr(res);
 }
 
 async function getOneNotification(
@@ -25,28 +35,28 @@ async function getOneNotification(
   // return res.filter(
   //   (notification: Notification) => notification.id === notification_id
   // )[0];
-  return res.data.scucess
-    ? resService.handleSucess(res)
+  return res.data.success
+    ? resService.handleSuccess(res)
     : resService.handleErr(res);
 }
 
 async function sendNotificationData(formData: any): Promise<void> {
   const res: any = axios.post(`${BASE_URL}`, formData);
-  return res.data.scucess
-    ? resService.handleSucess(res)
+  return res.data.success
+    ? resService.handleSuccess(res)
     : resService.handleErr(res);
 }
 
-async function editOneNotification(lesson_id: number, formData: any) {
+async function editOneNotification(notification_id: number, formData: any) {
   const res: any = axios.put(`${BASE_URL}`, formData);
-  return res.data.scucess
-    ? resService.handleSucess(res)
+  return res.data.success
+    ? resService.handleSuccess(res)
     : resService.handleErr(res);
 }
 
-async function deleteNotificationn(lesson_id: string) {
+async function deleteNotificationn(notification_id: number) {
   const res: any = axios.delete(`${BASE_URL}`);
-  return res.data.scucess
-    ? resService.handleSucess(res)
+  return res.data.success
+    ? resService.handleSuccess(res)
     : resService.handleErr(res);
 }

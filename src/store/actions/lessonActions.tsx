@@ -4,11 +4,15 @@ import { RootState } from "../store";
 import { Lesson } from '../../models/lesson';
 import { lessonService } from '../../services/lessonService';
 
+import { Res } from "../../models/res";
+
 export const lessonActions = lessonSlice.actions;
 
 export const getAllLessons = () : ThunkAction<void,RootState,unknown,AnyAction> =>{
     return async (dispatch, getState) =>{
         const res: Lesson[] = await lessonService.getAll();
+
+        
         dispatch(lessonActions.setLeesons(res));
     }
   }
@@ -34,7 +38,7 @@ export const editLesson = (lesson_id:number , formData:any) : ThunkAction<void,R
     }
 };
 
-export const deleteLesson = (lesson_id:string) : ThunkAction<void,RootState,unknown,AnyAction> =>{
+export const deleteLesson = (lesson_id:number|undefined) : ThunkAction<void,RootState,unknown,AnyAction> =>{
     return async (dispatch, getState) =>{
         await lessonService.deleteLesson(lesson_id);
         //dispatch(lessonActions.deleteLesson(lesson_id))

@@ -8,14 +8,13 @@ import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link , useNavigate , useParams} from 'react-router-dom';
 
 //redux
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch } from "../store/hooks";
 import { logOut } from '../store/actions/authActions';
 
 interface Props{
@@ -24,6 +23,7 @@ interface Props{
 
 const Header: React.FC<Props> = ({ isAdmin }) => {
   //const [isAdmin , setIsAdmin] = useState(true);
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -35,15 +35,15 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
   })
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+ // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event:any) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
+ /* const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-  };
+  };*/
 
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -124,7 +124,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
               <CalendarMonthIcon/>
             </IconButton>
             </Link>
-            <Link to='/notifications' style={{ textDecoration: 'none' , color:'white'}}>
+            <Link to={`/notifications/${id}`} style={{ textDecoration: 'none' , color:'white'}}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"

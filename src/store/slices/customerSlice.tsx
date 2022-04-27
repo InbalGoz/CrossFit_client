@@ -6,7 +6,8 @@ import { Customer } from '../../models/customer';
 
 interface CustomerSliceState {
  all_customers: Customer[];
- token: any;  
+ //token: any; 
+ isAuthenticated: Boolean, 
  customer:{
     id?: number;
     fName: string;
@@ -20,12 +21,15 @@ interface CustomerSliceState {
     //isAdmin: boolean,
     isVerified:boolean
   }; 
+ // customer_id:string;
+
 };
 
 const initialState : CustomerSliceState = {
    all_customers: [],
-   token: localStorage.getItem('token'),
-   customer: {
+  // token: localStorage.getItem('token'),
+   isAuthenticated: false,
+   customer: {  
     fName: '',
     lName: '',
     email:'',
@@ -36,7 +40,8 @@ const initialState : CustomerSliceState = {
     subEnd: null,
     //isAdmin: false,
     isVerified: false
-   } 
+   },
+  // customer_id:'',
 };
 
 export const customerSlice = createSlice({
@@ -47,19 +52,39 @@ export const customerSlice = createSlice({
             state.all_customers = action.payload;
         },
         setCustomer( state , action:PayloadAction<Customer>){
+            console.log("customer" , action.payload)
            // state.token = action.payload;
             state.customer = action.payload;
         },
         registration(state , action){
+
+            console.log("token", action.payload.token)
+            state.customer = action.payload;
             
-        // localStorage.setItem('token', action.payload.token);//added
+            localStorage.setItem('token', action.payload.token);//added
+            state.isAuthenticated = true;
             
         },
         login(state , action){
-            //state.customer = action.payload;
+            state.customer = action.payload;
+            state.isAuthenticated = true;
         },
         logout(state , action){
-            localStorage.removeItem(action.payload.token);
+            localStorage.removeItem('token');
+            state.customer = {
+                fName: '',
+                lName: '',
+                email:'',
+                password: '',
+                phone: '',
+                birthday: null,
+                subStart: null,
+                subEnd: null,
+                //isAdmin: false,
+                isVerified: false
+               }  
+            console.log("loggoutt")
+            state.isAuthenticated = false;
         },
     }
 });

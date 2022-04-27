@@ -4,6 +4,10 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import Header from '../components/Header';
 import axios from 'axios';
 
+//redux
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import  {getAllLessons } from '../store/actions/lessonActions';
+
 export const EVENTS = [
   {
     event_id: 1,
@@ -79,15 +83,12 @@ const SchedulerPage:React.FC = ()=> {
   const { id } = useParams();
   const [isAdmin , setAdmin] = useState(true);
 
-  const getUser = async () =>{
-    const { data } = await axios.get(`/api/users/${id}`);
-
-    console.log("data",data);
-  }
+  const dispatch = useAppDispatch();
+  const all_lessons = useAppSelector(state => state.lesson.all_lessons);
 
   useEffect(()=>{
-    getUser();
-  })
+    dispatch(getAllLessons());
+  },[dispatch])
 
   return (
     <>

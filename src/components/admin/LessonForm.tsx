@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Lesson } from '../../models/lesson';
-import { Link , Container , Box , CssBaseline , Typography , TextField , Button , Grid } from '@mui/material';
+import { Container , Box , CssBaseline , Typography , TextField , Button  } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 //redux
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import { createLesson } from '../../store/actions/lessonActions';
 
 interface Props {
@@ -17,8 +17,7 @@ const LessonForm:React.FC<Props> = ({ handleAddLessonClick }) => {
 
   const dispatch = useAppDispatch();
 
-  const initialLesson : Lesson ={
-    _id:'',
+  const initialLesson : Lesson = {
     date: null,
     employeeId: 0,
     lessonTypeId: 0,

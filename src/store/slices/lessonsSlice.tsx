@@ -5,27 +5,24 @@ import { Lesson } from '../../models/lesson';
 interface LessonsSliceState {
     all_lessons: Lesson[];  
     lesson:{
-        _id:string;
         id?:number;
         date:Date | null;
         employeeId:number;
         lessonTypeId:number;
         employees?:any[];
 
-        coustomers?:any[];
+        //coustomers?:any[];
      }; 
 };
    
 const initialState : LessonsSliceState = {
     all_lessons: [],
      lesson: {
-         _id:'',
-        // id:0,
         date: null,
         employeeId:0,
         lessonTypeId:0,
         employees:[],
-        coustomers:[],
+       // coustomers:[],
     } 
 };
 
@@ -34,6 +31,7 @@ export const lessonSlice = createSlice({
   initialState,
   reducers:{
     setLeesons( state , action:PayloadAction<Lesson[]>){
+        console.log("all lessons" , action.payload)
         state.all_lessons = action.payload;
     },
     setLesson( state , action:PayloadAction<Lesson>){

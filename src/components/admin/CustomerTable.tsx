@@ -22,17 +22,19 @@ const CustomerTable = () => {
 
   const cellStyle = { fontSize: '15pt' };
 
-  const fetchCustomers = () => {
-    const newAllCustomers: any = allCustomers.filter(
-      (customer) => customer.isVerified === false
-    );
-    setCustomers(newAllCustomers);
-  };
+  
 
   useEffect(() => {
     dispatch(getAllCustomers());
+
+    const fetchCustomers = () => {
+      const newAllCustomers: any = allCustomers.filter(
+        (customer) => customer.isVerified === false
+      );
+      setCustomers(newAllCustomers);
+    };
     fetchCustomers();
-  }, []);
+  }, [dispatch , allCustomers]);
 
   // const submitStyle = {backgroundColor:'rgba(0, 102, 255,0.8)', fontSize:'20px'}
 

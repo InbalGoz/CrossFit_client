@@ -10,17 +10,18 @@ import {Customer} from '../models/customer';
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getCustomer , getAllCustomers , logIn } from '../store/actions/authActions';
+import { logIn } from '../store/actions/authActions';
 
 const theme = createTheme();
 
 const Login: React.FC = () => {
 
-  const [customer_id , setCustomer_id] = useState(1);
+  const [newCustomer , setNewCustomer ] = useState({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const allCustomers = useAppSelector(state => state.customer.all_customers);
-  const oneCustomer = useAppSelector(state => state.customer.customer);
+ // const allCustomers = useAppSelector(state => state.customer.all_customers);
+  //const oneCustomer = useAppSelector(state => state.customer.customer);
+  const { customer ,isAuthenticated } = useAppSelector(state => state.customer);
 
   const [formData, setFormData] = useState({
       email: '',
@@ -37,11 +38,12 @@ const Login: React.FC = () => {
     event.preventDefault();
     try{
       //mine:get al users, loop them all, if the customer exist with the same mail, get is id and send it
-
-     // dispatch(logIn());
+      
+      dispatch(logIn(formData));
+      
 
       // if everything is good ->  go to home screen
-      navigate('/home');
+     // navigate('/home');
     }catch(error){
       console.log("error",error)
     }
@@ -50,7 +52,16 @@ const Login: React.FC = () => {
 
   useEffect(()=>{
     console.log("form",formData)
-  },[formData])
+    console.log("isAuthenticated",isAuthenticated)
+
+    if (isAuthenticated && customer) {
+      console.log("customer",customer)
+      navigate(`/home/${customer.id}`)
+     // navigate(`/home`)
+    }
+
+   // dispatch(reset());
+  },[formData, customer,navigate,dispatch])
    
   
 
@@ -104,9 +115,7 @@ const Login: React.FC = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                <ToLink to='/register' style={{ textDecoration: 'none' , color:'blue'}}> {"Don't have an account? Sign Up"}</ToLink>
-                </Link>
+                <ToLink to='/register' style={{ color:'blue'}}> {"Don't have an account? Sign Up"}</ToLink>
               </Grid>
             </Grid>
           </Box>

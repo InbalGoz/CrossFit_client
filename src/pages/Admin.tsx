@@ -12,19 +12,17 @@ const Admin = () => {
   const { id } = useParams();
   const [isAdmin , setAdmin] = useState(true);
 
-  const getUser = async () =>{
-    const { data } = await axios.get(`/api/users/${id}`);
+  /*const getUser = async () =>{
+    const { data } = await axios.get(`/users/${id}`);
 
     console.log("data",data);
-  }
+  }*/
 
-  useEffect(()=>{
-    getUser();
-  })
 
   useEffect(()=>{
         console.log("action" ,adminActions )
   })
+  
   return (
     <>
       <Header isAdmin={isAdmin}/>
