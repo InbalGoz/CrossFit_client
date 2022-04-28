@@ -35,13 +35,19 @@ export const notificationSlice = createSlice({
         state.notification = action.payload;
     },
     createNotification(state , action){
-
+        state.notification = action.payload;
     },
     editNotification(state , action){
        state.notification = action.payload;
     },
     deleteNotification(state , action){
-
+        state.notification = {
+            id: 0,
+            title: '',
+            desc: '',
+            isRead: false,
+            createdAt: null,
+        };
     }  
   }
 });

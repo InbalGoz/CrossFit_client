@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { List, Grid , Typography , ListItem , ListItemText } from '@mui/material';
-import CommentIcon from '@mui/icons-material/Comment';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import IconButton from '@mui/material/IconButton';
 
 import { Lesson } from '../models/lesson';
@@ -8,20 +8,26 @@ import { Lesson } from '../models/lesson';
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAllLessons } from '../store/actions/lessonActions';
+import { getLessonType , getAllLessonTypes } from '../store/actions/lessonTypeActions';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const RecommendedLessons: React.FC = () => {
   const {id} = useParams();
-  //const [lessons , setLessons] = useState<Array<Lesson>>([]);
+
+  const [lessons , setLessons] = useState<Array<Object>>([]);
+
   const dispatch = useAppDispatch();
   const all_lessons = useAppSelector(state => state.lesson.all_lessons);
-
+  const { all_lessonTypes , lessonType } = useAppSelector(state => state.lessonType);
   
 
   useEffect(()=>{
     dispatch(getAllLessons());
+
+    dispatch(getAllLessonTypes());
+    recommendedLessons();
 
     console.log("all_lessons" , all_lessons)
 
@@ -34,21 +40,48 @@ const RecommendedLessons: React.FC = () => {
      //};
 
    // fetchlessons();
-  },[])//all_lessons , id , dispatch
+  },[all_lessons])//all_lessons , id , dispatchall_lessons, lessonType
+
+  const recommendedLessons = () =>{
+    let recommendedLesson = {title:'', startDate: null as any  , endDate : null as any};
+    let recommendedLessonsArray: any[] = [];
+    
+    all_lessons.forEach((lesson) => {
+
+      //dispatch(getLessonType(lesson.lessonTypeId));
+      all_lessonTypes.forEach((lessonType) => {
+         if(lessonType.id === lesson.lessonTypeId){
+
+          console.log("lessonType.title", lessonType.title)
+          recommendedLesson.title = lessonType.title;
+         }
+      })
+
+      console.log("lesson.date", lesson.startDate?.toString())
+     // const startDate = lesson.startDate?.toUTCString();
+
+      recommendedLesson.startDate = lesson.startDate;
+      recommendedLesson.endDate = lesson.endDate;
+
+      recommendedLessonsArray.push(recommendedLesson)
+
+    })
+    setLessons(recommendedLessonsArray);
+  }
 
  
  // const lessonsListItems = lessons.map((le:any)=> (
-  const lessonsListItems = all_lessons.map((le:any)=> (
+  const lessonsListItems = lessons.map((lesson:any, index:any)=> (
       <ListItem
-          key={le.lessonTypeId}
+          key={index}
           disableGutters
           secondaryAction={
             <IconButton aria-label="comment">
-              <CommentIcon />
+              <AddCircleIcon />
             </IconButton>
           }
         >
-          <ListItemText primary={`${le.lessonTypeId}`} />
+          <ListItemText primary={`${lesson.title}`} secondary={`${lesson.startDate} until ${lesson.endDate}`} />
       </ListItem>
   ))
 

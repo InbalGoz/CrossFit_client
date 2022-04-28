@@ -2,49 +2,58 @@ import axios from 'axios';
 import devConfig from '../env/dev';
 import { Employee } from '../models/employee';
 import { resService } from './resService';
+import { Res } from '../models/res';
 
 export const employeeService = {
+  getLoggedEmployee,
+  getWithLessons,
   getAll,
-  getOneEmployee,
-  sendEmployeeData,
-  editOneEmployee,
+  createEmployee,
+  editEmployee,
   deleteEmployee,
 };
 
 const BASE_URL = `${devConfig.base_url}/employees`;
 
-async function getAll(): Promise<Employee[]> {
-  const res: any = axios.get(`${BASE_URL}`).then((res) => res.data);
-  return res.data.success
-    ? resService.handleSuccess(res)
-    : resService.handleErr(res);
-}
-
-async function getOneEmployee(employee_id: number): Promise<Employee> {
-  const res: any = axios.get(`${BASE_URL}`).then((res) => res.data);
+async function getLoggedEmployee(employee_id: number): Promise<Employee> {
+  const res: Res = await axios.get(`${BASE_URL}/loggedUser`);
   // return res.filter((employee:Employee) => employee.id === employee_id)[0];
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
-}
+};
 
-async function sendEmployeeData(formData: any): Promise<void> {
-  const res: any = axios.post(`${BASE_URL}`, formData);
+async function getWithLessons(employee_id: number): Promise<Employee> {
+  const res: Res = await axios.get(`${BASE_URL}/withLessons`);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
-}
+};
 
-async function editOneEmployee(employee_id: number, formData: any) {
-  const res: any = axios.put(`${BASE_URL}`, formData);
+async function getAll(): Promise<Employee[]> {
+  const res: Res = await axios.get(`${BASE_URL}`);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
-}
+};
+
+async function createEmployee(formData: any) {
+  const res: Res = await axios.post(`${BASE_URL}`, formData);
+  return res.data.success
+    ? resService.handleSuccess(res)
+    : resService.handleErr(res);
+};
+
+async function editEmployee(employee_id: number) {
+  const res: Res = await axios.put(`${BASE_URL}/${employee_id}`);
+  return res.data.success
+    ? resService.handleSuccess(res)
+    : resService.handleErr(res);
+};
 
 async function deleteEmployee(employee_id: string) {
-  const res: any = axios.delete(`${BASE_URL}`);
+  const res: Res = await axios.delete(`${BASE_URL}/${employee_id}`);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
-}
+};

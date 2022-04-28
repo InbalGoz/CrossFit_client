@@ -7,19 +7,10 @@ import setAuthToken from "../../utils/setAuthToken";
 
 export const customerActions = customerSlice.actions;
 
-export const getAllCustomers = () : ThunkAction<void,RootState,unknown,AnyAction> =>{
-  return async (dispatch, getState) =>{
-   // if(getState().customer.all_customers.length === 0){
-      const res: Customer[] = await customerService.getAll();
-      
-      dispatch(customerActions.setCustomers(res))
-    //}
-  }
-}
 
 export const getCustomer = (customer_id:number) : ThunkAction<void,RootState,unknown,AnyAction> =>{
   return async (dispatch, getState) =>{
-    const res: Customer = await customerService.getOneCustomer(customer_id);
+    const res: Customer = await customerService.getLoggedUser(customer_id);
     dispatch(customerActions.setCustomer(res))
   }
 };
@@ -27,10 +18,54 @@ export const getCustomer = (customer_id:number) : ThunkAction<void,RootState,unk
 export const register = (formData:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
   return async (dispatch,getState)=>{
     const res = await customerService.registerCustomer(formData);
-    dispatch(customerActions.registration(res))
+
+    if(!res){
+      console.log("not registerd")
+    }else{
+      dispatch(customerActions.registration(res))
+    }
    // dispatch(loadUser());//token
   }
 };
+
+export const logIn = (formData:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+    const res = await customerService.loginCustomer(formData);
+    dispatch(customerActions.login(res))
+    // dispatch(loadUser());//token
+  }
+};
+
+export const getAllCustomers = () : ThunkAction<void,RootState,unknown,AnyAction> =>{
+  return async (dispatch, getState) =>{
+   // if(getState().customer.all_customers.length === 0){
+      const res: Customer[] = await customerService.getAll();
+      dispatch(customerActions.setCustomers(res))
+    //}
+  }
+};
+
+export const editCustomer = (customer_id: number , formData: any) : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+    const res = await customerService.editCustomer(customer_id, formData);
+    dispatch(customerActions.updateCustomer(res));//check 
+  }
+};
+
+export const deleteCustomer = (customer_id: number ) : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+    const res = await customerService.deleteCustomer(customer_id);
+    dispatch(customerActions.deleteCustomer(res));//check 
+  }
+};
+
+export const logOut = () : ThunkAction<void,RootState,unknown,AnyAction> => {
+  return async (dispatch,getState)=>{
+   // const res = await customerService.(token);
+    dispatch(customerActions.logout(null));//check 
+  }
+};
+
 
 /*export const loadUser = () : ThunkAction<void,RootState,unknown,AnyAction> => {
   return async (dispatch,getState)=>{
@@ -43,22 +78,6 @@ export const register = (formData:any) : ThunkAction<void,RootState,unknown,AnyA
   }
 };
 */
-
-export const logIn = (formData:any) : ThunkAction<void,RootState,unknown,AnyAction> => {
-  return async (dispatch,getState)=>{
-    const res = await customerService.loginCustomer(formData);
-    dispatch(customerActions.login(res))
-    // dispatch(loadUser());//token
-  }
-};
-
-
-export const logOut = () : ThunkAction<void,RootState,unknown,AnyAction> => {
-  return async (dispatch,getState)=>{
-   // const res = await customerService.(token);
-    dispatch(customerActions.logout(null));//check 
-  }
-};
 
 
 

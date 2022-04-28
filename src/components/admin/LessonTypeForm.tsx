@@ -3,12 +3,17 @@ import { LessonType } from '../../models/lessonType';
 import { Container , Box , CssBaseline , Typography , TextField , Button } from '@mui/material';
 //import { Link as ToLink } from 'react-router-dom';
 
-interface Props {
+//redux
+import { useAppDispatch } from "../../store/hooks";
+import { createLessonType } from '../../store/actions/lessonTypeActions';
+import { useEffect } from 'react';
+
+/*interface Props {
     handleAddLessonTypeClick: any;
-}
+}*/
 
-const LessonTypeForm:React.FC<Props> = ({ handleAddLessonTypeClick }) => {
-
+const LessonTypeForm:React.FC= () => {
+  const dispatch = useAppDispatch();
   const initialLessonType : LessonType ={
     title: '',
     tags: [],
@@ -25,8 +30,14 @@ const LessonTypeForm:React.FC<Props> = ({ handleAddLessonTypeClick }) => {
   
   const handleSubmit = ( event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        console.log("lessontypeform submit" , formData)
         //send to data base
+        dispatch(createLessonType(formData));
   };
+
+  useEffect(()=>{
+    console.log("lessontypeform" , formData)
+  },[formData])
 
   //tags = checkbox
 
@@ -94,7 +105,7 @@ const LessonTypeForm:React.FC<Props> = ({ handleAddLessonTypeClick }) => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleAddLessonTypeClick}
+             // onClick={handleAddLessonTypeClick}
             >
               Add  
             </Button>

@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useState , useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import { Box , Modal , Button} from '@mui/material';
 import List from '@mui/material/List';
@@ -19,43 +19,8 @@ import EditIcon from '@mui/icons-material/Edit';
 
 //redux
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getAllLessons , deleteLesson} from '../../store/actions/lessonActions';
-import { useEffect } from 'react';
-
-function generate(element: React.ReactElement) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
-const types = ['Yoga', 'Pilates', 'Circuit Training'];
-const lessonsTypes = types.map((lessontype,index) => (
-      <ListItem
-           secondaryAction={
-          <IconButton edge="end" aria-label="delete">
-                <DeleteIcon />
-          </IconButton>
-          }
-      >
-         <ListItemAvatar>
-            <Avatar>
-               <FitnessCenterIcon />
-            </Avatar>
-          </ListItemAvatar>
-              <ListItemText
-                primary= {lessontype}
-                secondary={"level = entry level"}
-                    //secondary={secondary ? 'Secondary text' : null}
-              />
-        <IconButton >
-          <EditIcon />
-       </IconButton>      
-      </ListItem>
-));
-
-
+import { getAllLessons , deleteLesson , createLesson } from '../../store/actions/lessonActions';
+import { getLessonType , getAllLessonTypes  , deleteLessonType, editLessonType} from '../../store/actions/lessonTypeActions';
 
 
 const Demo = styled('div')(({ theme }) => ({
@@ -79,8 +44,8 @@ const style = {
 const Lessons: React.FC = () => {
 
   const dispatch = useAppDispatch();
-  const allLessons = useAppSelector(state => state.lesson.all_lessons);
- // const {lesson} = useAppSelector(state => state.lesson);
+  const all_lessons = useAppSelector(state => state.lesson.all_lessons);
+  const { all_lessonTypes } = useAppSelector(state => state.lessonType);
 
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
@@ -96,12 +61,12 @@ const Lessons: React.FC = () => {
 
   useEffect(() => {
     dispatch(getAllLessons());
-    console.log("allLessons", allLessons)
+    dispatch(getAllLessonTypes());
   },[])
 
   //lesson_id -> number
   const handleDelteLesson = (lesson_id:number|undefined) =>{
-    allLessons.forEach((lesson) => {
+    all_lessons.forEach((lesson) => {
       if(lesson.id === lesson_id){
         console.log('id',lesson.id)
         dispatch(deleteLesson(lesson_id))
@@ -109,8 +74,17 @@ const Lessons: React.FC = () => {
     })
     
   }
+
+
+  const handleAddLessonType = () =>{
+   setOpenLessonType(true);
+  };
+
+  const handleAddLesson = () =>{
+   setOpenLesson(true);
+  };
   
- const renderLessons = allLessons.map((lesson,index) => (
+ const renderLessons = all_lessons.map((lesson,index) => (
   <>
   <ListItem
        
@@ -127,7 +101,7 @@ const Lessons: React.FC = () => {
       </ListItemAvatar>
           <ListItemText
             primary= {lesson.lessonTypeId}
-            secondary={`${lesson.date} ${lesson.employeeId}`}
+            secondary={`${lesson.startDate} ${lesson.employeeId}`}
                 //secondary={secondary ? 'Secondary text' : null}
           />
         <IconButton >
@@ -141,23 +115,39 @@ const Lessons: React.FC = () => {
   
 ));
 
-  const handleAddLessonTypeClick = (event:any) =>{
-     console.log("hello")
-     //fetch from data base and add to the list
-  };
+const lessonsTypes = all_lessonTypes.map((lessontype,index) => (
+  <ListItem
+       secondaryAction={
+      <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteLessonType(lessontype.id)}>
+            <DeleteIcon />
+      </IconButton>
+      }
+  >
+     <ListItemAvatar>
+        <Avatar>
+           <FitnessCenterIcon />
+        </Avatar>
+      </ListItemAvatar>
+          <ListItemText
+            primary= {lessontype.title}
+            secondary={lessontype.level}
+                //secondary={secondary ? 'Secondary text' : null}
+          />
+    <IconButton >
+      <EditIcon  />
+   </IconButton>      
+  </ListItem>
+));
 
-  const handleAddLessonClick = () => {
-    console.log("hiii")
-  }
+const handleDeleteLessonType = (lessontype_id:any) =>{
+  dispatch(deleteLessonType(lessontype_id));
+};
 
-  const handleAddLessonType = () =>{
-    setOpenLessonType(true);
-  };
+/*const handleEditLessonType = (lessontype_id:any, formData:any) =>{
+  dispatch(editLessonType(lessontype_id))
+};*/
 
-  const handleAddLesson = () =>{
-    setOpenLesson(true);
-  }
-
+  
   return (
     <>
     <Grid container spacing={20} sx={{display:'flex' , alignItems:'center', justifyContent:'center'}}>
@@ -198,7 +188,7 @@ const Lessons: React.FC = () => {
       >
         <Box sx={style} >
          
-          <LessonTypeForm  handleAddLessonTypeClick={handleAddLessonTypeClick}/>
+          <LessonTypeForm  />
   
           <Button onClick={lessonTypeFormClose}>
             Close
@@ -214,7 +204,7 @@ const Lessons: React.FC = () => {
       >
         <Box sx={style} >
          
-          <LessonForm  handleAddLessonClick={handleAddLessonClick}/>
+          <LessonForm/>
   
           <Button onClick={lessonFormClose}>
             Close
@@ -226,4 +216,4 @@ const Lessons: React.FC = () => {
   )
 }
 
-export default Lessons
+export default Lessons;

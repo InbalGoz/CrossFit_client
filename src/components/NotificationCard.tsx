@@ -5,24 +5,38 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { deleteNotification} from '../store/actions/notificationActions';
 
-const NotificationCard = () => {
+interface Props{
+  title:any,
+  desc:any,
+  handleDelete:any,
+}
+
+
+const NotificationCard: React.FC<Props> = ({title , desc , handleDelete}) => {
+
+  
+
   return (
     <Card sx={{ minWidth: 800 }}>
     <CardContent>
       <Typography variant="h5" component="div">
-        Subject
+        {title}
       </Typography>
+
       <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        adjective
+        
       </Typography>
+
       <Typography variant="body2">
-        well meaning and kindly.
-        {'"a benevolent smile"'}
+        {desc}
       </Typography>
+
     </CardContent>
     <CardActions>
-      <Button size="small">Delete</Button>
+      <Button size="small" onClick={handleDelete}>Delete</Button>
     </CardActions>
   </Card>
   )

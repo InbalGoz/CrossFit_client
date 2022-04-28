@@ -52,22 +52,38 @@ export const customerSlice = createSlice({
             state.all_customers = action.payload;
         },
         setCustomer( state , action:PayloadAction<Customer>){
-            console.log("customer" , action.payload)
+           // console.log("set customer" , action.payload)
            // state.token = action.payload;
             state.customer = action.payload;
         },
         registration(state , action){
-
-            console.log("token", action.payload.token)
-            state.customer = action.payload;
-            
+            state.customer = action.payload.customer;
             localStorage.setItem('token', action.payload.token);//added
             state.isAuthenticated = true;
-            
         },
         login(state , action){
-            state.customer = action.payload;
+           // console.log("customer", action.payload.customer)
+            state.customer = action.payload.customer;
             state.isAuthenticated = true;
+        },
+        updateCustomer(state , action){
+            state.customer = action.payload.customer;
+        },
+        deleteCustomer(state , action){
+            localStorage.removeItem('token');
+            state.customer = {
+                fName: '',
+                lName: '',
+                email:'',
+                password: '',
+                phone: '',
+                birthday: null,
+                subStart: null,
+                subEnd: null,
+                //isAdmin: false,
+                isVerified: false
+            };
+            state.isAuthenticated = false; 
         },
         logout(state , action){
             localStorage.removeItem('token');
@@ -82,7 +98,7 @@ export const customerSlice = createSlice({
                 subEnd: null,
                 //isAdmin: false,
                 isVerified: false
-               }  
+            }  
             console.log("loggoutt")
             state.isAuthenticated = false;
         },

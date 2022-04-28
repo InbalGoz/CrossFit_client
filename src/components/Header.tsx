@@ -14,8 +14,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Link , useNavigate , useParams} from 'react-router-dom';
 
 //redux
-import { useAppDispatch } from "../store/hooks";
-import { logOut } from '../store/actions/authActions';
+import { useAppDispatch , useAppSelector} from "../store/hooks";
+import { logOut , getCustomer} from '../store/actions/authActions';
 
 interface Props{
   isAdmin:any;
@@ -115,11 +115,11 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
       <AppBar position="static">
         <Toolbar>
              <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 , fontFamily:'Nunito'}}>
-                <Link to='/home' style={{ textDecoration: 'none' , color:'white'}}> Nagar CrossFit </Link>
+                <Link to={`/home/${id}`} style={{ textDecoration: 'none' , color:'white'}}> Nagar CrossFit </Link>
              </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Link to='/scheduler' style={{ textDecoration: 'none' , color:'white'}}>
+          <Link to={`/scheduler/${id}`} style={{ textDecoration: 'none' , color:'white'}}>
             <IconButton size="medium" aria-label="show 4 new mails" color="inherit">
               <CalendarMonthIcon/>
             </IconButton>

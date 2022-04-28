@@ -35,13 +35,20 @@ export const lessonTypeSlice = createSlice({
         state.lessonType = action.payload;
     },
     createLessonType(state , action){
-
+        
+        state.lessonType = action.payload;
     },
     editLessonType(state , action){
        state.lessonType = action.payload;
     },
     deleteLessonType(state , action){
-
+        state.lessonType = {
+            id:0,
+            title: '',
+            tags:[],
+            max:0,
+            level:'',
+        };
     }  
   }
 });

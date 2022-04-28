@@ -38,10 +38,7 @@ const Login: React.FC = () => {
     event.preventDefault();
     try{
       //mine:get al users, loop them all, if the customer exist with the same mail, get is id and send it
-      
       dispatch(logIn(formData));
-      
-
       // if everything is good ->  go to home screen
      // navigate('/home');
     }catch(error){
@@ -51,16 +48,12 @@ const Login: React.FC = () => {
   };
 
   useEffect(()=>{
-    console.log("form",formData)
-    console.log("isAuthenticated",isAuthenticated)
-
-    if (isAuthenticated && customer) {
-      console.log("customer",customer)
+    if(isAuthenticated && customer) {
+      console.log("customer", customer)
+      console.log("id", customer.id)
+      
       navigate(`/home/${customer.id}`)
-     // navigate(`/home`)
     }
-
-   // dispatch(reset());
   },[formData, customer,navigate,dispatch])
    
   

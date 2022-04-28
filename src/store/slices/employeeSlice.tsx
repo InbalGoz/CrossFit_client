@@ -3,8 +3,8 @@ import { RootState } from '../store';
 import { Employee } from '../../models/employee';
 
 interface EmployeeSliceState {
-    all_emploees: Employee[];  
-    emploee:{
+    all_employees: Employee[];  
+    employee:{
         id?: number;
         fName: string;
         lName: string;
@@ -16,8 +16,8 @@ interface EmployeeSliceState {
 };
    
 const initialState : EmployeeSliceState = {
-    all_emploees: [],
-    emploee: {
+    all_employees: [],
+    employee: {
         id: 0,
         fName: '',
         lName: '',
@@ -29,23 +29,34 @@ const initialState : EmployeeSliceState = {
 };
 
 export const employeeSlice = createSlice({
-  name:'emploee',
+  name:'employee',
   initialState,
   reducers:{
     setEmployees( state , action:PayloadAction<Employee[]>){
-        state.all_emploees = action.payload;
+        state.all_employees = action.payload;
     },
     setEmployee( state , action:PayloadAction<Employee>){
-        state.emploee = action.payload;
+        state.employee = action.payload;
+    },
+    setEmployeeWithLessons(state , action:PayloadAction<Employee>){
+        state.employee = action.payload;
     },
     createEmployee(state , action){
-
+        state.employee = action.payload;
     },
     editEmployee(state , action){
-       state.emploee = action.payload;
+       state.employee = action.payload;
     },
     deleteEmployee(state , action){
-
+        state.employee = {
+            id: 0,
+            fName: '',
+            lName: '',
+            password: '',
+            phone: '',
+            isAdmin: false,
+            lessons: [],
+        };
     }  
   }
 });

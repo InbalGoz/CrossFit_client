@@ -24,7 +24,7 @@ const Register: React.FC = () => {
   const dispatch = useAppDispatch();
 
   //const oneCustomer = useAppSelector(state => state.customer.customer);
-  const { customer } = useAppSelector(state => state.customer);
+  const { customer , isAuthenticated} = useAppSelector(state => state.customer);
 
   const initialCustomer : Customer ={
     fName: '',
@@ -70,22 +70,26 @@ const Register: React.FC = () => {
 
     if(isAllDataFilled === true){
       try{
-
-
-        dispatch(register(formData));
-        
-        //check if the email is already there if yes send alert
-       // navigate(`/home`);
-        navigate(`/home/${customer.id}`);
-
+        dispatch(register(formData)); 
      }catch(error){
        console.log("error",error)
      }
     }else{
+      //swal
       alert("fill all data")
     }
     
   };
+
+  useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated)
+    if (isAuthenticated) {
+      console.log("customer", customer)
+      console.log("id", customer.id)
+
+      navigate(`/home/${customer.id}`);
+    }
+  }, [customer, navigate, dispatch])
 
  
   return (
