@@ -8,9 +8,15 @@ import Admin from './pages/Admin';
 import Notifications from './pages/Notifications';
 import SchedulerPage from './pages/SchedulerPage';
 import './App.css';
+import { useEffect } from 'react';
 
 
 const App: React.FC = () => {
+
+  useEffect(() => {
+
+  },[])
+
   return (
     <>
       <Router>

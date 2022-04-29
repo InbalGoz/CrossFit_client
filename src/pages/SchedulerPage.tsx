@@ -1,12 +1,7 @@
-import React , {useState , useEffect} from 'react';
-import {useParams} from 'react-router-dom'
 import { Scheduler } from "@aldabil/react-scheduler";
-import Header from '../components/Header';
-import axios from 'axios';
-
-//redux
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import  { getAllLessons } from '../store/actions/lessonActions';
+import { Button } from "@mui/material";
+import Header from "../components/Header";
+import React ,  { useState , useEffect } from "react";
 
 export const EVENTS = [
   {
@@ -72,65 +67,80 @@ export const EVENTS = [
   {
     event_id: 11,
     title: "Event 10",
-    start: new Date("2021 5 6 14:00"),
-    end: new Date("2021 5 6 15:00")
+    start: new Date(1651249669506 - 1000 * 60 * 60),
+    end: new Date(1651249669506)
   }
 ];
 
+const SchedulerPage = () => {
+  const [optionId , setOptionId] = useState(0);
 
-const SchedulerPage:React.FC = ()=> {
-  const [tempFields , setTempFields] = useState([]);
 
- /* const { id } = useParams();
-  const [isAdmin , setAdmin] = useState(true);
-  const [ lessonsEvents , setLessonsEvents ] = useState<Array<any>>([]);
-
-  const dispatch = useAppDispatch();
-  const all_lessons = useAppSelector(state => state.lesson.all_lessons);
-
-  const lessonsEventsCreate = () => {
-    let newEvents: any[] = [];
-    let newEvent = {
-      event_id: 0,
-      title:'' ,
-      start: new Date(),
-      end: new Date()
+  const register = () =>{
+    if(optionId === 1){
+      //register the customer to the lesson
     }
+    else{
+      ///dont register
+    }
+  };
 
-    all_lessons.forEach((element:any) => {
-      console.log("element" , element)
-      newEvent = {
-        event_id: element.id,
-        title: element.lessonTypeId,
-        start: element.startDate,
-        end: element.endDate
-      }
-      newEvents.push(newEvent);
-    })
-    setLessonsEvents(newEvents)
-  }
+  useEffect(() => {
 
-  useEffect(()=>{
-    dispatch(getAllLessons());
-    console.log("all_lessons" , all_lessons)
-
-   // lessonsEventsCreate();
-    console.log("startTime" , all_lessons[0].startDate)
-    //console.log("time" , new Date(all_lessons[0].startDate))
-    console.log("lessonsEvents" , lessonsEvents)
-  },[all_lessons])*/
-
-  useEffect(()=>{
-    console.log()
   })
+
+  
+
+  const handleConfirm = async (event:any, action:any): Promise<any> => {
+    console.log(event, action);
+    console.log(event.option_id)
+
+    setOptionId(event.option_id);
+
+    if (action === "edit") {
+      //register
+      //// add the id of the customer to the lesson customer array
+      /** PUT event to remote DB */
+    } else if (action === "create") {
+      /**POST event to remote DB */
+    }
+    /**
+     * Make sure to return 4 mandatory fields:
+     * event_id: string|number
+     * title: string
+     * start: Date|string
+     * end: Date|string
+     * ....extra other fields depend on your custom fields/editor properties
+     */
+    // Simulate http request: return added/edited event
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res({
+          ...event,
+          event_id: event.event_id || Math.random()
+        });
+      }, 3000);
+    });
+  };
+
+  const handleDelete = async (deletedId:any) : Promise<any>=> {
+    // Simulate http request: return the deleted id
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res(deletedId);
+      }, 3000);
+    });
+  };
 
   return (
     <>
     <Header isAdmin={true}/>
     <Scheduler
+      //view="week"
+      events={EVENTS}
       fields={[
         {
-          name: "user_id",
+          name: "option_id",
           type: "select",
           // Should provide options with type:"select"
           options: [
@@ -140,9 +150,9 @@ const SchedulerPage:React.FC = ()=> {
           config: { label: "Register To Lesson", required: true, errMsg: "Plz Select Choice" }
         },  
       ]}
-      view="week"
-      events={EVENTS}
-      selectedDate={new Date(2021, 4, 5)}
+      onConfirm={handleConfirm}
+      onDelete={handleDelete}
+      selectedDate={new Date(2022, 4, 5)}
     />
     </>
   );
@@ -150,13 +160,9 @@ const SchedulerPage:React.FC = ()=> {
 
 export default SchedulerPage;
 
-/*
-<Scheduler
-      view="week"
-      //events={EVENTS}
-      events={lessonsEvents}
-      selectedDate={new Date(2021, 4, 5)}
-    />*/
+
+
+
 
 
 

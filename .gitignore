@@ -6,6 +6,7 @@
 .pnp.js
 
 /hold.tsx
+/hide.tsx
 
 # testing
 /coverage
