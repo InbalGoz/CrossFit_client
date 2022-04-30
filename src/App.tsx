@@ -1,40 +1,54 @@
-import React from 'react';
-import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import LandingPage from './pages/Landing';
-import Admin from './pages/Admin';
-import Notifications from './pages/Notifications';
-import SchedulerPage from './pages/SchedulerPage';
-import './App.css';
-import { useEffect } from 'react';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import LandingPage from "./pages/Landing";
+import Admin from "./pages/Admin";
+import Notifications from "./pages/Notifications";
+import SchedulerPage from "./pages/SchedulerPage";
+import "./App.css";
+import { useEffect } from "react";
 
+//redux
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { getLoggedCustomer, logOut } from "./store/actions/authActions";
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const token = localStorage.getItem("token");
+  console.log("token", token);
+  const { user } = useAppSelector((state) => state.customer);
 
   useEffect(() => {
-
-  },[])
+    // if (token) {
+    dispatch(getLoggedCustomer(token));
+    console.log("user app", user);
+    //}
+    // log user out from all tabs if they log out in one tab
+    window.addEventListener("storage", () => {
+      if (!localStorage.token) dispatch(logOut());
+    });
+  }, [dispatch]);
 
   return (
     <>
       <Router>
-         <main className='py-3'>
-           <Routes>
-              <Route  path="/" element={<LandingPage />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/home/:id" element={<Home />} />
-              <Route path="/notifications/:id" element={<Notifications />} />
-              <Route path="/scheduler/:id" element={<SchedulerPage  />} />
-              <Route path="/admin/:adminActions" element={<Admin />} />
-            </Routes>
-         </main>
+        <main className='py-3'>
+          <Routes>
+            <Route path='/' element={<LandingPage />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/home/:id' element={<Home />} />
+            <Route path='/notifications/:id' element={<Notifications />} />
+            <Route path='/scheduler/:id' element={<SchedulerPage />} />
+            <Route path='/admin/:adminActions' element={<Admin />} />
+          </Routes>
+        </main>
       </Router>
     </>
   );
-}
+};
 
 export default App;
 

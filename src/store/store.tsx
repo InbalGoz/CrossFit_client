@@ -4,6 +4,7 @@ import { lessonSlice } from '../store/slices/lessonsSlice';
 import { lessonTypeSlice } from '../store/slices/lessonTypeSlice';
 import { employeeSlice } from '../store/slices/employeeSlice';
 import { notificationSlice } from '../store/slices/notificationSlice';
+import { customerToLessonSlice } from './slices/customerToLessonSlice';
 
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
         lesson: lessonSlice.reducer,
         lessonType:lessonTypeSlice.reducer,
         notification:notificationSlice.reducer,
+        customerToLesson:customerToLessonSlice.reducer,
     },
 });
 

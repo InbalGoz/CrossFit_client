@@ -8,6 +8,6 @@ export interface Customer {
   birthday: Date | null;
   subStart: Date | null;
   subEnd: Date | null;
-  //isAdmin: boolean,
+  isAdmin: boolean,
   isVerified: boolean;
 }

@@ -4,4 +4,5 @@ export interface Notification {
   desc: string;
   isRead: boolean;
   createdAt: Date | null;
+  customerId:number;
 }
