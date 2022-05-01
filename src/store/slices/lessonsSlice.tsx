@@ -38,20 +38,22 @@ export const lessonSlice = createSlice({
       state.lesson = action.payload;
     },
     createLesson(state, action) {
-      state.lesson = action.payload;
+      //state.lesson = action.payload;
+      state.all_lessons = [...state.all_lessons, action.payload];
     },
     editLesson(state, action) {
       state.lesson = action.payload;
+      // const idx = state.all_lessons.findIndex(
+      //   (lesson) => lesson.id === action.payload.id
+      // );
+      // state.all_lessons.splice(idx, 1);
     },
     deleteLesson(state, action) {
-      state.lesson = {
-        id: 0,
-        startDate: null,
-        endDate: null,
-        employeeId: 0,
-        lessonTypeId: 0,
-        coustomers: [],
-      };
+      console.log(action.payload);
+      const idx = state.all_lessons.findIndex(
+        (lesson) => lesson.id === action.payload
+      );
+      state.all_lessons.splice(idx, 1);
     },
   },
 });

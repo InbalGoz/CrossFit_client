@@ -44,6 +44,9 @@ async function getNotificationsByCustomerId(
   customer_id: number
 ): Promise<Notification[]> {
   const res: Res = await axios.get(`${BASE_URL}/customer/${customer_id}`);
+
+  console.log("resnoti", res);
+
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
@@ -71,7 +74,7 @@ async function editNotification(notification_id: number, formData: any) {
     : resService.handleErr(res);
 }
 
-async function deleteNotification(notification_id: number) {
+async function deleteNotification(notification_id: any) {
   const res: Res = await axios.delete(`${BASE_URL}/${notification_id}`);
   return res.data.success
     ? resService.handleSuccess(res)

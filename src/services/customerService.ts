@@ -31,7 +31,7 @@ async function loginCustomer(formData: any) {
     : resService.handleErr(res);
 };
 
-async function getById(customer_id: number): Promise<Customer> {
+async function getById(customer_id: any): Promise<Customer> {
   const res: Res = await axios.get(`${BASE_URL}/${customer_id}`);
   return res.data.success
     ? resService.handleSuccess(res)
@@ -52,14 +52,14 @@ async function registerCustomer(formData: any) {
     : resService.handleErr(res);
 };
 
-async function editCustomer(customer_id: number , formData: any) {
+async function editCustomer(customer_id: any , formData: any) {
   const res: Res = await axios.put(`${BASE_URL}/${customer_id}`, formData);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
 };
 
-async function verifyCustomer(customer_id: number) {
+async function verifyCustomer(customer_id: any) {
   const res: Res = await axios.put(`${BASE_URL}/verified/${customer_id}`);
   console.log("res" , res)
   return res.data.success
@@ -67,7 +67,7 @@ async function verifyCustomer(customer_id: number) {
     : resService.handleErr(res);
 };
 
-async function deleteCustomer(customer_id: number) {
+async function deleteCustomer(customer_id: any) {
   const res: Res = await axios.delete(`${BASE_URL}/${customer_id}`);
   return res.data.success
     ? resService.handleSuccess(res)

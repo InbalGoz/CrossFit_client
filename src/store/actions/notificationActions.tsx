@@ -19,7 +19,7 @@ export const getAllNotifications = (): ThunkAction<
 };
 
 export const getNotificationsByCustomerId = (
-  customer_id: number
+  customer_id: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res: Notification[] =
@@ -29,7 +29,7 @@ export const getNotificationsByCustomerId = (
 };
 
 export const getNotification = (
-  notification_id: number
+  notification_id: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res: Notification = await notificationService.getNotification(
@@ -44,12 +44,13 @@ export const createNotification = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await notificationService.createNotification(notificationData);
+    console.log({ res });
     dispatch(notificationActions.createNotification(res));
   };
 };
 
 export const editNotification = (
-  notification_id: number,
+  notification_id: any,
   formData: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
@@ -62,7 +63,7 @@ export const editNotification = (
 };
 
 export const editAllNotification = (
-  customer_id: number
+  customer_id: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await notificationService.editAllNotification(customer_id);
@@ -71,10 +72,10 @@ export const editAllNotification = (
 };
 
 export const deleteNotification = (
-  notification_id: number
+  notification_id: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    //await notificationService.deleteNotificationn(notification_id);
+    const res = await notificationService.deleteNotification(notification_id);
     dispatch(notificationActions.deleteNotification(notification_id));
   };
 };

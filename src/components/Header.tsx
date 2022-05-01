@@ -27,31 +27,35 @@ interface Props {
 
 const Header: React.FC<Props> = ({ isAdmin }) => {
   //const [isAdmin , setIsAdmin] = useState(true);
-  const { id } = useParams();
+  // const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const all_notifications = useAppSelector(
-    (state) => state.notification.all_notifications
+  const { user } = useAppSelector((state) => state.customer);
+
+  const { all_notificationsById } = useAppSelector(
+    (state) => state.notification
   );
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
+  useEffect(() => {
+    dispatch(getNotificationsByCustomerId(user.id));
+  }, []);
+
   const countNotRead = () => {
     let count = 0;
-    all_notifications.forEach((noti) => {
-      if (!noti.isRead) {
-        count++;
-      }
-    });
-    return count;
+    if (all_notificationsById) {
+      all_notificationsById.forEach((noti) => {
+        if (!noti.isRead) {
+          count++;
+        }
+      });
+      return count;
+    } else {
+      return count;
+    }
   };
-
-  useEffect(() => {
-    dispatch(getNotificationsByCustomerId(7));
-
-    console.log("admin", isAdmin);
-  }, []); //id
 
   const isMenuOpen = Boolean(anchorEl);
   // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -151,7 +155,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
             sx={{ flexGrow: 1, fontFamily: "Nunito" }}
           >
             <Link
-              to={`/home/${id}`}
+              to={`/home`}
               style={{ textDecoration: "none", color: "white" }}
             >
               {" "}
@@ -161,19 +165,19 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Link
-              to={`/scheduler/${id}`}
+              to={`/scheduler`}
               style={{ textDecoration: "none", color: "white" }}
             >
               <IconButton
-                size='medium'
-                aria-label='show 4 new mails'
+                size='large'
+                aria-label='show lesson in scheduler'
                 color='inherit'
               >
                 <CalendarMonthIcon />
               </IconButton>
             </Link>
             <Link
-              to={`/notifications/${id}`}
+              to={`/notifications`}
               style={{ textDecoration: "none", color: "white" }}
             >
               <IconButton

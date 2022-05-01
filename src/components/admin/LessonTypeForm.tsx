@@ -25,11 +25,11 @@ import {
   getAllLessonTypes,
 } from "../../store/actions/lessonTypeActions";
 
-const LessonTypeForm: React.FC = () => {
-  const tagsArr: any[] = ["Sport"];
-  let newTags: any[] = [];
-  const levels = ["Easy", "Medium", "Hard"];
+const tagsArr: any[] = ["PR", "SQ", "EMOM", "AMRAP", "Ladder", "Hero WOD"];
+let newTags: any[] = [];
+const levels = ["Easy", "Medium", "Hard"];
 
+const LessonTypeForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const all_lessonTypes = useAppSelector(
     (state) => state.lessonType.all_lessonTypes
@@ -65,6 +65,7 @@ const LessonTypeForm: React.FC = () => {
 
     if (updatedCheckedState[position]) {
       addToTags(position);
+      console.log("newTags", newTags);
     } else {
       let index = newTags.indexOf(tagsArr[position]);
       removeFromTags(index);
@@ -88,7 +89,7 @@ const LessonTypeForm: React.FC = () => {
   useEffect(() => {
     dispatch(getAllLessonTypes());
     console.log("lessontypeform", formData);
-  }, [formData]);
+  }, []);
 
   const menuItemsLevels = levels.map((level_item: any, index) => (
     <MenuItem key={index} value={level_item}>

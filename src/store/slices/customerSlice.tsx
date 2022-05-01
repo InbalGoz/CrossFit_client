@@ -5,34 +5,9 @@ import { Customer } from "../../models/customer";
 interface CustomerSliceState {
   all_customers: Customer[];
   isAuthenticated: Boolean;
-  user: {
-    id?: number;
-    fName: string;
-    lName: string;
-    email: string;
-    password: string;
-    phone: string;
-    birthday: Date | null;
-    subStart: Date | null;
-    subEnd: Date | null;
-    isAdmin: boolean;
-    isVerified: boolean;
-
-    // type: string;
-  };
-  customer: {
-    id?: number;
-    fName: string;
-    lName: string;
-    email: string;
-    password: string;
-    phone: string;
-    birthday: Date | null;
-    subStart: Date | null;
-    subEnd: Date | null;
-    isAdmin: boolean;
-    isVerified: boolean;
-  };
+  user: Customer;
+  customer: Customer;
+  user_type: string;
 }
 
 const initialState: CustomerSliceState = {
@@ -40,6 +15,7 @@ const initialState: CustomerSliceState = {
   // token: localStorage.getItem('token'),
   isAuthenticated: false,
   user: {
+    //id: 0,
     fName: "",
     lName: "",
     email: "",
@@ -54,6 +30,7 @@ const initialState: CustomerSliceState = {
     // type: "",
   },
   customer: {
+    //id: 0,
     fName: "",
     lName: "",
     email: "",
@@ -65,6 +42,7 @@ const initialState: CustomerSliceState = {
     isAdmin: false,
     isVerified: false,
   },
+  user_type: "string",
 };
 
 export const customerSlice = createSlice({
@@ -74,24 +52,24 @@ export const customerSlice = createSlice({
     setCustomers(state, action: PayloadAction<Customer[]>) {
       state.all_customers = action.payload;
     },
-    setLoggedCustomer(state, action: PayloadAction<Customer>) {
-      console.log("set customer", action.payload);
-      //state.user = action.payload;
-      //state.customer = action.payload;
-      state.user = action.payload;
-      console.log(" user", state.user);
+    setLoggedCustomer(state, action) {
+      console.log("user slice", action.payload);
+      state.user_type = action.payload.type;
+      state.user = action.payload.user;
+      state.isAuthenticated = true;
     },
     setCustomerById(state, action: PayloadAction<Customer>) {
-      // console.log("set customer" , action.payload)
-      // state.token = action.payload;
       state.customer = action.payload;
+      state.isAuthenticated = true;
     },
     verifyCustomer(state, action: PayloadAction<Customer>) {
       state.customer = action.payload;
+      state.isAuthenticated = true;
     },
     registration(state, action) {
       state.customer = action.payload.customer;
       localStorage.setItem("token", action.payload.token); //added
+
       state.isAuthenticated = true;
     },
     login(state, action) {
@@ -102,10 +80,12 @@ export const customerSlice = createSlice({
     },
     updateCustomer(state, action) {
       state.customer = action.payload.customer;
+      state.isAuthenticated = true;
     },
     deleteCustomer(state, action) {
       localStorage.removeItem("token");
       state.customer = {
+        // id: 0,
         fName: "",
         lName: "",
         email: "",
@@ -122,6 +102,7 @@ export const customerSlice = createSlice({
     logout(state, action) {
       localStorage.removeItem("token");
       state.customer = {
+        // id: 0,
         fName: "",
         lName: "",
         email: "",

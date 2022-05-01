@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -8,7 +8,8 @@ import Admin from "./pages/Admin";
 import Notifications from "./pages/Notifications";
 import SchedulerPage from "./pages/SchedulerPage";
 import "./App.css";
-import { useEffect } from "react";
+
+import PrivateRoute from "./utils/PrivateRoute";
 
 //redux
 import { useAppDispatch, useAppSelector } from "./store/hooks";
@@ -17,22 +18,60 @@ import { getLoggedCustomer, logOut } from "./store/actions/authActions";
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const token = localStorage.getItem("token");
+
   console.log("token", token);
-  const { user } = useAppSelector((state) => state.customer);
+
+  const { user, user_type } = useAppSelector((state) => state.customer);
 
   useEffect(() => {
-    // if (token) {
-    dispatch(getLoggedCustomer(token));
-    console.log("user app", user);
-    //}
+    if (token) {
+      dispatch(getLoggedCustomer(token));
+      console.log("user app", user);
+      console.log("user type", user_type);
+    }
+
     // log user out from all tabs if they log out in one tab
     window.addEventListener("storage", () => {
       if (!localStorage.token) dispatch(logOut());
     });
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
+      <Router>
+        <main className='py-3'>
+          <Routes>
+            <Route path='/' element={<LandingPage />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login />} />
+
+            <Route
+              path='home'
+              element={<PrivateRoute path='home' component={Home} />}
+            />
+            <Route
+              path='notifications'
+              element={<PrivateRoute component={Notifications} />}
+            />
+            <Route
+              path='scheduler'
+              element={<PrivateRoute component={SchedulerPage} />}
+            />
+            <Route
+              path='/admin/:adminActions'
+              element={<PrivateRoute component={Admin} />}
+            />
+          </Routes>
+        </main>
+      </Router>
+    </>
+  );
+};
+
+export default App;
+
+/*
+ <>
       <Router>
         <main className='py-3'>
           <Routes>
@@ -46,11 +85,4 @@ const App: React.FC = () => {
           </Routes>
         </main>
       </Router>
-    </>
-  );
-};
-
-export default App;
-
-// <Route path="/home/" element={<Home />} />
-//<Route path="/home/:id" element={<Home />} />
+    </>*/

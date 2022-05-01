@@ -7,31 +7,29 @@ import Header from "../components/Header";
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
-  getAllNotifications,
   getNotification,
   deleteNotification,
   getNotificationsByCustomerId,
   editAllNotification,
 } from "../store/actions/notificationActions";
-import { getLoggedCustomer } from "../store/actions/authActions";
 
 const Notifications = () => {
-  const { id } = useParams();
   const dispatch = useAppDispatch();
   const [isAdmin, setAdmin] = useState(true);
-  const { customer } = useAppSelector((state) => state.customer);
-  const all_notifications = useAppSelector(
-    (state) => state.notification.all_notifications
+  const { user } = useAppSelector((state) => state.customer);
+  const { all_notificationsById } = useAppSelector(
+    (state) => state.notification
   );
 
   useEffect(() => {
-    dispatch(getNotificationsByCustomerId(7));
-    dispatch(editAllNotification(7));
+    console.log(user.id);
+    dispatch(getNotificationsByCustomerId(user.id));
+    dispatch(editAllNotification(user.id));
 
-    console.log("all_notifications", all_notifications);
+    console.log("all_notifications", all_notificationsById);
   }, []);
 
-  const notificationsCards = all_notifications.map(
+  const notificationsCards = all_notificationsById.map(
     (notification: any, index) => (
       <NotificationCard
         key={index}

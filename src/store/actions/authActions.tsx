@@ -12,9 +12,6 @@ export const getLoggedCustomer = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res: Customer = await customerService.getLoggedUser(token);
-
-    console.log("res logged", res);
-
     dispatch(customerActions.setLoggedCustomer(res));
   };
 };

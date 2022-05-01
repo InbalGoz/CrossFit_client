@@ -114,9 +114,10 @@ const Register: React.FC = () => {
       console.log("customer", customer);
       console.log("id", customer.id);
 
-      navigate(`/home/${customer.id}`);
+      navigate(`/home`);
+      //navigate(`/home/${customer.id}`);
     }
-  }, [isAuthenticated, dispatch]);
+  }, []); //isAuthenticated, dispatch
 
   return (
     <>

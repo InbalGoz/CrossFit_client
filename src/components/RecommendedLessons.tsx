@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { List, Grid, Typography, ListItem, ListItemText } from "@mui/material";
+import {
+  List,
+  Grid,
+  Typography,
+  ListItem,
+  ListItemText,
+  Button,
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
 import { useParams } from "react-router-dom";
@@ -10,44 +17,66 @@ import { getAllLessons } from "../store/actions/lessonActions";
 import { getAllLessonTypes } from "../store/actions/lessonTypeActions";
 import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
 import { createNotification } from "../store/actions/notificationActions";
+import { lessonService } from "../services/lessonService";
 
 const RecommendedLessons: React.FC = () => {
-  const { id } = useParams(); ///bytoken
-
   const [lessons, setLessons] = useState<Array<Object>>([]);
 
   const dispatch = useAppDispatch();
-  const all_lessons = useAppSelector((state) => state.lesson.all_lessons);
+  const all_lessons = useAppSelector((state) => state.lesson.all_lessons); // get from backend in useEffevct
   const { all_lessonTypes, lessonType } = useAppSelector(
     (state) => state.lessonType
   );
-  //const { customerToLesson } = useAppSelector(state => state.customerToLesson);
+  const { user } = useAppSelector((state) => state.customer);
+
+  const recommendedLessons = () => {
+    let recommendedLesson = {
+      id: undefined as any,
+      title: "",
+      startDate: null as any,
+      endDate: null as any,
+    };
+
+    let recommendedLessonsArray: any[] = [];
+    console.log("length", all_lessons.length);
+    all_lessons.forEach((lesson) => {
+      all_lessonTypes.forEach((lessonType) => {
+        if (lessonType.id === lesson.lessonTypeId) {
+          recommendedLesson.title = lessonType.title;
+        }
+      });
+
+      console.log("lesson.date", new Date(`${lesson.startDate}`));
+
+      recommendedLesson.id = lesson.id;
+      recommendedLesson.startDate = new Date(`${lesson.startDate}`);
+      recommendedLesson.endDate = new Date(`${lesson.endDate}`);
+
+      recommendedLessonsArray.push(recommendedLesson);
+    });
+    setLessons(recommendedLessonsArray);
+  };
 
   useEffect(() => {
     dispatch(getAllLessons());
     dispatch(getAllLessonTypes());
-    // recommendedLessons();
-  }, [dispatch]); //all_lessons , id , dispatchall_lessons, lessonType
+    recommendedLessons();
+  }, []); //all_lessons , id , dispatchall_lessons, lessonType
 
-  const handleAddToLesson = (
-    lesson_id: any,
-    customer_id: any,
-    lesson_title: any
-  ) => {
-    //need the customerId and lesson Id
+  const handleAddToLesson = (lesson_id: any, lesson_title: any) => {
     const data = {
       lessonId: lesson_id,
-      customerId: customer_id,
+      customerId: user.id,
     };
 
     dispatch(createCustomerToLesson(data));
 
     const registerNotification = {
-      title: "lesson_title",
-      desc: `You are now registerd to 2 lesson.`,
+      title: lesson_title,
+      desc: `You are now registerd to ${lesson_title} lesson.`,
       isRead: false,
       createdAt: new Date().toLocaleString(),
-      customerId: id,
+      customerId: user.id,
     };
 
     //send notification to db and get it back from db
@@ -55,14 +84,14 @@ const RecommendedLessons: React.FC = () => {
   };
 
   // const lessonsListItems = lessons.map((le:any)=> (
-  const lessonsListItems = all_lessons.map((lesson: any, index: any) => (
+  const lessonsListItems = lessons.map((lesson: any, index: any) => (
     <ListItem
       key={index}
       disableGutters
       secondaryAction={
         <IconButton
           aria-label='comment'
-          onClick={() => handleAddToLesson(lesson.id, id, "title")}
+          onClick={() => handleAddToLesson(lesson.id, lesson.title)}
         >
           <AddCircleIcon />
         </IconButton>
@@ -70,7 +99,11 @@ const RecommendedLessons: React.FC = () => {
     >
       <ListItemText
         primary={`${lesson.title}`}
-        secondary={`${lesson.startDate} until ${lesson.endDate}`}
+        secondary={` from : ${new Date(
+          `${lesson.startDate}`
+        ).toLocaleString()}, until : ${new Date(
+          `${lesson.endDate}`
+        ).toLocaleString()}`}
       />
     </ListItem>
   ));
@@ -102,40 +135,24 @@ const RecommendedLessons: React.FC = () => {
           </List>
         </Grid>
       </Grid>
+      <Button
+        onClick={() => {
+          const registerNotification = {
+            title: "lesson_title",
+            desc: `You are now registerd to 2 lesson.`,
+            isRead: false,
+            createdAt: new Date().toLocaleString(),
+            customerId: user.id,
+          };
+
+          //send notification to db and get it back from db
+          dispatch(createNotification(registerNotification));
+        }}
+      >
+        test add notification
+      </Button>
     </>
   );
 };
 
 export default RecommendedLessons;
-
-/*
-const recommendedLessons = () => {
-      console.log("recommende");
-      let recommendedLesson = {
-        title: "",
-        startDate: null as any,
-        endDate: null as any,
-      };
-      let recommendedLessonsArray: any[] = [];
-
-      console.log("all", all_lessons);
-
-      all_lessons.forEach((lesson) => {
-        //dispatch(getLessonType(lesson.lessonTypeId));
-        all_lessonTypes.forEach((lessonType) => {
-          if (lessonType.id === lesson.lessonTypeId) {
-            console.log("lessonType.title", lessonType.title);
-            recommendedLesson.title = lessonType.title;
-          }
-        });
-
-        console.log("lesson.date", lesson.startDate?.toString());
-        // const startDate = lesson.startDate?.toUTCString();
-
-        recommendedLesson.startDate = lesson.startDate;
-        recommendedLesson.endDate = lesson.endDate;
-
-        recommendedLessonsArray.push(recommendedLesson);
-      });
-      setLessons(recommendedLessonsArray);
-    };*/

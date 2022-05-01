@@ -69,7 +69,7 @@ const Lessons: React.FC = () => {
   useEffect(() => {
     dispatch(getAllLessons());
     dispatch(getAllLessonTypes());
-  }, [all_lessons, dispatch]);
+  }, []);
 
   const handleAddLessonType = () => {
     setOpenLessonType(true);

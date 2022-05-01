@@ -9,6 +9,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Modal,
+  TextField,
+  Box,
 } from "@mui/material";
 
 //redux
@@ -17,8 +20,26 @@ import {
   getAllCustomers,
   verifyCustomer,
 } from "../../store/actions/authActions";
+import { createNotification } from "../../store/actions/notificationActions";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const CustomerTable: React.FC = () => {
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const dispatch = useAppDispatch();
   const allCustomers = useAppSelector((state) => state.customer.all_customers);
 
@@ -30,9 +51,29 @@ const CustomerTable: React.FC = () => {
     alert("Customer has been verified");
   };
 
+  const onChange = (event: any) => {
+    setMessage(event.target.value);
+  };
+
+  const handleMessageForm = () => {
+    setOpen(true);
+  };
+
+  const handleSend = () => {
+    const newNotification = {
+      title: "string",
+      desc: message,
+      isRead: false,
+      createdAt: new Date(),
+      //customerId: number,
+    };
+    dispatch(createNotification(newNotification));
+  };
+
   useEffect(() => {
     dispatch(getAllCustomers());
-  }, [dispatch]);
+    console.log("message", message);
+  }, []);
 
   const addRows = allCustomers.map((customer: any, index) => (
     <TableRow key={index}>
@@ -50,49 +91,83 @@ const CustomerTable: React.FC = () => {
   ));
 
   return (
-    <div>
-      <Typography
-        component='h1'
-        variant='h3'
-        sx={{
-          fontFamily: "Nunito",
-          marginLeft: 30,
-          marginTop: 10,
-          marginBottom: 3,
-        }}
+    <>
+      <div>
+        <Typography
+          component='h1'
+          variant='h3'
+          sx={{
+            fontFamily: "Nunito",
+            marginLeft: 30,
+            marginTop: 10,
+            marginBottom: 3,
+            maxWidth: 300,
+          }}
+        >
+          Customers
+        </Typography>
+
+        <Paper
+          sx={{
+            overflow: "hidden",
+            marginLeft: 30,
+            maxWidth: "70%",
+            alignItems: "center",
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <TableContainer sx={{ maxHeight: 600 }}>
+            <Table stickyHeader aria-label='sticky table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell style={cellStyle}>Student Number</TableCell>
+                  <TableCell style={cellStyle}>First Name</TableCell>
+                  <TableCell style={cellStyle}>Last Name</TableCell>
+                  <TableCell style={cellStyle}>Phone</TableCell>
+                  <TableCell style={cellStyle}>Email</TableCell>
+                  <TableCell style={cellStyle}>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <Fragment>{addRows}</Fragment>
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Button sx={{ m: 2 }} variant='contained' onClick={handleMessageForm}>
+            Send Message to all customers
+          </Button>
+        </Paper>
+      </div>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
       >
-        Customers
-      </Typography>
-      <Paper
-        sx={{
-          overflow: "hidden",
-          marginLeft: 30,
-          maxWidth: "70%",
-          alignItems: "center",
-          justifyContent: "center",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <TableContainer sx={{ maxHeight: 700 }}>
-          <Table stickyHeader aria-label='sticky table'>
-            <TableHead>
-              <TableRow>
-                <TableCell style={cellStyle}>Student Number</TableCell>
-                <TableCell style={cellStyle}>First Name</TableCell>
-                <TableCell style={cellStyle}>Last Name</TableCell>
-                <TableCell style={cellStyle}>Phone</TableCell>
-                <TableCell style={cellStyle}>Email</TableCell>
-                <TableCell style={cellStyle}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <Fragment>{addRows}</Fragment>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </div>
+        <Box sx={style}>
+          <Typography id='transition-modal-title' variant='h6' component='h2'>
+            Write a Message:
+          </Typography>
+          <TextField
+            margin='normal'
+            required
+            fullWidth
+            id='message'
+            label='Message:'
+            name='message'
+            autoComplete='message'
+            autoFocus
+            onChange={onChange}
+          />
+          <Button onClick={handleSend}>Send</Button>
+          <Button onClick={handleClose}>Close</Button>
+        </Box>
+      </Modal>
+    </>
   );
 };
 

@@ -14,6 +14,7 @@ export const getAllLessons = (): ThunkAction<
 > => {
   return async (dispatch, getState) => {
     const res: Lesson[] = await lessonService.getAll();
+    console.log("res", res.length);
     dispatch(lessonActions.setLeesons(res));
   };
 };

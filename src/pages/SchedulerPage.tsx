@@ -79,8 +79,8 @@ export const EVENTS = [
   {
     event_id: 10,
     title: "Event 9",
-    start: new Date("2021 5 6  15:00"),
-    end: new Date("2021 5 6 16:00"),
+    start: new Date("2022 5 6  15:00"),
+    end: new Date("2022 5 6 16:00"),
   },
   {
     event_id: 11,
@@ -93,8 +93,11 @@ export const EVENTS = [
 const SchedulerPage = () => {
   const [optionId, setOptionId] = useState(0);
   const [lessonsEvents, setLessonsEvents] = useState<Array<any>>([]);
+  const isAdmin = true;
+
   const dispatch = useAppDispatch();
   const { all_lessons, lesson } = useAppSelector((state) => state.lesson);
+  const { user } = useAppSelector((state) => state.customer);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
 
   const register = () => {
@@ -117,15 +120,17 @@ const SchedulerPage = () => {
       };
       newEvents.push(newEvent);
     });
+
     setLessonsEvents(newEvents);
   };
 
   useEffect(() => {
+    console.log(all_lessons.length);
     dispatch(getAllLessons());
 
     getEvents();
     // dispatch(getLessonType())
-  }, [dispatch]);
+  }, []);
 
   const handleConfirm = async (event: any, action: any): Promise<any> => {
     console.log("event", event.event_id);
@@ -140,50 +145,52 @@ const SchedulerPage = () => {
       if (event.option_id === 1) {
         const data = {
           lessonId: event.event_id,
-          customerId: 7,
+          customerId: user.id,
         };
         dispatch(createCustomerToLesson(data));
       }
 
       //// add the id of the customer to the lesson customer array
     } else if (action === "create") {
+      // console.log(event);
       /**POST event to remote DB */
+
+      /**
+       * Make sure to return 4 mandatory fields:
+       * event_id: string|number
+       * title: string
+       * start: Date|string
+       * end: Date|string
+       * ....extra other fields depend on your custom fields/editor properties
+       */
+      // Simulate http request: return added/edited event
+      return new Promise((res, rej) => {
+        setTimeout(() => {
+          res({
+            ...event,
+            event_id: event.event_id || Math.random(),
+          });
+        }, 3000);
+      });
     }
-    /**
-     * Make sure to return 4 mandatory fields:
-     * event_id: string|number
-     * title: string
-     * start: Date|string
-     * end: Date|string
-     * ....extra other fields depend on your custom fields/editor properties
-     */
-    // Simulate http request: return added/edited event
-    /* return new Promise((res, rej) => {
-      setTimeout(() => {
-        res({
-          ...event,
-          event_id: event.event_id || Math.random(),
-        });
-      }, 3000);
-    });*/
   };
 
   const handleDelete = async (deletedId: any): Promise<any> => {
+    if (isAdmin) {
+      dispatch(deleteLesson(deletedId));
+    }
     // Simulate http request: return the deleted id
-    return new Promise((res, rej) => {
+    /* return new Promise((res, rej) => {
       setTimeout(() => {
         res(deletedId);
       }, 3000);
-    });
+    });*/
   };
 
   return (
     <>
       <Header isAdmin={true} />
-
       <Scheduler
-        //customEditor={(scheduler) => <CustomEditor scheduler={scheduler} />}
-        //view="week"
         fields={[
           {
             name: "option_id",
@@ -194,16 +201,29 @@ const SchedulerPage = () => {
               { id: 2, text: "Dont Register", value: 2 },
             ],
             config: {
-              label: "Register To Lesson",
+              label: "Do you want to Register To Lesson?",
               required: true,
               errMsg: "Plz Select Choice",
             },
           },
         ]}
+        view='week'
+        week={{
+          weekDays: [0, 1, 2, 3, 4, 5],
+          weekStartOn: 6,
+          startHour: 7,
+          endHour: 22,
+          step: 60,
+        }}
+        day={{
+          startHour: 7,
+          endHour: 22,
+          step: 60,
+        }}
         onConfirm={handleConfirm}
         onDelete={handleDelete}
         events={lessonsEvents}
-        selectedDate={new Date(2022, 4, 5)}
+        selectedDate={new Date()}
       />
     </>
   );

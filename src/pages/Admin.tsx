@@ -8,8 +8,6 @@ import axios from "axios";
 
 const Admin = () => {
   const { adminActions } = useParams();
-
-  const { id } = useParams();
   const [isAdmin, setAdmin] = useState(true);
 
   useEffect(() => {
