@@ -14,8 +14,32 @@ export const getAllLessons = (): ThunkAction<
 > => {
   return async (dispatch, getState) => {
     const res: Lesson[] = await lessonService.getAll();
-    console.log("res", res.length);
-    dispatch(lessonActions.setLeesons(res));
+    dispatch(lessonActions.getAllLessons(res));
+  };
+};
+
+/*export const getAllRecommendedLessons = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const res: Lesson[] = await lessonService.getRecommendedLessons();
+    dispatch(lessonActions.getRecommendedLessons(res));
+  };
+};*/
+
+export const getFullInfoLessons = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    const res: Lesson[] = await lessonService.getFullInfoLessons();
+    console.log("res lessons", res);
+    dispatch(lessonActions.getFullInfoLessons(res));
   };
 };
 
@@ -24,7 +48,7 @@ export const getLesson = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res: Lesson = await lessonService.getLesson(lesson_id);
-    dispatch(lessonActions.setLesson(res));
+    dispatch(lessonActions.getLesson(res));
   };
 };
 
@@ -38,7 +62,7 @@ export const createLesson = (
 };
 
 export const editLesson = (
-  lesson_id: number,
+  lesson_id: any,
   formData: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
@@ -52,7 +76,6 @@ export const deleteLesson = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await lessonService.deleteLesson(lesson_id);
-    console.log("res get lesson", res);
     dispatch(lessonActions.deleteLesson(lesson_id));
   };
 };

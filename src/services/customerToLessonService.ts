@@ -3,6 +3,7 @@ import devConfig from '../env/dev';
 import { CustomerToLesson } from '../models/customerToLesson';
 import { Res } from '../models/res';
 import { resService } from './resService';
+import Swal from "sweetalert2";
 
 
 export const customerToLessonService = {
@@ -23,8 +24,9 @@ async function getAll(): Promise<CustomerToLesson[]> {
 
 async function createCTL(data: any) {
     const res: Res = await axios.post(`${BASE_URL}`, data);
-
-    console.log("res create ctl" , res)
+    if(res.data.success){
+      Swal.fire("Good Luck!", "You are now registered for the lesson ", "success");
+    }
     return res.data.success
       ? resService.handleSuccess(res)
       : resService.handleErr(res);

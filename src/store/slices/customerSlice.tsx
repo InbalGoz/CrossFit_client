@@ -26,8 +26,6 @@ const initialState: CustomerSliceState = {
     subEnd: null,
     isAdmin: false,
     isVerified: false,
-
-    // type: "",
   },
   customer: {
     //id: 0,
@@ -53,7 +51,7 @@ export const customerSlice = createSlice({
       state.all_customers = action.payload;
     },
     setLoggedCustomer(state, action) {
-      console.log("user slice", action.payload);
+      // console.log("user slice", action.payload);
       state.user_type = action.payload.type;
       state.user = action.payload.user;
       state.isAuthenticated = true;
@@ -67,15 +65,19 @@ export const customerSlice = createSlice({
       state.isAuthenticated = true;
     },
     registration(state, action) {
-      state.customer = action.payload.customer;
-      localStorage.setItem("token", action.payload.token); //added
+      if (state.user_type === "customer") {
+        state.customer = action.payload.customer;
 
+        state.all_customers = [...state.all_customers, action.payload];
+      }
+      localStorage.setItem("token", action.payload.token); //adde
       state.isAuthenticated = true;
     },
     login(state, action) {
-      // console.log("customer", action.payload.customer)
       localStorage.setItem("token", action.payload.token);
+
       state.customer = action.payload.customer;
+
       state.isAuthenticated = true;
     },
     updateCustomer(state, action) {
@@ -84,37 +86,23 @@ export const customerSlice = createSlice({
     },
     deleteCustomer(state, action) {
       localStorage.removeItem("token");
-      state.customer = {
-        // id: 0,
-        fName: "",
-        lName: "",
-        email: "",
-        password: "",
-        phone: "",
-        birthday: null,
-        subStart: null,
-        subEnd: null,
-        isAdmin: false,
-        isVerified: false,
-      };
+
+      const newCustomerArr = state.all_customers.filter(
+        (c) => c.id !== action.payload
+      );
+      state.all_customers = newCustomerArr;
+
       state.isAuthenticated = false;
     },
     logout(state, action) {
       localStorage.removeItem("token");
-      state.customer = {
-        // id: 0,
-        fName: "",
-        lName: "",
-        email: "",
-        password: "",
-        phone: "",
-        birthday: null,
-        subStart: null,
-        subEnd: null,
-        isAdmin: false,
-        isVerified: false,
-      };
-      console.log("loggoutt");
+
+      const newCustomerArr = state.all_customers.filter(
+        (c) => c.id !== action.payload
+      );
+
+      state.all_customers = newCustomerArr;
+      // console.log("loggoutt");
       state.isAuthenticated = false;
     },
   },

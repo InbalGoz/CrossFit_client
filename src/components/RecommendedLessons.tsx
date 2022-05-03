@@ -1,67 +1,28 @@
 import React, { useState, useEffect } from "react";
-import {
-  List,
-  Grid,
-  Typography,
-  ListItem,
-  ListItemText,
-  Button,
-} from "@mui/material";
+import { List, Grid, Typography, ListItem, ListItemText } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IconButton from "@mui/material/IconButton";
-import { useParams } from "react-router-dom";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getAllLessons } from "../store/actions/lessonActions";
-import { getAllLessonTypes } from "../store/actions/lessonTypeActions";
 import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
 import { createNotification } from "../store/actions/notificationActions";
 import { lessonService } from "../services/lessonService";
+import { Lesson } from "../models/lesson";
 
 const RecommendedLessons: React.FC = () => {
   const [lessons, setLessons] = useState<Array<Object>>([]);
-
   const dispatch = useAppDispatch();
-  const all_lessons = useAppSelector((state) => state.lesson.all_lessons); // get from backend in useEffevct
-  const { all_lessonTypes, lessonType } = useAppSelector(
-    (state) => state.lessonType
-  );
   const { user } = useAppSelector((state) => state.customer);
 
-  const recommendedLessons = () => {
-    let recommendedLesson = {
-      id: undefined as any,
-      title: "",
-      startDate: null as any,
-      endDate: null as any,
-    };
-
-    let recommendedLessonsArray: any[] = [];
-    console.log("length", all_lessons.length);
-    all_lessons.forEach((lesson) => {
-      all_lessonTypes.forEach((lessonType) => {
-        if (lessonType.id === lesson.lessonTypeId) {
-          recommendedLesson.title = lessonType.title;
-        }
-      });
-
-      console.log("lesson.date", new Date(`${lesson.startDate}`));
-
-      recommendedLesson.id = lesson.id;
-      recommendedLesson.startDate = new Date(`${lesson.startDate}`);
-      recommendedLesson.endDate = new Date(`${lesson.endDate}`);
-
-      recommendedLessonsArray.push(recommendedLesson);
-    });
-    setLessons(recommendedLessonsArray);
-  };
-
   useEffect(() => {
-    dispatch(getAllLessons());
-    dispatch(getAllLessonTypes());
-    recommendedLessons();
-  }, []); //all_lessons , id , dispatchall_lessons, lessonType
+    const recommendedLessonsService = async () => {
+      const recommendedLessons: Lesson[] =
+        await lessonService.getRecommendedLessons();
+      setLessons(recommendedLessons);
+    };
+    recommendedLessonsService();
+  }, []);
 
   const handleAddToLesson = (lesson_id: any, lesson_title: any) => {
     const data = {
@@ -83,7 +44,6 @@ const RecommendedLessons: React.FC = () => {
     dispatch(createNotification(registerNotification));
   };
 
-  // const lessonsListItems = lessons.map((le:any)=> (
   const lessonsListItems = lessons.map((lesson: any, index: any) => (
     <ListItem
       key={index}
@@ -98,12 +58,22 @@ const RecommendedLessons: React.FC = () => {
       }
     >
       <ListItemText
-        primary={`${lesson.title}`}
-        secondary={` from : ${new Date(
-          `${lesson.startDate}`
-        ).toLocaleString()}, until : ${new Date(
-          `${lesson.endDate}`
-        ).toLocaleString()}`}
+        primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
+        secondary={` Related categories : ${lesson.tags.map(
+          (tag: any) => tag
+        )} ,  Date : ${new Date(`${lesson.startDate}`)
+          .toISOString()
+          .slice(0, 10)} ,
+        From:
+        ${new Date(`${lesson.startDate}`).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })} to : ${new Date(`${lesson.endDate}`).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}`}
       />
     </ListItem>
   ));
@@ -135,22 +105,6 @@ const RecommendedLessons: React.FC = () => {
           </List>
         </Grid>
       </Grid>
-      <Button
-        onClick={() => {
-          const registerNotification = {
-            title: "lesson_title",
-            desc: `You are now registerd to 2 lesson.`,
-            isRead: false,
-            createdAt: new Date().toLocaleString(),
-            customerId: user.id,
-          };
-
-          //send notification to db and get it back from db
-          dispatch(createNotification(registerNotification));
-        }}
-      >
-        test add notification
-      </Button>
     </>
   );
 };

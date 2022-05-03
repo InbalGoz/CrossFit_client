@@ -6,6 +6,10 @@ import React, { useState, useEffect } from "react";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+
+import { lessonService } from "../services/lessonService";
+import { Lesson } from "../models/lesson";
+
 import {
   getAllLessons,
   deleteLesson,
@@ -90,7 +94,7 @@ export const EVENTS = [
   },
 ];
 
-const SchedulerPage = () => {
+const SchedulerPage: React.FC = () => {
   const [optionId, setOptionId] = useState(0);
   const [lessonsEvents, setLessonsEvents] = useState<Array<any>>([]);
   const isAdmin = true;
@@ -100,40 +104,66 @@ const SchedulerPage = () => {
   const { user } = useAppSelector((state) => state.customer);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
 
-  const register = () => {
-    if (optionId === 1) {
-      //register the customer to the lesson
-    } else {
-      ///dont register
-    }
-  };
-
-  const getEvents = () => {
-    let newEvents: any[] = [];
-    console.log(all_lessons.length);
-    all_lessons.forEach((lesson_element) => {
-      const newEvent = {
-        event_id: lesson_element.id,
-        title: "Event 10",
-        start: new Date(`${lesson_element.startDate}`),
-        end: new Date(`${lesson_element.endDate}`),
+  const getEvents = (newfullInfolessons: any) => {
+    const newEvents = newfullInfolessons.map((lesson_event: any) => {
+      console.log(
+        "date",
+        new Date(`${lesson_event.startDate}`).toLocaleString("en", {
+          timeZone: "UTC",
+        })
+      );
+      const tempStartDate = new Date(`${lesson_event.startDate}`);
+      const tempEndDate = new Date(`${lesson_event.endDate}`);
+      lesson_event = {
+        event_id: lesson_event.id,
+        title: lesson_event.title,
+        start: tempStartDate,
+        end: tempEndDate,
       };
-      newEvents.push(newEvent);
+      return lesson_event;
     });
 
-    setLessonsEvents(newEvents);
+    /* let newEvents: any[] = [];
+    newfullInfolessons.forEach((lesson_element: any) => {
+      const newEvent = {
+        event_id: lesson_element.id,
+        title: lesson_element.title,
+        start: new Date(lesson_element.startDate),
+        end: new Date(lesson_element.endDate),
+      };
+      newEvents.push(newEvent);
+    });*/
+
+    console.log("newEvents", newEvents);
+
+    return newEvents;
+  };
+
+  const fullInfolessonsService = async () => {
+    const newfullInfolessons: Lesson[] =
+      await lessonService.getFullInfoLessons();
+
+    console.log("Scheduler after get full lessons", newfullInfolessons);
+    const newArr = await getEvents(newfullInfolessons);
+    console.log("lessonsEvents hhhh", newArr);
+    setLessonsEvents(newArr);
   };
 
   useEffect(() => {
-    console.log(all_lessons.length);
-    dispatch(getAllLessons());
+    //dispatch(getAllLessons());
 
-    getEvents();
+    //getEvents();
     // dispatch(getLessonType())
+
+    fullInfolessonsService();
+
+    console.log("lessonsEvents ", lessonsEvents);
+
+    // getEvents();
   }, []);
 
   const handleConfirm = async (event: any, action: any): Promise<any> => {
-    console.log("event", event.event_id);
+    //console.log("event", event.event_id);
 
     setOptionId(event.option_id);
     //console.log("id", event.event_id);

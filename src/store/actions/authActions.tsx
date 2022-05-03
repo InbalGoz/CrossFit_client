@@ -3,7 +3,6 @@ import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { Customer } from "../../models/customer";
 import { customerService } from "../../services/customerService";
-import setAuthToken from "../../utils/setAuthToken";
 
 export const customerActions = customerSlice.actions;
 

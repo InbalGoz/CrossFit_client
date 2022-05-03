@@ -37,10 +37,10 @@ export const lessonTypeSlice = createSlice({
       state.lessonType = action.payload;
     },
     deleteLessonType(state, action) {
-      const idx = state.all_lessonTypes.findIndex(
-        (lessonType) => lessonType.id === action.payload
+      const newLessonTypesrArr = state.all_lessonTypes.filter(
+        (lessonType) => lessonType.id !== action.payload
       );
-      state.all_lessonTypes.splice(idx, 1);
+      state.all_lessonTypes = newLessonTypesrArr;
     },
   },
 });

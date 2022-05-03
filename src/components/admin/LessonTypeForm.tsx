@@ -51,7 +51,7 @@ const LessonTypeForm: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("lessontypeform submit", formData);
+
     newTags = [];
     dispatch(createLessonType(formData));
   };
@@ -88,7 +88,6 @@ const LessonTypeForm: React.FC = () => {
 
   useEffect(() => {
     dispatch(getAllLessonTypes());
-    console.log("lessontypeform", formData);
   }, []);
 
   const menuItemsLevels = levels.map((level_item: any, index) => (

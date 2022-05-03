@@ -15,13 +15,15 @@ import {
   MenuItem,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+//import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import momentTimezone from "moment-timezone";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-//import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { he } from "date-fns/locale";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { createLesson } from "../../store/actions/lessonActions";
+import { createLesson, editLesson } from "../../store/actions/lessonActions";
 import {
   getAllLessonTypes,
   getLessonType,
@@ -31,7 +33,20 @@ import {
   getEmployee,
 } from "../../store/actions/employeeActions";
 
-const LessonForm: React.FC = () => {
+interface Props {
+  handleSubmitLesson: any;
+}
+
+const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
+  // const timeZoneFromServer = "Europe/Israel ";
+  // const { moment } = new AdapterMoment({ instance: momentTimezone });
+  // const dateWithTimeZone = moment().tz(timeZoneFromServer);
+
+  //momentTimezone.tz.setDefault("Europe/Israel");
+
+  const { lesson } = useAppSelector((state) => state.lesson);
+
+  const [isEdit, setIsEdit] = useState(localStorage.getItem("isEdit") || false);
   const dispatch = useAppDispatch();
   const all_employees = useAppSelector((state) => state.employee.all_employees);
   const all_lessonTypes = useAppSelector(
@@ -39,25 +54,40 @@ const LessonForm: React.FC = () => {
   );
 
   const initialLesson: Lesson = {
-    startDate: null,
-    endDate: null,
-    employeeId: 0,
-    lessonTypeId: 0,
+    startDate: null || lesson.startDate,
+    endDate: null || lesson.endDate,
+    employeeId: 0 || lesson.employeeId,
+    lessonTypeId: 0 || lesson.lessonTypeId,
   };
 
   const [formData, setFormData] = useState(initialLesson);
   const { startDate, endDate, employeeId, lessonTypeId } = formData;
 
+  /*const fullInfolessonsService = async () => {
+    const newfullInfolessons: Lesson[] =
+      await lessonService.getFullInfoLessons();
+    //setFullInfolessons(newfullInfolessons);
+  };*/
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log("formData submit", formData);
+
     const form = {
       ...formData,
       endDate: formData.endDate?.toLocaleString(),
       startDate: formData.startDate?.toLocaleString(),
     };
 
-    dispatch(createLesson(form));
+    console.log("isEdit", isEdit);
+
+    if (isEdit === "true") {
+      dispatch(editLesson(lesson.id, form));
+    } else {
+      setIsEdit(true);
+      dispatch(createLesson(form));
+    }
+
+    handleSubmitLesson();
   };
 
   const handleEmployeeChange = (event: any) => {
@@ -83,6 +113,8 @@ const LessonForm: React.FC = () => {
   useEffect(() => {
     dispatch(getAllEmployees());
     dispatch(getAllLessonTypes());
+
+    localStorage.setItem("isEdit", JSON.stringify(isEdit));
 
     console.log("formData", formData);
   }, []);
@@ -111,14 +143,17 @@ const LessonForm: React.FC = () => {
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
+                  inputFormat='dd.MM.yyyy hh:mm'
                   renderInput={(params: any) => <TextField {...params} />}
                   label='Start Date and Time'
+                  //value={dateWithTimeZone}
                   value={formData.startDate}
                   onChange={(newValue: any) => {
+                    console.log("newValue", new Date(newValue));
                     //setValue(newValue);
                     setFormData({
                       ...formData,
-                      startDate: new Date(newValue),
+                      startDate: new Date(`${newValue}`),
                     });
                   }}
                 />
@@ -128,11 +163,16 @@ const LessonForm: React.FC = () => {
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
+                  inputFormat='dd.MM.yyyy hh:mm'
                   renderInput={(params: any) => <TextField {...params} />}
                   label='End Date and Time'
+                  // value={dateWithTimeZone}
                   value={formData.endDate}
                   onChange={(newValue: any) => {
-                    setFormData({ ...formData, endDate: new Date(newValue) });
+                    setFormData({
+                      ...formData,
+                      endDate: new Date(`${newValue}`),
+                    });
                   }}
                 />
               </LocalizationProvider>
@@ -182,7 +222,7 @@ const LessonForm: React.FC = () => {
             onClick={handleSubmit}
             sx={{ mt: 3, mb: 2 }}
           >
-            Add
+            Submit
           </Button>
         </Box>
       </Box>

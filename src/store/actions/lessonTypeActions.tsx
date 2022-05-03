@@ -32,8 +32,6 @@ export const createLessonType = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await lessonTypeService.createLessonType(formData);
-
-    console.log("res", res);
     dispatch(lessonTypeActions.createLessonType(res));
   };
 };

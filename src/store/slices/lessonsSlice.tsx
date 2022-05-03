@@ -4,18 +4,13 @@ import { Lesson } from "../../models/lesson";
 
 interface LessonsSliceState {
   all_lessons: Lesson[];
-  lesson: {
-    id?: number;
-    startDate: Date | null;
-    endDate: Date | null;
-    employeeId: number;
-    lessonTypeId: number;
-    coustomers?: any[];
-  };
+  all_fullInfoLessons: Lesson[];
+  lesson: Lesson;
 }
 
 const initialState: LessonsSliceState = {
   all_lessons: [],
+  all_fullInfoLessons: [],
   lesson: {
     id: 0,
     startDate: null,
@@ -30,30 +25,38 @@ export const lessonSlice = createSlice({
   name: "lesson",
   initialState,
   reducers: {
-    setLeesons(state, action: PayloadAction<Lesson[]>) {
-      // console.log("all lessons" , action.payload)
+    getAllLessons(state, action: PayloadAction<Lesson[]>) {
       state.all_lessons = action.payload;
     },
-    setLesson(state, action: PayloadAction<Lesson>) {
+    getLesson(state, action: PayloadAction<Lesson>) {
+      console.log("slice lesson", action.payload);
       state.lesson = action.payload;
     },
+    getFullInfoLessons(state, action: PayloadAction<Lesson[]>) {
+      state.all_fullInfoLessons = action.payload;
+    },
     createLesson(state, action) {
-      //state.lesson = action.payload;
+      console.log("getFullInfoLessons", action.payload);
       state.all_lessons = [...state.all_lessons, action.payload];
+
+      /*state.all_fullInfoLessons = [
+        ...state.all_fullInfoLessons,
+        action.payload,
+      ];*/
     },
     editLesson(state, action) {
       state.lesson = action.payload;
-      // const idx = state.all_lessons.findIndex(
-      //   (lesson) => lesson.id === action.payload.id
-      // );
-      // state.all_lessons.splice(idx, 1);
     },
     deleteLesson(state, action) {
-      console.log(action.payload);
-      const idx = state.all_lessons.findIndex(
-        (lesson) => lesson.id === action.payload
+      const newLessonArr = state.all_lessons.filter(
+        (lesson) => lesson.id !== action.payload
       );
-      state.all_lessons.splice(idx, 1);
+      state.all_lessons = newLessonArr;
+
+      const newFullLessonArr = state.all_fullInfoLessons.filter(
+        (lesson) => lesson.id !== action.payload
+      );
+      state.all_fullInfoLessons = newFullLessonArr;
     },
   },
 });

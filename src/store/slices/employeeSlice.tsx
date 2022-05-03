@@ -5,15 +5,7 @@ import { Employee } from "../../models/employee";
 //authSlice  :  user : employee||customer . login, logout, register,
 interface EmployeeSliceState {
   all_employees: Employee[];
-  employee: {
-    id?: number;
-    fName: string;
-    lName: string;
-    password: string;
-    phone: string;
-    isAdmin: boolean;
-    lessons?: any[];
-  };
+  employee: Employee;
 }
 
 const initialState: EmployeeSliceState = {
@@ -39,25 +31,20 @@ export const employeeSlice = createSlice({
     setEmployee(state, action: PayloadAction<Employee>) {
       state.employee = action.payload;
     },
-    setEmployeeWithLessons(state, action: PayloadAction<Employee>) {
+    setEmployeeWithLessons(state, action) {
       state.employee = action.payload;
     },
     createEmployee(state, action) {
-      state.employee = action.payload;
+      state.all_employees = [...state.all_employees, action.payload];
     },
     editEmployee(state, action) {
       state.employee = action.payload;
     },
     deleteEmployee(state, action) {
-      state.employee = {
-        id: 0,
-        fName: "",
-        lName: "",
-        password: "",
-        phone: "",
-        isAdmin: false,
-        lessons: [],
-      };
+      const newEmployeeArr = state.all_employees.filter(
+        (employee) => employee.id !== action.payload
+      );
+      state.all_employees = newEmployeeArr;
     },
   },
 });

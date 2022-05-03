@@ -46,17 +46,18 @@ const Login: React.FC = () => {
     try {
       //mine:get al users, loop them all, if the customer exist with the same mail, get is id and send it
       dispatch(logIn(formData));
-
-      if (isAuthenticated) {
-        navigate(`/home`);
-        //navigate(`/home/${customer.id}`);
-      }
     } catch (error) {
       console.log("error", error);
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(isAuthenticated);
+    if (isAuthenticated) {
+      navigate(`/home`);
+      //navigate(`/home/${customer.id}`);
+    }
+  }, [isAuthenticated]);
 
   return (
     <>

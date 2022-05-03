@@ -61,7 +61,6 @@ async function editCustomer(customer_id: any , formData: any) {
 
 async function verifyCustomer(customer_id: any) {
   const res: Res = await axios.put(`${BASE_URL}/verified/${customer_id}`);
-  console.log("res" , res)
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);

@@ -20,7 +20,7 @@ import {
   getAllCustomers,
   verifyCustomer,
 } from "../../store/actions/authActions";
-import { createNotification } from "../../store/actions/notificationActions";
+import { createNotificationForAll } from "../../store/actions/notificationActions";
 
 const style = {
   position: "absolute" as "absolute",
@@ -61,18 +61,16 @@ const CustomerTable: React.FC = () => {
 
   const handleSend = () => {
     const newNotification = {
-      title: "string",
+      title: "System Message",
       desc: message,
       isRead: false,
       createdAt: new Date(),
-      //customerId: number,
     };
-    dispatch(createNotification(newNotification));
+    dispatch(createNotificationForAll(newNotification));
   };
 
   useEffect(() => {
     dispatch(getAllCustomers());
-    console.log("message", message);
   }, []);
 
   const addRows = allCustomers.map((customer: any, index) => (

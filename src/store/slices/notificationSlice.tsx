@@ -5,14 +5,7 @@ import { Notification } from "../../models/notification";
 interface NotificationSliceState {
   all_notifications: Notification[];
   all_notificationsById: Notification[];
-  notification: {
-    id?: number;
-    title: string;
-    desc: string;
-    isRead: boolean;
-    createdAt: Date | null;
-    customerId: number;
-  };
+  notification: Notification;
 }
 
 const initialState: NotificationSliceState = {
@@ -35,34 +28,31 @@ export const notificationSlice = createSlice({
     setNotifications(state, action: PayloadAction<Notification[]>) {
       state.all_notifications = action.payload;
     },
-    setNotification(state, action: PayloadAction<Notification>) {
-      state.notification = action.payload;
-    },
     getAllById(state, action) {
-      console.log("notifi", action.payload);
       state.all_notificationsById = action.payload;
     },
     createNotification(state, action) {
-      // state.notification = action.payload;
       state.all_notificationsById = [
         ...state.all_notificationsById,
         action.payload,
       ];
-
+    },
+    createNotificationForAll(state, action) {
       state.all_notifications = [...state.all_notifications, action.payload];
     },
     editNotification(state, action) {
+      //-----
       state.notification = action.payload;
     },
     editAllNotifications(state, action) {
       state.all_notifications = action.payload;
     },
     deleteNotification(state, action) {
-      console.log("delete notifi", action.payload);
-      const index = state.all_notificationsById.findIndex(
-        (notification) => notification.id === action.payload.id
+      // console.log("delete notifi", action.payload);
+      const newNotificationrArr = state.all_notificationsById.filter(
+        (nById) => nById.id !== action.payload
       );
-      state.all_notificationsById.splice(index, 1);
+      state.all_notificationsById = newNotificationrArr;
     },
   },
 });

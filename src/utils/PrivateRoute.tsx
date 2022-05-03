@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<MyRouteProps> = ({
   const navigate = useNavigate();
 
   const render = () => {
-    console.log(isAuthenticated);
+    // console.log(isAuthenticated);
     if (isAuthenticated) return <Component />;
     else navigate("/login");
   };

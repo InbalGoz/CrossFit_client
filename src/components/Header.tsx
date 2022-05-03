@@ -26,11 +26,10 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ isAdmin }) => {
-  //const [isAdmin , setIsAdmin] = useState(true);
-  // const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.customer);
+  const { employee } = useAppSelector((state) => state.employee);
 
   const { all_notificationsById } = useAppSelector(
     (state) => state.notification
@@ -222,3 +221,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
 };
 
 export default Header;
+
+/*{
+  (employee.isAdmin && renderAdminMenue) || (!employee.isAdmin && renderMenu);
+}*/

@@ -7,26 +7,23 @@ import Header from "../components/Header";
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
-  getNotification,
   deleteNotification,
   getNotificationsByCustomerId,
   editAllNotification,
 } from "../store/actions/notificationActions";
 
-const Notifications = () => {
-  const dispatch = useAppDispatch();
+const Notifications: React.FC = () => {
   const [isAdmin, setAdmin] = useState(true);
+
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.customer);
   const { all_notificationsById } = useAppSelector(
     (state) => state.notification
   );
 
   useEffect(() => {
-    console.log(user.id);
     dispatch(getNotificationsByCustomerId(user.id));
     dispatch(editAllNotification(user.id));
-
-    console.log("all_notifications", all_notificationsById);
   }, []);
 
   const notificationsCards = all_notificationsById.map(
@@ -42,7 +39,6 @@ const Notifications = () => {
 
   const handleDelete = (notification_id: number) => {
     dispatch(deleteNotification(notification_id));
-    console.log("notification_id", notification_id);
   };
 
   const root: Object = {

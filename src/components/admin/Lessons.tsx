@@ -20,18 +20,20 @@ import EditIcon from "@mui/icons-material/Edit";
 //redux
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
-  getAllLessons,
   deleteLesson,
+  getFullInfoLessons,
   createLesson,
   editLesson,
   getLesson,
 } from "../../store/actions/lessonActions";
 import {
-  getLessonType,
   getAllLessonTypes,
   deleteLessonType,
   editLessonType,
 } from "../../store/actions/lessonTypeActions";
+
+import { lessonService } from "../../services/lessonService";
+import { Lesson } from "../../models/lesson";
 
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -51,8 +53,9 @@ const style = {
 
 const Lessons: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { all_lessons, lesson } = useAppSelector((state) => state.lesson);
+  const [fullInfolessons, setFullInfolessons] = useState<Array<Object>>([]);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
+  const { lesson } = useAppSelector((state) => state.lesson);
 
   const [dense, setDense] = React.useState(false);
   // const [secondary, setSecondary] = React.useState(false);
@@ -66,8 +69,17 @@ const Lessons: React.FC = () => {
   const lessonFormClose = () => setOpenLesson(false);
   const lessonFormShow = () => setOpenLesson(true);
 
+  const fullInfolessonsService = async () => {
+    const newfullInfolessons: Lesson[] =
+      await lessonService.getFullInfoLessons();
+
+    console.log("after get full lessons", newfullInfolessons);
+    setFullInfolessons(newfullInfolessons);
+  };
+
   useEffect(() => {
-    dispatch(getAllLessons());
+    fullInfolessonsService();
+
     dispatch(getAllLessonTypes());
   }, []);
 
@@ -75,11 +87,11 @@ const Lessons: React.FC = () => {
     setOpenLessonType(true);
   };
 
-  const handleAddLesson = () => {
+  const handleAddIconLesson = () => {
     setOpenLesson(true);
   };
 
-  const renderLessons = all_lessons.map((lesson, index) => (
+  const renderLessons = fullInfolessons.map((lesson: any, index) => (
     <>
       <ListItem
         key={index}
@@ -99,12 +111,22 @@ const Lessons: React.FC = () => {
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={lesson.lessonTypeId}
-          secondary={` from : ${new Date(
-            `${lesson.startDate}`
-          ).toLocaleString()}, until : ${new Date(
-            `${lesson.endDate}`
-          ).toLocaleString()}`}
+          primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
+          secondary={` Related categories : ${lesson.tags.map(
+            (tag: any) => tag
+          )} ,  Date : ${new Date(`${lesson.startDate}`)
+            .toISOString()
+            .slice(0, 10)} ,
+          From: ${new Date(`${lesson.startDate}`).toLocaleTimeString("en", {
+            timeStyle: "short",
+            hour12: false,
+            timeZone: "UTC",
+          })} to ${new Date(`${lesson.endDate}`).toLocaleTimeString("en", {
+            timeStyle: "short",
+            hour12: false,
+            timeZone: "UTC",
+          })}
+          `}
           //secondary={secondary ? 'Secondary text' : null}
         />
 
@@ -115,17 +137,24 @@ const Lessons: React.FC = () => {
     </>
   ));
 
-  const handleDelteLesson = (lesson_id: any) => {
+  const handleSubmitLesson = () => {
+    fullInfolessonsService();
+  };
+
+  const handleDelteLesson = async (lesson_id: any) => {
+    const newFullInfoLessons = fullInfolessons.filter(
+      (lesson_item: any) => lesson_item.id !== lesson_id
+    );
+
+    setFullInfolessons(newFullInfoLessons);
+
     dispatch(deleteLesson(lesson_id));
   };
 
-  const handleEditLesson = (lesson_id: any) => {
+  const handleEditLesson = async (lesson_id: any) => {
     dispatch(getLesson(lesson_id));
 
-    //open form
-    lessonFormShow();
-
-    dispatch(editLesson(lesson_id, lesson));
+    console.log("lesson gett", lesson);
   };
 
   const lessonsTypes = all_lessonTypes.map((lessontype, index) => (
@@ -198,7 +227,7 @@ const Lessons: React.FC = () => {
           >
             Lessons
           </Typography>
-          <Button variant='contained' onClick={handleAddLesson}>
+          <Button variant='contained' onClick={handleAddIconLesson}>
             Schedual a new Lesson
           </Button>
           <Demo>
@@ -227,7 +256,7 @@ const Lessons: React.FC = () => {
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <LessonForm />
+          <LessonForm handleSubmitLesson={handleSubmitLesson} />
 
           <Button onClick={lessonFormClose}>Close</Button>
         </Box>
@@ -242,3 +271,14 @@ export default Lessons;
 <IconButton>
           <ForwardToInboxIcon />
         </IconButton>*/
+
+/*
+${new Date(`${lesson.startDate}`).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })} to : ${new Date(`${lesson.endDate}`).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}*/

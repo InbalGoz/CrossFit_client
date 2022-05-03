@@ -6,6 +6,8 @@ import { resService } from './resService';
 
 export const lessonService = {
   getAll,
+  getRecommendedLessons,
+  getFullInfoLessons,
   createLesson,
   getLesson,
   editLesson,
@@ -21,6 +23,24 @@ async function getAll(): Promise<Lesson[]> {
   : resService.handleErr(res);
 };
 
+async function getRecommendedLessons(): Promise<Lesson[]> {
+  const res: Res = await axios.get(`${BASE_URL}/recommended`);
+
+  
+  return res.data.success
+  ? resService.handleSuccess(res)
+  : resService.handleErr(res);
+};
+
+async function getFullInfoLessons(): Promise<Lesson[]> {
+  const res: Res = await axios.get(`${BASE_URL}/fullInfo`);
+
+  console.log("serviceeee", res);
+  return res.data.success
+  ? resService.handleSuccess(res)
+  : resService.handleErr(res);
+};
+
 async function createLesson(formData: any) {
   const res: Res = await axios.post(`${BASE_URL}`, formData);
   return res.data.success
@@ -29,13 +49,13 @@ async function createLesson(formData: any) {
 };
 
 async function getLesson(lesson_id: number): Promise<Lesson> {
-  const res: Res = await axios.get(`${BASE_URL}`);
+  const res: Res = await axios.get(`${BASE_URL}/${lesson_id}`);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
 };
 
-async function editLesson(lesson_id: number, formData: any) {
+async function editLesson(lesson_id: any, formData: any) {
   const res: Res = await axios.put(`${BASE_URL}/${lesson_id}`, formData);
   return res.data.success
     ? resService.handleSuccess(res)
@@ -44,6 +64,7 @@ async function editLesson(lesson_id: number, formData: any) {
 
 async function deleteLesson(lesson_id: number|undefined) {
   const res: Res = await axios.delete(`${BASE_URL}/${lesson_id}`);
+
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);

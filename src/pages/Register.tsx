@@ -80,7 +80,7 @@ const Register: React.FC = () => {
       counter++;
     }
 
-    console.log("counter", counter);
+    //console.log("counter", counter);
     if (counter > 0) {
       return false;
     } else {
@@ -111,13 +111,10 @@ const Register: React.FC = () => {
   useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     if (isAuthenticated) {
-      console.log("customer", customer);
-      console.log("id", customer.id);
-
       navigate(`/home`);
       //navigate(`/home/${customer.id}`);
     }
-  }, []); //isAuthenticated, dispatch
+  }, [isAuthenticated]); //isAuthenticated, dispatch
 
   return (
     <>
