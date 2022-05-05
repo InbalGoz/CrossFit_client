@@ -23,7 +23,11 @@ import { he } from "date-fns/locale";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { createLesson, editLesson } from "../../store/actions/lessonActions";
+import {
+  createLesson,
+  editLesson,
+  getFullInfoLessons,
+} from "../../store/actions/lessonActions";
 import {
   getAllLessonTypes,
   getLessonType,
@@ -78,16 +82,9 @@ const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
       startDate: formData.startDate?.toLocaleString(),
     };
 
-    console.log("isEdit", isEdit);
-
-    if (isEdit === "true") {
-      dispatch(editLesson(lesson.id, form));
-    } else {
-      setIsEdit(true);
-      dispatch(createLesson(form));
-    }
-
-    handleSubmitLesson();
+    dispatch(createLesson(form));
+    // dispatch(getFullInfoLessons());
+    handleSubmitLesson(form);
   };
 
   const handleEmployeeChange = (event: any) => {

@@ -25,6 +25,7 @@ const RecommendedLessons: React.FC = () => {
   }, []);
 
   const handleAddToLesson = (lesson_id: any, lesson_title: any) => {
+    console.log("user.id recomended", user.id);
     const data = {
       lessonId: lesson_id,
       customerId: user.id,

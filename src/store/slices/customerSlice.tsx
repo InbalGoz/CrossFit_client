@@ -76,7 +76,11 @@ export const customerSlice = createSlice({
     login(state, action) {
       localStorage.setItem("token", action.payload.token);
 
-      state.customer = action.payload.customer;
+      console.log("all_customers action.payload", action.payload);
+
+      state.all_customers = [...state.all_customers, action.payload];
+
+      //state.customer = action.payload.customer;
 
       state.isAuthenticated = true;
     },

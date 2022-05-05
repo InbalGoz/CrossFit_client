@@ -54,7 +54,9 @@ export const createNotificationForAll = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await notificationService.createForAll(notificationData);
+
     console.log("res notifi", res);
+
     dispatch(notificationActions.createNotificationForAll(res));
   };
 };

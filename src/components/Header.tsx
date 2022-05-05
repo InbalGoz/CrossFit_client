@@ -26,6 +26,8 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ isAdmin }) => {
+  //const [count, setCount] = useState(0);
+  let count = 0;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.customer);
@@ -39,14 +41,15 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   useEffect(() => {
+    console.log("user iddd", user.id);
     dispatch(getNotificationsByCustomerId(user.id));
   }, []);
 
   const countNotRead = () => {
-    let count = 0;
     if (all_notificationsById) {
       all_notificationsById.forEach((noti) => {
         if (!noti.isRead) {
+          // setCount(count + 1);
           count++;
         }
       });
@@ -78,6 +81,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
 
   const handleLogOutClose = () => {
     //logout
+    // count = 0;
     dispatch(logOut());
     navigate("/");
 

@@ -32,6 +32,8 @@ export const createCustomerToLesson = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await customerToLessonService.createCTL(data);
+
+    console.log("res", res);
     dispatch(customerToLessonActions.createCustomerToLesson(res));
   };
 };

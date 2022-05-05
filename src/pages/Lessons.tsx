@@ -13,27 +13,27 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 //import AssignmentIcon from '@mui/icons-material/Assignment';
-import LessonTypeForm from "./LessonTypeForm";
-import LessonForm from "./LessonForm";
+import LessonTypeForm from "../components/admin/LessonTypeForm";
+import LessonForm from "../components/admin/LessonForm";
 import EditIcon from "@mui/icons-material/Edit";
 
 //redux
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   deleteLesson,
   getFullInfoLessons,
   createLesson,
   editLesson,
   getLesson,
-} from "../../store/actions/lessonActions";
+} from "../store/actions/lessonActions";
 import {
   getAllLessonTypes,
   deleteLessonType,
   editLessonType,
-} from "../../store/actions/lessonTypeActions";
+} from "../store/actions/lessonTypeActions";
 
-import { lessonService } from "../../services/lessonService";
-import { Lesson } from "../../models/lesson";
+import { lessonService } from "../services/lessonService";
+import { Lesson } from "../models/lesson";
 
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -53,12 +53,11 @@ const style = {
 
 const Lessons: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [fullInfolessons, setFullInfolessons] = useState<Array<Object>>([]);
+  // const [fullInfolessons, setFullInfolessons] = useState<Array<Object>>([]);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
-  const { lesson } = useAppSelector((state) => state.lesson);
+  const { all_fullInfoLessons } = useAppSelector((state) => state.lesson);
 
   const [dense, setDense] = React.useState(false);
-  // const [secondary, setSecondary] = React.useState(false);
 
   const [openLessonType, setOpenLessonType] = useState(false);
 
@@ -69,29 +68,23 @@ const Lessons: React.FC = () => {
   const lessonFormClose = () => setOpenLesson(false);
   const lessonFormShow = () => setOpenLesson(true);
 
-  const fullInfolessonsService = async () => {
-    const newfullInfolessons: Lesson[] =
-      await lessonService.getFullInfoLessons();
-
-    console.log("after get full lessons", newfullInfolessons);
-    setFullInfolessons(newfullInfolessons);
-  };
-
   useEffect(() => {
-    fullInfolessonsService();
+    dispatch(getFullInfoLessons());
 
     dispatch(getAllLessonTypes());
   }, []);
 
   const handleAddLessonType = () => {
-    setOpenLessonType(true);
+    lessonTypeFormShow();
+    //setOpenLessonType(true);
   };
 
-  const handleAddIconLesson = () => {
-    setOpenLesson(true);
+  const handleAddNewLesson = () => {
+    lessonFormShow();
+    //setOpenLesson(true);
   };
 
-  const renderLessons = fullInfolessons.map((lesson: any, index) => (
+  const renderLessons = all_fullInfoLessons.map((lesson: any, index) => (
     <>
       <ListItem
         key={index}
@@ -127,7 +120,6 @@ const Lessons: React.FC = () => {
             timeZone: "UTC",
           })}
           `}
-          //secondary={secondary ? 'Secondary text' : null}
         />
 
         <IconButton onClick={() => handleEditLesson(lesson.id)}>
@@ -137,24 +129,18 @@ const Lessons: React.FC = () => {
     </>
   ));
 
-  const handleSubmitLesson = () => {
-    fullInfolessonsService();
+  const handleSubmitLesson = async () => {
+    lessonFormClose();
+
+    dispatch(getFullInfoLessons());
   };
 
   const handleDelteLesson = async (lesson_id: any) => {
-    const newFullInfoLessons = fullInfolessons.filter(
-      (lesson_item: any) => lesson_item.id !== lesson_id
-    );
-
-    setFullInfolessons(newFullInfoLessons);
-
     dispatch(deleteLesson(lesson_id));
   };
 
   const handleEditLesson = async (lesson_id: any) => {
     dispatch(getLesson(lesson_id));
-
-    console.log("lesson gett", lesson);
   };
 
   const lessonsTypes = all_lessonTypes.map((lessontype, index) => (
@@ -175,11 +161,7 @@ const Lessons: React.FC = () => {
           <FitnessCenterIcon />
         </Avatar>
       </ListItemAvatar>
-      <ListItemText
-        primary={lessontype.title}
-        secondary={lessontype.level}
-        //secondary={secondary ? 'Secondary text' : null}
-      />
+      <ListItemText primary={lessontype.title} secondary={lessontype.level} />
       <IconButton>
         <EditIcon />
       </IconButton>
@@ -227,7 +209,7 @@ const Lessons: React.FC = () => {
           >
             Lessons
           </Typography>
-          <Button variant='contained' onClick={handleAddIconLesson}>
+          <Button variant='contained' onClick={handleAddNewLesson}>
             Schedual a new Lesson
           </Button>
           <Demo>
@@ -266,19 +248,3 @@ const Lessons: React.FC = () => {
 };
 
 export default Lessons;
-
-/*
-<IconButton>
-          <ForwardToInboxIcon />
-        </IconButton>*/
-
-/*
-${new Date(`${lesson.startDate}`).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          })} to : ${new Date(`${lesson.endDate}`).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          })}*/

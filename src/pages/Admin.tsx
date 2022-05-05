@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import CustomerTable from "../components/admin/CustomerTable";
-import Lessons from "../components/admin/Lessons";
+import Lessons from "./Lessons";
 import { useEffect } from "react";
 import axios from "axios";
 

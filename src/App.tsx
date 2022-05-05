@@ -9,6 +9,8 @@ import Notifications from "./pages/Notifications";
 import SchedulerPage from "./pages/SchedulerPage";
 import "./App.css";
 
+import ListCmp from "./components/ListCmp";
+
 import PrivateRoute from "./utils/PrivateRoute";
 
 //redux
@@ -24,11 +26,11 @@ const App: React.FC = () => {
   const { user, user_type } = useAppSelector((state) => state.customer);
 
   useEffect(() => {
-    if (token) {
-      dispatch(getLoggedCustomer(token));
-      console.log("user app", user);
-      console.log("user type", user_type);
-    }
+    // if (token) {
+    dispatch(getLoggedCustomer(token));
+    console.log("user app", user);
+    console.log("user type", user_type);
+    //}
 
     // log user out from all tabs if they log out in one tab
     window.addEventListener("storage", () => {
@@ -44,7 +46,12 @@ const App: React.FC = () => {
             <Route path='/' element={<LandingPage />} />
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
-
+            {/* {user.isAdmin && ( */}
+            <Route
+              path='/admin/:adminActions'
+              element={<PrivateRoute component={Admin} />}
+            />
+            {/* )} */}
             <Route
               path='home'
               element={<PrivateRoute path='home' component={Home} />}
@@ -56,10 +63,6 @@ const App: React.FC = () => {
             <Route
               path='scheduler'
               element={<PrivateRoute component={SchedulerPage} />}
-            />
-            <Route
-              path='/admin/:adminActions'
-              element={<PrivateRoute component={Admin} />}
             />
           </Routes>
         </main>

@@ -29,16 +29,14 @@ export const lessonSlice = createSlice({
       state.all_lessons = action.payload;
     },
     getLesson(state, action: PayloadAction<Lesson>) {
-      console.log("slice lesson", action.payload);
       state.lesson = action.payload;
     },
     getFullInfoLessons(state, action: PayloadAction<Lesson[]>) {
       state.all_fullInfoLessons = action.payload;
     },
     createLesson(state, action) {
-      console.log("getFullInfoLessons", action.payload);
+      console.log("action.payload FullInfoLessons", action.payload);
       state.all_lessons = [...state.all_lessons, action.payload];
-
       /*state.all_fullInfoLessons = [
         ...state.all_fullInfoLessons,
         action.payload,

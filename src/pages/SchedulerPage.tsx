@@ -163,8 +163,7 @@ const SchedulerPage: React.FC = () => {
   }, []);
 
   const handleConfirm = async (event: any, action: any): Promise<any> => {
-    //console.log("event", event.event_id);
-
+    console.log("user.id", user.id);
     setOptionId(event.option_id);
     //console.log("id", event.event_id);
     if (action === "edit") {
