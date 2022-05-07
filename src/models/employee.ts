@@ -1,5 +1,5 @@
 export interface Employee {
-  id?: number;
+  id: number;
   fName: string;
   lName: string;
   password: string;

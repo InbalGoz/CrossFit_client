@@ -1,98 +1,87 @@
-import { Scheduler } from "@aldabil/react-scheduler";
-import { Button } from "@mui/material";
-import Header from "../components/Header";
-import React, { useState, useEffect } from "react";
+import { Scheduler } from '@aldabil/react-scheduler';
+import { Button } from '@mui/material';
+import Header from '../components/Header';
+import React, { useState, useEffect } from 'react';
 //import CustomEditor from "../components/customScheduler";
 
 //redux
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-import { lessonService } from "../services/lessonService";
-import { Lesson } from "../models/lesson";
+import { lessonService } from '../services/lessonService';
+import { Lesson } from '../models/lesson';
+import { deleteLesson } from '../store/actions/lessonActions';
 
-import {
-  getAllLessons,
-  deleteLesson,
-  createLesson,
-  editLesson,
-  getLesson,
-} from "../store/actions/lessonActions";
-import {
-  getLessonType,
-  getAllLessonTypes,
-  deleteLessonType,
-  editLessonType,
-} from "../store/actions/lessonTypeActions";
-import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
+import { createCustomerToLesson } from '../store/actions/customerToLessonActions';
+import { useNavigate } from 'react-router-dom';
 
-export const EVENTS = [
-  {
-    event_id: 1,
-    title: "Event 1",
-    start: new Date("2021 5 2 09:30"),
-    end: new Date("2021 5 2 10:30"),
-  },
-  {
-    event_id: 2,
-    title: "Event 2",
-    start: new Date("2021 5 4 10:00"),
-    end: new Date("2021 5 4 11:00"),
-  },
-  {
-    event_id: 3,
-    title: "Event 3",
-    start: new Date("2021 4 27 09:00"),
-    end: new Date("2021 4 28 10:00"),
-  },
-  {
-    event_id: 4,
-    title: "Event 4",
-    start: new Date("2021 5 4 9:00"),
-    end: new Date("2021 5 4 10:36"),
-  },
-  {
-    event_id: 5,
-    title: "Event 5",
-    start: new Date("2021 5 1 10:00"),
-    end: new Date("2021 5 18 11:00"),
-  },
-  {
-    event_id: 6,
-    title: "Event 6",
-    start: new Date("2021 5 2 11:00"),
-    end: new Date("2021 5 2 12:00"),
-  },
-  {
-    event_id: 7,
-    title: "Event 7",
-    start: new Date("2021 5 1 12:00"),
-    end: new Date("2021 5 1 13:00"),
-  },
-  {
-    event_id: 8,
-    title: "Event 8",
-    start: new Date("2021 5 1 13:00"),
-    end: new Date("2021 5 1 14:00"),
-  },
-  {
-    event_id: 9,
-    title: "Event 11",
-    start: new Date("2021 5 5 16:00"),
-    end: new Date("2021 5 5 17:00"),
-  },
-  {
-    event_id: 10,
-    title: "Event 9",
-    start: new Date("2022 5 6  15:00"),
-    end: new Date("2022 5 6 16:00"),
-  },
-  {
-    event_id: 11,
-    title: "Event 10",
-    start: new Date(1651249669506 - 1000 * 60 * 60),
-    end: new Date(1651249669506),
-  },
-];
+// export const EVENTS = [
+//   {
+//     event_id: 1,
+//     title: 'Event 1',
+//     start: new Date('2021 5 2 09:30'),
+//     end: new Date('2021 5 2 10:30'),
+//   },
+//   {
+//     event_id: 2,
+//     title: 'Event 2',
+//     start: new Date('2021 5 4 10:00'),
+//     end: new Date('2021 5 4 11:00'),
+//   },
+//   {
+//     event_id: 3,
+//     title: 'Event 3',
+//     start: new Date('2021 4 27 09:00'),
+//     end: new Date('2021 4 28 10:00'),
+//   },
+//   {
+//     event_id: 4,
+//     title: 'Event 4',
+//     start: new Date('2021 5 4 9:00'),
+//     end: new Date('2021 5 4 10:36'),
+//   },
+//   {
+//     event_id: 5,
+//     title: 'Event 5',
+//     start: new Date('2021 5 1 10:00'),
+//     end: new Date('2021 5 18 11:00'),
+//   },
+//   {
+//     event_id: 6,
+//     title: 'Event 6',
+//     start: new Date('2021 5 2 11:00'),
+//     end: new Date('2021 5 2 12:00'),
+//   },
+//   {
+//     event_id: 7,
+//     title: 'Event 7',
+//     start: new Date('2021 5 1 12:00'),
+//     end: new Date('2021 5 1 13:00'),
+//   },
+//   {
+//     event_id: 8,
+//     title: 'Event 8',
+//     start: new Date('2021 5 1 13:00'),
+//     end: new Date('2021 5 1 14:00'),
+//   },
+//   {
+//     event_id: 9,
+//     title: 'Event 11',
+//     start: new Date('2021 5 5 16:00'),
+//     end: new Date('2021 5 5 17:00'),
+//   },
+//   {
+//     event_id: 10,
+//     title: 'Event 9',
+//     start: new Date('2022 5 6  15:00'),
+//     end: new Date('2022 5 6 16:00'),
+//   },
+//   {
+//     event_id: 11,
+//     title: 'Event 10',
+//     start: new Date(1651249669506 - 1000 * 60 * 60),
+//     end: new Date(1651249669506),
+//   },
+// ];
 
 const SchedulerPage: React.FC = () => {
   const [optionId, setOptionId] = useState(0);
@@ -101,17 +90,30 @@ const SchedulerPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const { all_lessons, lesson } = useAppSelector((state) => state.lesson);
-  const { user } = useAppSelector((state) => state.customer);
+  const { user } = useAppSelector((state) => state.auth);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
+  const navigate = useNavigate();
+
+  const loadLessonsEvents = async () => {
+    const newfullInfolessons: Lesson[] =
+      await lessonService.getFullInfoLessons();
+
+    console.log('Scheduler after get full lessons', newfullInfolessons);
+    const newArr = await getEvents(newfullInfolessons);
+    console.log('lessonsEvents hhhh', newArr);
+    setLessonsEvents(newArr);
+  };
+
+  useEffect(() => {
+    loadLessonsEvents();
+  }, []);
+  if (!user) {
+    navigate('/');
+    return <div>loading</div>;
+  }
 
   const getEvents = (newfullInfolessons: any) => {
     const newEvents = newfullInfolessons.map((lesson_event: any) => {
-      console.log(
-        "date",
-        new Date(`${lesson_event.startDate}`).toLocaleString("en", {
-          timeZone: "UTC",
-        })
-      );
       const tempStartDate = new Date(`${lesson_event.startDate}`);
       const tempEndDate = new Date(`${lesson_event.endDate}`);
       lesson_event = {
@@ -122,51 +124,14 @@ const SchedulerPage: React.FC = () => {
       };
       return lesson_event;
     });
-
-    /* let newEvents: any[] = [];
-    newfullInfolessons.forEach((lesson_element: any) => {
-      const newEvent = {
-        event_id: lesson_element.id,
-        title: lesson_element.title,
-        start: new Date(lesson_element.startDate),
-        end: new Date(lesson_element.endDate),
-      };
-      newEvents.push(newEvent);
-    });*/
-
-    console.log("newEvents", newEvents);
-
     return newEvents;
   };
 
-  const fullInfolessonsService = async () => {
-    const newfullInfolessons: Lesson[] =
-      await lessonService.getFullInfoLessons();
-
-    console.log("Scheduler after get full lessons", newfullInfolessons);
-    const newArr = await getEvents(newfullInfolessons);
-    console.log("lessonsEvents hhhh", newArr);
-    setLessonsEvents(newArr);
-  };
-
-  useEffect(() => {
-    //dispatch(getAllLessons());
-
-    //getEvents();
-    // dispatch(getLessonType())
-
-    fullInfolessonsService();
-
-    console.log("lessonsEvents ", lessonsEvents);
-
-    // getEvents();
-  }, []);
-
   const handleConfirm = async (event: any, action: any): Promise<any> => {
-    console.log("user.id", user.id);
+    console.log('user.id', user.id);
     setOptionId(event.option_id);
     //console.log("id", event.event_id);
-    if (action === "edit") {
+    if (action === 'edit') {
       //register
 
       ///not edit the title and time
@@ -180,7 +145,7 @@ const SchedulerPage: React.FC = () => {
       }
 
       //// add the id of the customer to the lesson customer array
-    } else if (action === "create") {
+    } else if (action === 'create') {
       // console.log(event);
       /**POST event to remote DB */
 
@@ -222,17 +187,17 @@ const SchedulerPage: React.FC = () => {
       <Scheduler
         fields={[
           {
-            name: "option_id",
-            type: "select",
+            name: 'option_id',
+            type: 'select',
             // Should provide options with type:"select"
             options: [
-              { id: 1, text: "Register", value: 1 },
-              { id: 2, text: "Dont Register", value: 2 },
+              { id: 1, text: 'Register', value: 1 },
+              { id: 2, text: 'Dont Register', value: 2 },
             ],
             config: {
-              label: "Do you want to Register To Lesson?",
+              label: 'Do you want to Register To Lesson?',
               required: true,
-              errMsg: "Plz Select Choice",
+              errMsg: 'Plz Select Choice',
             },
           },
         ]}

@@ -1,5 +1,5 @@
 export interface Customer {
-  id?: number;
+  id: number;
   fName: string;
   lName: string;
   email: string;
@@ -8,6 +8,6 @@ export interface Customer {
   birthday: Date | null;
   subStart: Date | null;
   subEnd: Date | null;
-  isAdmin: boolean,//delete
+  isAdmin: boolean; //delete
   isVerified: boolean;
 }

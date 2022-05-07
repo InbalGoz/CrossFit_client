@@ -21,6 +21,7 @@ import {
   verifyCustomer,
 } from "../../store/actions/authActions";
 import { createNotificationForAll } from "../../store/actions/notificationActions";
+import { Customer } from "../../models/customer";
 
 const style = {
   position: "absolute" as "absolute",
@@ -42,7 +43,7 @@ const CustomerTable: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const allCustomers = useAppSelector((state) => state.customer.all_customers);
-
+console.log({allCustomers});
   const cellStyle = { fontSize: "15pt" };
 
   //verify the customer
@@ -73,7 +74,7 @@ const CustomerTable: React.FC = () => {
     dispatch(getAllCustomers());
   }, []);
 
-  const addRows = allCustomers.map((customer: any, index) => (
+  const addRows = allCustomers.map((customer: Customer, index) => (
     <TableRow key={index}>
       <TableCell style={cellStyle}>{customer.id}</TableCell>
       <TableCell style={cellStyle}>{customer.fName}</TableCell>
@@ -81,9 +82,9 @@ const CustomerTable: React.FC = () => {
       <TableCell style={cellStyle}>{customer.phone}</TableCell>
       <TableCell style={cellStyle}>{customer.email}</TableCell>
       <TableCell>
-        <Button variant='contained' onClick={() => handleClick(customer.id)}>
-          Confirm
-        </Button>
+     {  !customer.isVerified? <Button variant='contained' onClick={() => handleClick(customer.id)}>
+       verify
+        </Button>: 'verified' }
       </TableCell>
     </TableRow>
   ));

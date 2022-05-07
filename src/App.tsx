@@ -1,61 +1,63 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import LandingPage from "./pages/Landing";
-import Admin from "./pages/Admin";
-import Notifications from "./pages/Notifications";
-import SchedulerPage from "./pages/SchedulerPage";
-import "./App.css";
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import LandingPage from './pages/Landing';
+import Admin from './pages/Admin';
+import Notifications from './pages/Notifications';
+import SchedulerPage from './pages/SchedulerPage';
+import './App.css';
 
-import ListCmp from "./components/ListCmp";
+import ListCmp from './components/ListCmp';
 
-import PrivateRoute from "./utils/PrivateRoute";
+import PrivateRoute from './utils/PrivateRoute';
 
 //redux
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { getLoggedCustomer, logOut } from "./store/actions/authActions";
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { getLoggedUser, logOut } from './store/actions/authActions';
+import { getNotificationsByCustomerId } from './store/actions/notificationActions';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
-  console.log("token", token);
+  console.log('token', token);
 
-  const { user, user_type } = useAppSelector((state) => state.customer);
+  const { user, user_type } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    // if (token) {
-    dispatch(getLoggedCustomer(token));
-    console.log("user app", user);
-    console.log("user type", user_type);
-    //}
+    if (token) {
+      dispatch(getLoggedUser(token));
+    }
 
     // log user out from all tabs if they log out in one tab
-    window.addEventListener("storage", () => {
+    window.addEventListener('storage', () => {
       if (!localStorage.token) dispatch(logOut());
     });
   }, []);
+
+  useEffect(() => {
+    if (user && user_type === 'customer') {
+      dispatch(getNotificationsByCustomerId(user.id));
+    }
+  }, [user]);
 
   return (
     <>
       <Router>
         <main className='py-3'>
           <Routes>
-            <Route path='/' element={<LandingPage />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/login' element={<Login />} />
+            <Route path='register' element={<Register />} />
+            <Route path='login' element={<Login />} />
+
             {/* {user.isAdmin && ( */}
             <Route
-              path='/admin/:adminActions'
+              path='admin/:adminActions'
               element={<PrivateRoute component={Admin} />}
             />
             {/* )} */}
-            <Route
-              path='home'
-              element={<PrivateRoute path='home' component={Home} />}
-            />
+            <Route path='home' element={<PrivateRoute component={Home} />} />
             <Route
               path='notifications'
               element={<PrivateRoute component={Notifications} />}
@@ -64,6 +66,7 @@ const App: React.FC = () => {
               path='scheduler'
               element={<PrivateRoute component={SchedulerPage} />}
             />
+            <Route path='/' element={<LandingPage />} />
           </Routes>
         </main>
       </Router>

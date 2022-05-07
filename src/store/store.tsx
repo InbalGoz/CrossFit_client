@@ -5,11 +5,13 @@ import { lessonTypeSlice } from '../store/slices/lessonTypeSlice';
 import { employeeSlice } from '../store/slices/employeeSlice';
 import { notificationSlice } from '../store/slices/notificationSlice';
 import { customerToLessonSlice } from './slices/customerToLessonSlice';
+import { authSlice } from './slices/authSlice';
 
 
 const store = configureStore({
     reducer: {
         customer:customerSlice.reducer,
+        auth:authSlice.reducer,
         employee:employeeSlice.reducer,
         lesson: lessonSlice.reducer,
         lessonType:lessonTypeSlice.reducer,

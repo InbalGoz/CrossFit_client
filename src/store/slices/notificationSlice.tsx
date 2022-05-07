@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { Notification } from "../../models/notification";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { Notification } from '../../models/notification';
 
 interface NotificationSliceState {
   all_notifications: Notification[];
@@ -13,8 +13,8 @@ const initialState: NotificationSliceState = {
   all_notificationsById: [],
   notification: {
     id: 0,
-    title: "",
-    desc: "",
+    title: '',
+    desc: '',
     isRead: false,
     createdAt: null,
     customerId: 0,
@@ -22,7 +22,7 @@ const initialState: NotificationSliceState = {
 };
 
 export const notificationSlice = createSlice({
-  name: "notification",
+  name: 'notification',
   initialState,
   reducers: {
     setNotifications(state, action: PayloadAction<Notification[]>) {
@@ -45,7 +45,7 @@ export const notificationSlice = createSlice({
       state.notification = action.payload;
     },
     editAllNotifications(state, action) {
-      state.all_notifications = action.payload;
+      state.all_notificationsById = action.payload;
     },
     deleteNotification(state, action) {
       // console.log("delete notifi", action.payload);

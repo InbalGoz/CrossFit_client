@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { Lesson } from "../../models/lesson";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { Lesson } from '../../models/lesson';
 
 interface LessonsSliceState {
   all_lessons: Lesson[];
@@ -22,7 +22,7 @@ const initialState: LessonsSliceState = {
 };
 
 export const lessonSlice = createSlice({
-  name: "lesson",
+  name: 'lesson',
   initialState,
   reducers: {
     getAllLessons(state, action: PayloadAction<Lesson[]>) {
@@ -35,12 +35,10 @@ export const lessonSlice = createSlice({
       state.all_fullInfoLessons = action.payload;
     },
     createLesson(state, action) {
-      console.log("action.payload FullInfoLessons", action.payload);
-      state.all_lessons = [...state.all_lessons, action.payload];
-      /*state.all_fullInfoLessons = [
+      state.all_fullInfoLessons = [
         ...state.all_fullInfoLessons,
         action.payload,
-      ];*/
+      ];
     },
     editLesson(state, action) {
       state.lesson = action.payload;

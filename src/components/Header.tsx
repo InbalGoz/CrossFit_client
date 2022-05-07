@@ -30,7 +30,7 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
   let count = 0;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.customer);
+  const { user } = useAppSelector((state) => state.auth);
   const { employee } = useAppSelector((state) => state.employee);
 
   const { all_notificationsById } = useAppSelector(
@@ -41,8 +41,6 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   useEffect(() => {
-    console.log("user iddd", user.id);
-    dispatch(getNotificationsByCustomerId(user.id));
   }, []);
 
   const countNotRead = () => {

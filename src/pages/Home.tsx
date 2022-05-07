@@ -8,7 +8,7 @@ import RecommendedLessons from "../components/RecommendedLessons";
 
 const Home = () => {
   const [isAdmin, setAdmin] = useState(true);
-
+console.log('here');
   return (
     <div>
       <Header isAdmin={isAdmin} />

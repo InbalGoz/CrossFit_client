@@ -1,8 +1,8 @@
-import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import { customerToLessonSlice } from "../slices/customerToLessonSlice";
-import { RootState } from "../store";
-import { CustomerToLesson } from "../../models/customerToLesson";
-import { customerToLessonService } from "../../services/customerToLessonService";
+import { AnyAction, ThunkAction } from '@reduxjs/toolkit';
+import { customerToLessonSlice } from '../slices/customerToLessonSlice';
+import { RootState } from '../store';
+import { CustomerToLesson } from '../../models/customerToLesson';
+import { customerToLessonService } from '../../services/customerToLessonService';
 
 export const customerToLessonActions = customerToLessonSlice.actions;
 
@@ -33,8 +33,10 @@ export const createCustomerToLesson = (
   return async (dispatch, getState) => {
     const res = await customerToLessonService.createCTL(data);
 
-    console.log("res", res);
-    dispatch(customerToLessonActions.createCustomerToLesson(res));
+    console.log('res', res);
+    if (res) {
+      dispatch(customerToLessonActions.createCustomerToLesson(res));
+    }
   };
 };
 

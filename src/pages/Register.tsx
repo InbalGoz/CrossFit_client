@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -6,21 +6,21 @@ import {
   Grid,
   Button,
   TextField,
-} from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import Link from "@mui/material/Link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TopBar from "../components/TopBar";
-import { Link as ToLink, useNavigate } from "react-router-dom";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Customer } from "../models/customer";
+} from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import Link from '@mui/material/Link';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TopBar from '../components/TopBar';
+import { Link as ToLink, useNavigate } from 'react-router-dom';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Customer } from '../models/customer';
 
 //redux
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { register } from "../store/actions/authActions";
-import { customerSlice } from "../store/slices/customerSlice";
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { register } from '../store/actions/authActions';
+import { customerSlice } from '../store/slices/customerSlice';
 
 const theme = createTheme();
 
@@ -29,24 +29,20 @@ const Register: React.FC = () => {
   const dispatch = useAppDispatch();
 
   //const oneCustomer = useAppSelector(state => state.customer.customer);
-  const { customer, isAuthenticated } = useAppSelector(
-    (state) => state.customer
-  );
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  const initialCustomer: Customer = {
-    fName: "",
-    lName: "",
-    email: "",
-    password: "",
-    phone: "",
+  const [formData, setFormData] = useState({
+    fName: '',
+    lName: '',
+    email: '',
+    password: '',
+    phone: '',
     birthday: null,
     subStart: null,
     subEnd: null,
     isAdmin: false,
     isVerified: false,
-  };
-
-  const [formData, setFormData] = useState(initialCustomer);
+  });
 
   const {
     fName,
@@ -70,11 +66,11 @@ const Register: React.FC = () => {
   const checkData = () => {
     let counter = 0;
     if (
-      formData.fName === "" ||
-      formData.lName === "" ||
-      formData.email === "" ||
-      formData.password === "" ||
-      formData.phone === "" ||
+      formData.fName === '' ||
+      formData.lName === '' ||
+      formData.email === '' ||
+      formData.password === '' ||
+      formData.phone === '' ||
       formData.birthday === null
     ) {
       counter++;
@@ -100,16 +96,16 @@ const Register: React.FC = () => {
       try {
         dispatch(register(formData));
       } catch (error) {
-        console.log("error", error);
+        console.log('error', error);
       }
     } else {
       //swal
-      alert("fill all data");
+      alert('fill all data');
     }
   };
 
   useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
+    console.log('isAuthenticated', isAuthenticated);
     if (isAuthenticated) {
       navigate(`/home`);
       //navigate(`/home/${customer.id}`);
@@ -125,16 +121,16 @@ const Register: React.FC = () => {
           <Box
             sx={{
               marginTop: 12,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              fontFamily: "Nunito",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              fontFamily: 'Nunito',
             }}
           >
             <Typography
               component='h1'
               variant='h3'
-              sx={{ fontFamily: "Nunito" }}
+              sx={{ fontFamily: 'Nunito' }}
             >
               Sign Up
             </Typography>
@@ -230,8 +226,8 @@ const Register: React.FC = () => {
               </Button>
               <Grid container justifyContent='flex-end'>
                 <Grid item>
-                  <ToLink to='/login' style={{ color: "blue" }}>
-                    {" "}
+                  <ToLink to='/login' style={{ color: 'blue' }}>
+                    {' '}
                     Already have an account? Sign in
                   </ToLink>
                 </Grid>

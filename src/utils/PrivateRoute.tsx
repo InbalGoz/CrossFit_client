@@ -21,7 +21,7 @@ const PrivateRoute: React.FC<MyRouteProps> = ({
   component: Component,
   ...rest
 }: any) => {
-  const { isAuthenticated } = useAppSelector((state) => state.customer);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const render = () => {

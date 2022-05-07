@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { Customer } from "../../models/customer";
-import { Employee } from "../../models/employee";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { Customer } from '../../models/customer';
+import { Employee } from '../../models/employee';
 
 interface UserSliceState {
   all_users: any[];
   isAuthenticated: Boolean;
-  user: any;
+  user: Customer | Employee | null;
   user_type: string;
 }
 
@@ -15,15 +15,21 @@ const initialState: UserSliceState = {
   // token: localStorage.getItem('token'),
   isAuthenticated: false,
   user: null,
-  user_type: "",
+  user_type: '',
 };
 
 export const authSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
+    setUser(state, action) {
+      console.log({ action });
+      state.user = action.payload.user;
+      state.user_type = action.payload.type;
+      state.isAuthenticated = true;
+    },
     getLoggedUser(state, action) {
-      // console.log("user slice", action.payload);
+      console.log('user slice', action.payload);
       state.user_type = action.payload.type;
       state.user = action.payload.user;
       state.isAuthenticated = true;
@@ -32,23 +38,18 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
       state.all_users = [...state.all_users, action.payload]; //check
 
-      localStorage.setItem("token", action.payload.token); //adde
+      localStorage.setItem('token', action.payload.token); //adde
       state.isAuthenticated = true;
     },
     login(state, action) {
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem('token', action.payload.token);
       state.all_users = [...state.all_users, action.payload];
       state.isAuthenticated = true;
     },
-    logout(state, action) {
-      localStorage.removeItem("token");
-
-      const newUserArr = state.all_users.filter(
-        (user) => user.id !== action.payload
-      );
-      state.all_users = newUserArr;
-
+    logout(state) {
+      localStorage.removeItem('token');
       state.isAuthenticated = false;
+      state.user = null;
     },
   },
 });
