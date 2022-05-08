@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Lesson } from "../../models/lesson";
+import React, { useState, useEffect } from 'react';
+import { FullLesson, Lesson } from '../../models/lesson';
 import {
   Container,
   Box,
@@ -13,78 +13,98 @@ import {
   FormControl,
   Select,
   MenuItem,
-} from "@mui/material";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+} from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 //import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import momentTimezone from "moment-timezone";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { he } from "date-fns/locale";
+import momentTimezone from 'moment-timezone';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { he } from 'date-fns/locale';
 
 //redux
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   createLesson,
   editLesson,
   getFullInfoLessons,
-} from "../../store/actions/lessonActions";
+} from '../../store/actions/lessonActions';
 import {
   getAllLessonTypes,
   getLessonType,
-} from "../../store/actions/lessonTypeActions";
+} from '../../store/actions/lessonTypeActions';
 import {
   getAllEmployees,
   getEmployee,
-} from "../../store/actions/employeeActions";
+} from '../../store/actions/employeeActions';
+import Swal from 'sweetalert2';
 
 interface Props {
-  handleSubmitLesson: any;
+  close: any;
+  lesson: FullLesson | null;
 }
 
-const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
+const LessonForm: React.FC<Props> = ({ close, lesson }) => {
   // const timeZoneFromServer = "Europe/Israel ";
   // const { moment } = new AdapterMoment({ instance: momentTimezone });
   // const dateWithTimeZone = moment().tz(timeZoneFromServer);
 
   //momentTimezone.tz.setDefault("Europe/Israel");
 
-  const { lesson } = useAppSelector((state) => state.lesson);
-
-  const [isEdit, setIsEdit] = useState(localStorage.getItem("isEdit") || false);
   const dispatch = useAppDispatch();
   const all_employees = useAppSelector((state) => state.employee.all_employees);
   const all_lessonTypes = useAppSelector(
     (state) => state.lessonType.all_lessonTypes
   );
+  const [formData, setFormData] = useState<Lesson>(
+    convertLesson() || {
+      startDate: new Date(),
+      endDate: new Date(),
+      employeeId: 0,
+      lessonTypeId: 0,
+    }
+  );
 
-  const initialLesson: Lesson = {
-    startDate: null || lesson.startDate,
-    endDate: null || lesson.endDate,
-    employeeId: 0 || lesson.employeeId,
-    lessonTypeId: 0 || lesson.lessonTypeId,
-  };
-
-  const [formData, setFormData] = useState(initialLesson);
-  const { startDate, endDate, employeeId, lessonTypeId } = formData;
-
-  /*const fullInfolessonsService = async () => {
-    const newfullInfolessons: Lesson[] =
-      await lessonService.getFullInfoLessons();
-    //setFullInfolessons(newfullInfolessons);
-  };*/
-
+  function convertLesson() {
+    if (lesson) {
+      return {
+        id: lesson.id,
+        startDate: lesson.startDate,
+        endDate: lesson.endDate,
+        employeeId:
+          all_employees.find((e) => {
+            return (
+              e.fName === lesson.employeeFName &&
+              e.lName === lesson.employeeLName
+            );
+          })?.id || 0,
+        lessonTypeId:
+          all_lessonTypes.find((l) => l.title === lesson.title)?.id || 0,
+      };
+    } else {
+      return null;
+    }
+  }
   const handleSubmit = (event: any) => {
     event.preventDefault();
-
-    const form = {
-      ...formData,
-      endDate: formData.endDate?.toLocaleString(),
-      startDate: formData.startDate?.toLocaleString(),
-    };
-
-    dispatch(createLesson(form));
-    // dispatch(getFullInfoLessons());
-    handleSubmitLesson(form);
+    if (
+      formData.employeeId &&
+      formData.lessonTypeId &&
+      formData.endDate &&
+      formData.startDate
+    ) {
+      if (formData.id) {
+        dispatch(editLesson(formData));
+      } else {
+        dispatch(createLesson(formData));
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'error',
+        text: 'Must fill all fields',
+      });
+    }
+    close();
   };
 
   const handleEmployeeChange = (event: any) => {
@@ -110,10 +130,6 @@ const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
   useEffect(() => {
     dispatch(getAllEmployees());
     dispatch(getAllLessonTypes());
-
-    localStorage.setItem("isEdit", JSON.stringify(isEdit));
-
-    console.log("formData", formData);
   }, []);
 
   return (
@@ -122,15 +138,15 @@ const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
       <Box
         sx={{
           marginTop: 3,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Typography
           component='h1'
           variant='h5'
-          sx={{ color: "#8A2BE2", fontWeight: "bold" }}
+          sx={{ color: '#8A2BE2', fontWeight: 'bold' }}
         >
           Schedual new lesson:
         </Typography>
@@ -146,7 +162,7 @@ const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
                   //value={dateWithTimeZone}
                   value={formData.startDate}
                   onChange={(newValue: any) => {
-                    console.log("newValue", new Date(newValue));
+                    console.log('newValue', new Date(newValue));
                     //setValue(newValue);
                     setFormData({
                       ...formData,
@@ -219,7 +235,7 @@ const LessonForm: React.FC<Props> = ({ handleSubmitLesson }) => {
             onClick={handleSubmit}
             sx={{ mt: 3, mb: 2 }}
           >
-            Submit
+            {formData.id ? 'Edit' : 'Add'}
           </Button>
         </Box>
       </Box>

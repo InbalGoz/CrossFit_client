@@ -5,20 +5,11 @@ import { Lesson } from '../../models/lesson';
 interface LessonsSliceState {
   all_lessons: Lesson[];
   all_fullInfoLessons: Lesson[];
-  lesson: Lesson;
 }
 
 const initialState: LessonsSliceState = {
   all_lessons: [],
   all_fullInfoLessons: [],
-  lesson: {
-    id: 0,
-    startDate: null,
-    endDate: null,
-    employeeId: 0,
-    lessonTypeId: 0,
-    coustomers: [],
-  },
 };
 
 export const lessonSlice = createSlice({
@@ -29,7 +20,7 @@ export const lessonSlice = createSlice({
       state.all_lessons = action.payload;
     },
     getLesson(state, action: PayloadAction<Lesson>) {
-      state.lesson = action.payload;
+      // state.lesson = action.payload;
     },
     getFullInfoLessons(state, action: PayloadAction<Lesson[]>) {
       state.all_fullInfoLessons = action.payload;
@@ -41,7 +32,10 @@ export const lessonSlice = createSlice({
       ];
     },
     editLesson(state, action) {
-      state.lesson = action.payload;
+      const copy = [...state.all_fullInfoLessons];
+      const idx = copy.findIndex((lesson) => lesson.id === action.payload.id);
+      copy.splice(idx, 1, action.payload);
+      state.all_fullInfoLessons = copy;
     },
     deleteLesson(state, action) {
       const newLessonArr = state.all_lessons.filter(

@@ -56,8 +56,8 @@ async function getLesson(lesson_id: number): Promise<Lesson> {
     : resService.handleErr(res);
 }
 
-async function editLesson(lesson_id: any, formData: any) {
-  const res: Res = await axios.put(`${BASE_URL}/${lesson_id}`, formData);
+async function editLesson(lesson: any) {
+  const res: Res = await axios.put(`${BASE_URL}/${lesson.id}`, lesson);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);

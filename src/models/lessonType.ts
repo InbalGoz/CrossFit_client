@@ -1,5 +1,5 @@
 export interface LessonType {
-  id?: number;
+  id: number;
   title: string;
   tags: string[];
   max: number;

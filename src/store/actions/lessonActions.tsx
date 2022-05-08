@@ -1,8 +1,8 @@
-import { lessonSlice } from "../slices/lessonsSlice";
-import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { Lesson } from "../../models/lesson";
-import { lessonService } from "../../services/lessonService";
+import { lessonSlice } from '../slices/lessonsSlice';
+import { AnyAction, ThunkAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { Lesson } from '../../models/lesson';
+import { lessonService } from '../../services/lessonService';
 
 export const lessonActions = lessonSlice.actions;
 
@@ -38,7 +38,7 @@ export const getFullInfoLessons = (): ThunkAction<
 > => {
   return async (dispatch, getState) => {
     const res: Lesson[] = await lessonService.getFullInfoLessons();
-    console.log("res lessons", res);
+    console.log('res lessons', res);
     dispatch(lessonActions.getFullInfoLessons(res));
   };
 };
@@ -62,11 +62,10 @@ export const createLesson = (
 };
 
 export const editLesson = (
-  lesson_id: any,
-  formData: any
+  lesson: Lesson
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    const res = await lessonService.editLesson(lesson_id, formData);
+    const res = await lessonService.editLesson(lesson);
     dispatch(lessonActions.editLesson(res));
   };
 };

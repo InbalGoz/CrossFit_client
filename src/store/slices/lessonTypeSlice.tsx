@@ -1,25 +1,17 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { LessonType } from "../../models/lessonType";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { LessonType } from '../../models/lessonType';
 
 interface LessonTypeSliceState {
   all_lessonTypes: LessonType[];
-  lessonType: LessonType;
 }
 
 const initialState: LessonTypeSliceState = {
   all_lessonTypes: [],
-  lessonType: {
-    id: 0,
-    title: "",
-    tags: [],
-    max: 0,
-    level: "",
-  },
 };
 
 export const lessonTypeSlice = createSlice({
-  name: "lessonType",
+  name: 'lessonType',
   initialState,
   reducers: {
     setLeesonsTypes(state, action: PayloadAction<LessonType[]>) {
@@ -27,14 +19,15 @@ export const lessonTypeSlice = createSlice({
     },
     setLessonType(state, action: PayloadAction<LessonType>) {
       ///-----------------
-      state.lessonType = action.payload;
     },
     createLessonType(state, action) {
       state.all_lessonTypes = [...state.all_lessonTypes, action.payload];
     },
     editLessonType(state, action) {
-      ///--------
-      state.lessonType = action.payload;
+      const copy = [...state.all_lessonTypes];
+      const idx = copy.findIndex((lt) => lt.id === action.payload.id);
+      copy.splice(idx, 1, action.payload);
+      state.all_lessonTypes = copy;
     },
     deleteLessonType(state, action) {
       const newLessonTypesrArr = state.all_lessonTypes.filter(

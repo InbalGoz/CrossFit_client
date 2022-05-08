@@ -1,8 +1,8 @@
-import { lessonTypeSlice } from "../slices/lessonTypeSlice";
-import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { LessonType } from "../../models/lessonType";
-import { lessonTypeService } from "../../services/lessonTypeService";
+import { lessonTypeSlice } from '../slices/lessonTypeSlice';
+import { AnyAction, ThunkAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { LessonType } from '../../models/lessonType';
+import { lessonTypeService } from '../../services/lessonTypeService';
 
 export const lessonTypeActions = lessonTypeSlice.actions;
 
@@ -37,11 +37,10 @@ export const createLessonType = (
 };
 
 export const editLessonType = (
-  lesson_id: number,
-  formData: any
+  lessonType: LessonType
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    const res = await lessonTypeService.editLessonType(lesson_id, formData);
+    const res = await lessonTypeService.editLessonType(lessonType);
     dispatch(lessonTypeActions.editLessonType(res));
   };
 };

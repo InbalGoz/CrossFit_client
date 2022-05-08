@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { LessonType } from "../../models/lessonType";
+import React, { useState, useEffect } from 'react';
+import { LessonType } from '../../models/lessonType';
 import {
   Container,
   Box,
@@ -15,71 +15,58 @@ import {
   Grid,
   FormControlLabel,
   Checkbox,
-} from "@mui/material";
-//import { Link as ToLink } from 'react-router-dom';
-
-//redux
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+} from '@mui/material';
+import { useAppDispatch } from '../../store/hooks';
 import {
   createLessonType,
+  editLessonType,
   getAllLessonTypes,
-} from "../../store/actions/lessonTypeActions";
+} from '../../store/actions/lessonTypeActions';
+import Swal from 'sweetalert2';
 
-const tagsArr: any[] = ["PR", "SQ", "EMOM", "AMRAP", "Ladder", "Hero WOD"];
-let newTags: any[] = [];
-const levels = ["Easy", "Medium", "Hard"];
-
-const LessonTypeForm: React.FC = () => {
+const tagsArr: any[] = ['PR', 'SQ', 'EMOM', 'AMRAP', 'Ladder', 'Hero WOD'];
+const levels = ['Easy', 'Medium', 'Hard'];
+const LessonTypeForm = ({ close, lessonType }: any) => {
   const dispatch = useAppDispatch();
-  const all_lessonTypes = useAppSelector(
-    (state) => state.lessonType.all_lessonTypes
+  const [formData, setFormData] = useState<LessonType>(
+    lessonType || {
+      title: '',
+      tags: [],
+      max: 0,
+      level: '',
+    }
   );
-  const [tagsState, setTags] = useState(new Array(tagsArr.length).fill(false));
-  const initialLessonType: LessonType = {
-    title: "",
-    tags: [],
-    max: 0,
-    level: "",
-  };
-
-  const [formData, setFormData] = useState(initialLessonType);
-
-  const { title, tags, max, level } = formData;
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [event.target.name]: event.target.value });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    newTags = [];
-    dispatch(createLessonType(formData));
-  };
-
-  const handleTagsChange = (position: any) => {
-    const updatedCheckedState = tagsState.map((item, index) =>
-      index === position ? !item : item
-    );
-
-    setTags(updatedCheckedState);
-
-    if (updatedCheckedState[position]) {
-      addToTags(position);
-      console.log("newTags", newTags);
+    if (formData.level && formData.max && formData.title) {
+      if (formData.id) {
+        dispatch(editLessonType(formData));
+      } else {
+        dispatch(createLessonType(formData));
+      }
     } else {
-      let index = newTags.indexOf(tagsArr[position]);
-      removeFromTags(index);
+      Swal.fire({
+        icon: 'error',
+        title: 'error',
+        text: 'Must fill all fields',
+      });
     }
-
-    setFormData({ ...formData, tags: newTags });
+    close();
   };
 
-  const addToTags = (position: any) => {
-    newTags.push(tagsArr[position]);
-  };
-
-  const removeFromTags = (index: any) => {
-    newTags.splice(index, 1);
+  const handleTagsChange = (tag: string) => {
+    const copy: LessonType = JSON.parse(JSON.stringify(formData));
+    const idx = copy.tags.findIndex((t) => t === tag);
+    if (idx !== -1) {
+      copy.tags.splice(idx, 1);
+    } else {
+      copy.tags.push(tag);
+    }
+    setFormData(copy);
   };
 
   const handleLevelChange = (event: any) => {
@@ -102,12 +89,12 @@ const LessonTypeForm: React.FC = () => {
       <Box
         sx={{
           marginTop: 3,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <Typography component='h1' variant='h3' sx={{ fontFamily: "Nunito" }}>
+        <Typography component='h1' variant='h3' sx={{ fontFamily: 'Nunito' }}>
           New Lesson type:
         </Typography>
         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
@@ -123,6 +110,7 @@ const LessonTypeForm: React.FC = () => {
                 autoComplete='title'
                 autoFocus
                 onChange={onChange}
+                value={formData.title}
               />
             </Grid>
 
@@ -139,9 +127,9 @@ const LessonTypeForm: React.FC = () => {
                               id={`custom-checkbox-${index}`}
                               name={tag}
                               value={tag}
-                              key={tagsArr[index]}
-                              checked={tagsState[index]}
-                              onChange={() => handleTagsChange(index)}
+                              key={tag}
+                              checked={formData.tags.includes(tag)}
+                              onChange={() => handleTagsChange(tag)}
                               color='primary'
                             />
                           }
@@ -165,6 +153,7 @@ const LessonTypeForm: React.FC = () => {
                 id='max'
                 autoComplete='max'
                 onChange={onChange}
+                value={formData.max}
               />
             </Grid>
             <Grid item xs={12}>
@@ -190,7 +179,7 @@ const LessonTypeForm: React.FC = () => {
               sx={{ mt: 3, mb: 2 }}
               // onClick={handleAddLessonTypeClick}
             >
-              Add
+              {formData.id ? 'Edit' : 'Add'}
             </Button>
           </Grid>
         </Box>

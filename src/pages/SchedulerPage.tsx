@@ -89,7 +89,7 @@ const SchedulerPage: React.FC = () => {
   const isAdmin = true;
 
   const dispatch = useAppDispatch();
-  const { all_lessons, lesson } = useAppSelector((state) => state.lesson);
+  const { all_lessons } = useAppSelector((state) => state.lesson);
   const { user } = useAppSelector((state) => state.auth);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
   const navigate = useNavigate();

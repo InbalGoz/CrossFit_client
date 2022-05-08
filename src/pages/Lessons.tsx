@@ -1,52 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import { Box, Modal, Button } from "@mui/material";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import React, { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
+import { Box, Modal, Button } from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 //import AssignmentIcon from '@mui/icons-material/Assignment';
-import LessonTypeForm from "../components/admin/LessonTypeForm";
-import LessonForm from "../components/admin/LessonForm";
-import EditIcon from "@mui/icons-material/Edit";
+import LessonTypeForm from '../components/admin/LessonTypeForm';
+import LessonForm from '../components/admin/LessonForm';
+import EditIcon from '@mui/icons-material/Edit';
 
 //redux
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   deleteLesson,
   getFullInfoLessons,
-  createLesson,
-  editLesson,
-  getLesson,
-} from "../store/actions/lessonActions";
+} from '../store/actions/lessonActions';
 import {
   getAllLessonTypes,
   deleteLessonType,
-  editLessonType,
-} from "../store/actions/lessonTypeActions";
+} from '../store/actions/lessonTypeActions';
+import { FullLesson, Lesson } from '../models/lesson';
+import { LessonType } from '../models/lessonType';
 
-import { lessonService } from "../services/lessonService";
-import { Lesson } from "../models/lesson";
-
-const Demo = styled("div")(({ theme }) => ({
+const Demo = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 
 const style = {
-  position: "absolute",
-  top: "48%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '48%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 700,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
@@ -56,33 +51,18 @@ const Lessons: React.FC = () => {
   // const [fullInfolessons, setFullInfolessons] = useState<Array<Object>>([]);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
   const { all_fullInfoLessons } = useAppSelector((state) => state.lesson);
-
-  const [dense, setDense] = React.useState(false);
-
+  const dense = false;
   const [openLessonType, setOpenLessonType] = useState(false);
-
-  const lessonTypeFormClose = () => setOpenLessonType(false);
-  const lessonTypeFormShow = () => setOpenLessonType(true);
-
   const [openLesson, setOpenLesson] = useState(false);
-  const lessonFormClose = () => setOpenLesson(false);
-  const lessonFormShow = () => setOpenLesson(true);
-
+  const [choosenLessonType, setChoosenLessonType] = useState<LessonType | null>(
+    null
+  );
+  const [choosenLesson, setChoosenLesson] = useState<FullLesson | null>(null);
   useEffect(() => {
     dispatch(getFullInfoLessons());
 
     dispatch(getAllLessonTypes());
   }, []);
-
-  const handleAddLessonType = () => {
-    lessonTypeFormShow();
-    //setOpenLessonType(true);
-  };
-
-  const handleAddNewLesson = () => {
-    lessonFormShow();
-    //setOpenLesson(true);
-  };
 
   const renderLessons = all_fullInfoLessons.map((lesson: any, index) => (
     <>
@@ -110,37 +90,37 @@ const Lessons: React.FC = () => {
           )} ,  Date : ${new Date(`${lesson.startDate}`)
             .toISOString()
             .slice(0, 10)} ,
-          From: ${new Date(`${lesson.startDate}`).toLocaleTimeString("en", {
-            timeStyle: "short",
+          From: ${new Date(`${lesson.startDate}`).toLocaleTimeString('en', {
+            timeStyle: 'short',
             hour12: false,
-            timeZone: "UTC",
-          })} to ${new Date(`${lesson.endDate}`).toLocaleTimeString("en", {
-            timeStyle: "short",
+            timeZone: 'UTC',
+          })} to ${new Date(`${lesson.endDate}`).toLocaleTimeString('en', {
+            timeStyle: 'short',
             hour12: false,
-            timeZone: "UTC",
+            timeZone: 'UTC',
           })}
           `}
         />
 
-        <IconButton onClick={() => handleEditLesson(lesson.id)}>
+        <IconButton onClick={() => handleEditLesson(lesson)}>
           <EditIcon />
         </IconButton>
       </ListItem>
     </>
   ));
 
-  const handleSubmitLesson = async () => {
-    lessonFormClose();
-
-    dispatch(getFullInfoLessons());
-  };
-
   const handleDelteLesson = async (lesson_id: any) => {
     dispatch(deleteLesson(lesson_id));
   };
 
-  const handleEditLesson = async (lesson_id: any) => {
-    dispatch(getLesson(lesson_id));
+  const handleEditLesson = async (lesson: FullLesson) => {
+    setChoosenLesson(lesson);
+    setOpenLesson(true);
+  };
+
+  const handleEditLessonType = (lessonType: LessonType) => {
+    setChoosenLessonType(lessonType);
+    setOpenLessonType(true);
   };
 
   const lessonsTypes = all_lessonTypes.map((lessontype, index) => (
@@ -162,7 +142,7 @@ const Lessons: React.FC = () => {
         </Avatar>
       </ListItemAvatar>
       <ListItemText primary={lessontype.title} secondary={lessontype.level} />
-      <IconButton>
+      <IconButton onClick={() => handleEditLessonType(lessontype)}>
         <EditIcon />
       </IconButton>
     </ListItem>
@@ -176,23 +156,30 @@ const Lessons: React.FC = () => {
   dispatch(editLessonType(lessontype_id))
   };*/
 
+  const reset = () => {
+    setOpenLesson(false);
+    setOpenLessonType(false);
+    setChoosenLesson(null);
+    setChoosenLessonType(null);
+  };
+
   return (
     <>
       <Grid
         container
         spacing={20}
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
         <Grid item xs={12} md={5}>
           <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: "Nunito" }}
+            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
             variant='h5'
             component='div'
           >
             Lessons types
           </Typography>
 
-          <Button variant='contained' onClick={handleAddLessonType}>
+          <Button variant='contained' onClick={() => setOpenLessonType(true)}>
             Add Lesson Type
           </Button>
 
@@ -203,13 +190,13 @@ const Lessons: React.FC = () => {
 
         <Grid item xs={12} md={5}>
           <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: "Nunito" }}
+            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
             variant='h5'
             component='div'
           >
             Lessons
           </Typography>
-          <Button variant='contained' onClick={handleAddNewLesson}>
+          <Button variant='contained' onClick={() => setOpenLesson(true)}>
             Schedual a new Lesson
           </Button>
           <Demo>
@@ -220,27 +207,30 @@ const Lessons: React.FC = () => {
 
       <Modal
         open={openLessonType}
-        onClose={lessonTypeFormClose}
+        onClose={() => reset()}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <LessonTypeForm />
+          <LessonTypeForm
+            close={() => reset()}
+            lessonType={choosenLessonType}
+          />
 
-          <Button onClick={lessonTypeFormClose}>Close</Button>
+          <Button onClick={() => reset()}>Close</Button>
         </Box>
       </Modal>
 
       <Modal
         open={openLesson}
-        onClose={lessonFormClose}
+        onClose={() => reset()}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <LessonForm handleSubmitLesson={handleSubmitLesson} />
+          <LessonForm lesson={choosenLesson} close={() => reset()} />
 
-          <Button onClick={lessonFormClose}>Close</Button>
+          <Button onClick={() => reset()}>Close</Button>
         </Box>
       </Modal>
     </>
