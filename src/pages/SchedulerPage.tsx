@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import { lessonService } from '../services/lessonService';
-import { Lesson } from '../models/lesson';
+import { FullLesson, Lesson } from '../models/lesson';
 import { deleteLesson } from '../store/actions/lessonActions';
 
 import { createCustomerToLesson } from '../store/actions/customerToLessonActions';
@@ -95,7 +95,7 @@ const SchedulerPage: React.FC = () => {
   const navigate = useNavigate();
 
   const loadLessonsEvents = async () => {
-    const newfullInfolessons: Lesson[] =
+    const newfullInfolessons: FullLesson[] =
       await lessonService.getFullInfoLessons();
 
     console.log('Scheduler after get full lessons', newfullInfolessons);
@@ -129,43 +129,17 @@ const SchedulerPage: React.FC = () => {
 
   const handleConfirm = async (event: any, action: any): Promise<any> => {
     console.log('user.id', user.id);
-    setOptionId(event.option_id);
-    //console.log("id", event.event_id);
+    console.log('event', event);
+    console.log('action', action);
     if (action === 'edit') {
-      //register
-
-      ///not edit the title and time
-
       if (event.option_id === 1) {
         const data = {
           lessonId: event.event_id,
           customerId: user.id,
         };
-        dispatch(createCustomerToLesson(data));
+        // dispatch(createCustomerToLesson(data));
       }
-
-      //// add the id of the customer to the lesson customer array
     } else if (action === 'create') {
-      // console.log(event);
-      /**POST event to remote DB */
-
-      /**
-       * Make sure to return 4 mandatory fields:
-       * event_id: string|number
-       * title: string
-       * start: Date|string
-       * end: Date|string
-       * ....extra other fields depend on your custom fields/editor properties
-       */
-      // Simulate http request: return added/edited event
-      return new Promise((res, rej) => {
-        setTimeout(() => {
-          res({
-            ...event,
-            event_id: event.event_id || Math.random(),
-          });
-        }, 3000);
-      });
     }
   };
 

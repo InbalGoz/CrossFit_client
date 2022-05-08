@@ -1,7 +1,7 @@
 import axios from 'axios';
 import devConfig from '../env/dev';
 import { Res } from '../models/res';
-import { Lesson } from '../models/lesson';
+import { FullLesson, Lesson } from '../models/lesson';
 import { resService } from './resService';
 
 export const lessonService = {
@@ -33,7 +33,7 @@ async function getRecommendedLessons(userId: number): Promise<Lesson[]> {
     : resService.handleErr(res);
 }
 
-async function getFullInfoLessons(): Promise<Lesson[]> {
+async function getFullInfoLessons(): Promise<FullLesson[]> {
   const res: Res = await axios.get(`${BASE_URL}/fullInfo`);
 
   console.log('serviceeee', res);
