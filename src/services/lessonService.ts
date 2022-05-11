@@ -24,7 +24,7 @@ async function getAll(): Promise<Lesson[]> {
 }
 
 async function getRecommendedLessons(userId: number): Promise<Lesson[]> {
-  console.log(userId);
+  console.log("hiiii" , userId);
   const res: Res = await axios.get(`${BASE_URL}/recommended/${userId}`);
   console.log({ res });
 

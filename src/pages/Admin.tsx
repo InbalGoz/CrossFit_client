@@ -16,7 +16,7 @@ const Admin = () => {
 
   return (
     <>
-      <Header isAdmin={isAdmin} />
+      <Header />
       <div>
         {(adminActions === "customers" && <CustomerTable />) ||
           (adminActions === "lessons" && <Lessons />)}

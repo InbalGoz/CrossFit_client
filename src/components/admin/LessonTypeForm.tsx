@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { LessonType } from '../../models/lessonType';
+import React, { useState, useEffect } from "react";
+import { LessonType } from "../../models/lessonType";
 import {
   Container,
   Box,
@@ -15,25 +15,46 @@ import {
   Grid,
   FormControlLabel,
   Checkbox,
-} from '@mui/material';
-import { useAppDispatch } from '../../store/hooks';
+} from "@mui/material";
+import { useAppDispatch } from "../../store/hooks";
 import {
   createLessonType,
   editLessonType,
   getAllLessonTypes,
-} from '../../store/actions/lessonTypeActions';
-import Swal from 'sweetalert2';
+} from "../../store/actions/lessonTypeActions";
+import Swal from "sweetalert2";
 
-const tagsArr: any[] = ['PR', 'SQ', 'EMOM', 'AMRAP', 'Ladder', 'Hero WOD'];
-const levels = ['Easy', 'Medium', 'Hard'];
+const tagsArr: any[] = [
+  "גמישות",
+  "חיזוק",
+  "יציבות",
+  "נשימה",
+  "מתיחות",
+  "שרירי ליבה",
+  "קורדינציה",
+  "איזון",
+  "שיווי משקל",
+  "אירובי",
+  "סיבולת לב ריאה",
+  "סיבולת שריר",
+  "שריפת שומנים",
+  "חיטוב",
+  "שרירי רגליים",
+  "שרירי בטן",
+  "עצימות גבוהה",
+  "אימון רצועות",
+  "כוח מתפרץ",
+  "זריזות",
+];
+const levels = ["מתחילים", "מתקדמים", "מומחים"];
 const LessonTypeForm = ({ close, lessonType }: any) => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<LessonType>(
     lessonType || {
-      title: '',
+      title: "",
       tags: [],
       max: 0,
-      level: '',
+      level: "",
     }
   );
 
@@ -50,9 +71,9 @@ const LessonTypeForm = ({ close, lessonType }: any) => {
       }
     } else {
       Swal.fire({
-        icon: 'error',
-        title: 'error',
-        text: 'Must fill all fields',
+        icon: "error",
+        title: "error",
+        text: "Must fill all fields",
       });
     }
     close();
@@ -89,12 +110,12 @@ const LessonTypeForm = ({ close, lessonType }: any) => {
       <Box
         sx={{
           marginTop: 3,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <Typography component='h1' variant='h3' sx={{ fontFamily: 'Nunito' }}>
+        <Typography component='h1' variant='h3' sx={{ fontFamily: "Nunito" }}>
           New Lesson type:
         </Typography>
         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
@@ -179,7 +200,7 @@ const LessonTypeForm = ({ close, lessonType }: any) => {
               sx={{ mt: 3, mb: 2 }}
               // onClick={handleAddLessonTypeClick}
             >
-              {formData.id ? 'Edit' : 'Add'}
+              {formData.id ? "Edit" : "Add"}
             </Button>
           </Grid>
         </Box>

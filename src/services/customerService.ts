@@ -6,7 +6,7 @@ import { Res } from '../models/res';
 import { resService } from './resService';
 
 export const customerService = {
-  getLoggedUser,
+  //getLoggedUser,
   registerCustomer,
   loginCustomer,
   getById,
@@ -18,7 +18,7 @@ export const customerService = {
 
 const BASE_URL = `${devConfig.base_url}/customers`;
 
-async function getLoggedUser(
+/*async function getLoggedUser(
   token: any
 ): Promise<{ user: Customer | Employee; type: string }> {
   const res: Res = await axios.get(`${BASE_URL}/loggedUser`, {
@@ -28,7 +28,7 @@ async function getLoggedUser(
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
-}
+}*/
 
 async function loginCustomer(formData: any) {
   const res: Res = await axios.get(`${BASE_URL}/login`, {

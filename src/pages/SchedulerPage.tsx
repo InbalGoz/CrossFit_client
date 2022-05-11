@@ -1,18 +1,18 @@
-import { Scheduler } from '@aldabil/react-scheduler';
-import { Button } from '@mui/material';
-import Header from '../components/Header';
-import React, { useState, useEffect } from 'react';
+import { Scheduler } from "@aldabil/react-scheduler";
+import { Button } from "@mui/material";
+import Header from "../components/Header";
+import React, { useState, useEffect } from "react";
 //import CustomEditor from "../components/customScheduler";
 
 //redux
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 
-import { lessonService } from '../services/lessonService';
-import { FullLesson, Lesson } from '../models/lesson';
-import { deleteLesson } from '../store/actions/lessonActions';
+import { lessonService } from "../services/lessonService";
+import { FullLesson, Lesson } from "../models/lesson";
+import { deleteLesson } from "../store/actions/lessonActions";
 
-import { createCustomerToLesson } from '../store/actions/customerToLessonActions';
-import { useNavigate } from 'react-router-dom';
+import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
+import { useNavigate } from "react-router-dom";
 
 // export const EVENTS = [
 //   {
@@ -98,9 +98,9 @@ const SchedulerPage: React.FC = () => {
     const newfullInfolessons: FullLesson[] =
       await lessonService.getFullInfoLessons();
 
-    console.log('Scheduler after get full lessons', newfullInfolessons);
+    console.log("Scheduler after get full lessons", newfullInfolessons);
     const newArr = await getEvents(newfullInfolessons);
-    console.log('lessonsEvents hhhh', newArr);
+    console.log("lessonsEvents hhhh", newArr);
     setLessonsEvents(newArr);
   };
 
@@ -108,7 +108,7 @@ const SchedulerPage: React.FC = () => {
     loadLessonsEvents();
   }, []);
   if (!user) {
-    navigate('/');
+    navigate("/");
     return <div>loading</div>;
   }
 
@@ -128,18 +128,19 @@ const SchedulerPage: React.FC = () => {
   };
 
   const handleConfirm = async (event: any, action: any): Promise<any> => {
-    console.log('user.id', user.id);
-    console.log('event', event);
-    console.log('action', action);
-    if (action === 'edit') {
+    console.log("user.id", user.id);
+    console.log("event", event);
+    console.log("action", action);
+
+    if (action === "edit") {
       if (event.option_id === 1) {
         const data = {
           lessonId: event.event_id,
           customerId: user.id,
         };
-        // dispatch(createCustomerToLesson(data));
+        dispatch(createCustomerToLesson(data));
       }
-    } else if (action === 'create') {
+    } else if (action === "create") {
     }
   };
 
@@ -157,21 +158,21 @@ const SchedulerPage: React.FC = () => {
 
   return (
     <>
-      <Header isAdmin={true} />
+      <Header />
       <Scheduler
         fields={[
           {
-            name: 'option_id',
-            type: 'select',
+            name: "option_id",
+            type: "select",
             // Should provide options with type:"select"
             options: [
-              { id: 1, text: 'Register', value: 1 },
-              { id: 2, text: 'Dont Register', value: 2 },
+              { id: 1, text: "Register", value: 1 },
+              { id: 2, text: "Dont Register", value: 2 },
             ],
             config: {
-              label: 'Do you want to Register To Lesson?',
+              label: "Do you want to Register To Lesson?",
               required: true,
-              errMsg: 'Plz Select Choice',
+              errMsg: "Plz Select Choice",
             },
           },
         ]}

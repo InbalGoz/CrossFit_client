@@ -1,25 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { List, Grid, Typography, ListItem, ListItemText } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import IconButton from '@mui/material/IconButton';
+import React, { useState, useEffect } from "react";
+import { List, Grid, Typography, ListItem, ListItemText } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import IconButton from "@mui/material/IconButton";
 //redux
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { createCustomerToLesson } from '../store/actions/customerToLessonActions';
-import { createNotification } from '../store/actions/notificationActions';
-import { lessonService } from '../services/lessonService';
-import { Lesson } from '../models/lesson';
-import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
+import { createNotification } from "../store/actions/notificationActions";
+import { lessonService } from "../services/lessonService";
+import { Lesson } from "../models/lesson";
+import { useNavigate } from "react-router-dom";
 
 const RecommendedLessons: React.FC = () => {
   const [lessons, setLessons] = useState<Array<Object>>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+
   const getRecommendedLessons = async () => {
     console.log({ user });
+
     if (user) {
       const recommendedLessons: Lesson[] =
         await lessonService.getRecommendedLessons(user.id);
+      console.log("recommendedLessons", recommendedLessons);
       setLessons(recommendedLessons || []);
     }
   };
@@ -28,12 +31,13 @@ const RecommendedLessons: React.FC = () => {
     getRecommendedLessons();
   }, []);
   if (!user) {
-    navigate('/');
+    navigate("/");
     return <div>loading</div>;
   }
 
   const handleAddToLesson = (lesson_id: any, lesson_title: any) => {
-    console.log('user.id recomended', user.id);
+    console.log("user.id recomended", user.id);
+    // if(customers.length < max)
     const data = {
       lessonId: lesson_id,
       customerId: user.id,
@@ -65,6 +69,7 @@ const RecommendedLessons: React.FC = () => {
       }
     >
       <ListItemText
+        sx={{ marginLeft: 4 }}
         primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
         secondary={` Related categories : ${lesson.tags.map(
           (tag: any) => tag
@@ -73,18 +78,18 @@ const RecommendedLessons: React.FC = () => {
           .slice(0, 10)} ,
         From:
         ${new Date(`${lesson.startDate}`).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
+          hour: "2-digit",
+          minute: "2-digit",
           hour12: false,
         })} to : ${new Date(`${lesson.endDate}`).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
+          hour: "2-digit",
+          minute: "2-digit",
           hour12: false,
         })}`}
       />
     </ListItem>
   ));
-
+  //xs={12} md={5}
   return (
     <>
       <Grid
@@ -92,21 +97,27 @@ const RecommendedLessons: React.FC = () => {
         spacing={0}
         sx={{
           marginTop: 5,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Grid item xs={12} md={5}>
+        <Grid item>
           <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
-            variant='h5'
+            sx={{ mt: 6, mb: 2, fontFamily: "Nunito", color: "white" }}
+            variant='h4'
             component='div'
           >
-            Recommended Lessons
+            Recommended Lessons:
           </Typography>
           <List
-            sx={{ width: '100%', maxWidth: 600, bgcolor: 'background.paper' }}
+            sx={{
+              width: 700,
+              bgcolor: "background.paper",
+              border: "2px solid orange",
+              padding: "10px",
+              borderRadius: "25px",
+            }}
           >
             {lessonsListItems}
           </List>

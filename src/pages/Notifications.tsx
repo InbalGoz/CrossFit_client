@@ -1,16 +1,16 @@
-import { Box, Typography } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import NotificationCard from '../components/NotificationCard';
-import Header from '../components/Header';
+import { Box, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import NotificationCard from "../components/NotificationCard";
+import Header from "../components/Header";
 
 //redux
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   deleteNotification,
   getNotificationsByCustomerId,
   editAllNotification,
-} from '../store/actions/notificationActions';
+} from "../store/actions/notificationActions";
 
 const Notifications: React.FC = () => {
   const [isAdmin, setAdmin] = useState(true);
@@ -26,7 +26,7 @@ const Notifications: React.FC = () => {
     if (user) {
       dispatch(editAllNotification(user.id));
     } else {
-      navigate('/');
+      navigate("/");
     }
   }, []);
 
@@ -36,6 +36,7 @@ const Notifications: React.FC = () => {
         key={index}
         title={notification.title}
         desc={notification.desc}
+        date={notification.createdAt}
         handleDelete={() => handleDelete(notification.id)}
       />
     )
@@ -47,16 +48,16 @@ const Notifications: React.FC = () => {
 
   const root: Object = {
     marginTop: 30,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   };
 
   return (
     <>
-      <Header isAdmin={isAdmin} />
+      <Header />
       <Box style={root}>
-        <Typography component='h1' variant='h3' sx={{ fontFamily: 'Nunito' }}>
+        <Typography component='h1' variant='h3' sx={{ fontFamily: "Nunito" }}>
           Inbox
         </Typography>
         {notificationsCards}

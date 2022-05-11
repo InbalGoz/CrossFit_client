@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "@mui/material/Card";
+import { Card, CardHeader } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
@@ -11,20 +11,32 @@ import { deleteNotification } from "../store/actions/notificationActions";
 interface Props {
   title: any;
   desc: any;
+  date: any;
   handleDelete: any;
 }
 
-const NotificationCard: React.FC<Props> = ({ title, desc, handleDelete }) => {
+const NotificationCard: React.FC<Props> = ({
+  title,
+  desc,
+  date,
+  handleDelete,
+}) => {
   return (
     <Card sx={{ minWidth: 800, mb: 5 }}>
+      <CardHeader
+        title={title}
+        subheader={`Date : ${new Date(`${date}`).toISOString().slice(0, 10)} ,
+      At:
+      ${new Date(`${date}`).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })}`}
+      />
       <CardContent>
-        <Typography variant='h5' component='div'>
-          {title}
+        <Typography variant='body2' fontSize={20}>
+          {desc}
         </Typography>
-
-        <Typography sx={{ mb: 1.5 }} color='text.secondary'></Typography>
-
-        <Typography variant='body2'>{desc}</Typography>
       </CardContent>
       <CardActions>
         <Button size='small' onClick={handleDelete}>

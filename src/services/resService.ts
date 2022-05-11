@@ -14,12 +14,12 @@ function handleErr(res: Res) {
   Swal.fire({ 
     icon: 'error',
     title: 'Oops...',
-    text: 'hello' , 
+    text: `${res.data.err}` , 
    });
 }
 
 function handleSuccess(res: Res) {
- // console.log("res.data.data" , res.data.data)
+  console.log("res.data.data" , res.data.data)
   
   /*Swal.fire({ 
     icon: 'error',

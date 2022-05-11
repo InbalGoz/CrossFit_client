@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { Customer } from '../../models/customer';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import { Customer } from "../../models/customer";
 
 interface CustomerSliceState {
   all_customers: Customer[];
+  // customer: Customer | null;
 }
 
 const initialState: CustomerSliceState = {
@@ -23,29 +24,20 @@ const initialState: CustomerSliceState = {
   //   isAdmin: false,
   //   isVerified: false,
   // },
-  // customer: {
-  //   //id: 0,
-  //   fName: '',
-  //   lName: '',
-  //   email: '',
-  //   password: '',
-  //   phone: '',
-  //   birthday: null,
-  //   subStart: null,
-  //   subEnd: null,
-  //   isAdmin: false,
-  //   isVerified: false,
-  // },
+  // customer: null,
   // user_type: 'string',
 };
 
 export const customerSlice = createSlice({
-  name: 'customer',
+  name: "customer",
   initialState,
   reducers: {
     setCustomers(state, action: PayloadAction<Customer[]>) {
       state.all_customers = action.payload;
     },
+    // getCustomer(state, action: PayloadAction<Customer>) {
+    //  state.customer = action.payload;
+    // },
     setLoggedCustomer(state, action) {
       // console.log('user slice', action.payload);
       // state.user_type = action.payload.type;
@@ -76,7 +68,7 @@ export const customerSlice = createSlice({
     //   state.isAuthenticated = true;
     // },
     login(state, action) {
-      console.log('all_customers action.payload', action.payload);
+      console.log("all_customers action.payload", action.payload);
 
       state.all_customers = [...state.all_customers, action.payload];
 
@@ -89,7 +81,7 @@ export const customerSlice = createSlice({
     //   state.isAuthenticated = true;
     // },
     deleteCustomer(state, action) {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
 
       const newCustomerArr = state.all_customers.filter(
         (c) => c.id !== action.payload
@@ -98,7 +90,7 @@ export const customerSlice = createSlice({
 
       // state.isAuthenticated = false;
     },
-    logout(state, action) {
+    /* logout(state, action) {
       localStorage.removeItem('token');
 
       const newCustomerArr = state.all_customers.filter(
@@ -108,6 +100,6 @@ export const customerSlice = createSlice({
       state.all_customers = newCustomerArr;
       // console.log("loggoutt");
       // state.isAuthenticated = false;
-    },
+    },*/
   },
 });

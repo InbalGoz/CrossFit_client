@@ -1,28 +1,28 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import Home from './pages/Home';
-import LandingPage from './pages/Landing';
-import Admin from './pages/Admin';
-import Notifications from './pages/Notifications';
-import SchedulerPage from './pages/SchedulerPage';
-import './App.css';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import LandingPage from "./pages/Landing";
+import Admin from "./pages/Admin";
+import Notifications from "./pages/Notifications";
+import SchedulerPage from "./pages/SchedulerPage";
+import "./App.css";
 
-import ListCmp from './components/ListCmp';
+import ListCmp from "./components/ListCmp";
 
-import PrivateRoute from './utils/PrivateRoute';
+import PrivateRoute from "./utils/PrivateRoute";
 
 //redux
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import { getLoggedUser, logOut } from './store/actions/authActions';
-import { getNotificationsByCustomerId } from './store/actions/notificationActions';
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import { getLoggedUser, logOut } from "./store/actions/authActions";
+import { getNotificationsByCustomerId } from "./store/actions/notificationActions";
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
-  console.log('token', token);
+  console.log("token", token);
 
   const { user, user_type } = useAppSelector((state) => state.auth);
 
@@ -32,13 +32,13 @@ const App: React.FC = () => {
     }
 
     // log user out from all tabs if they log out in one tab
-    window.addEventListener('storage', () => {
+    window.addEventListener("storage", () => {
       if (!localStorage.token) dispatch(logOut());
     });
   }, []);
 
   useEffect(() => {
-    if (user && user_type === 'customer') {
+    if (user && user_type === "customer") {
       dispatch(getNotificationsByCustomerId(user.id));
     }
   }, [user]);

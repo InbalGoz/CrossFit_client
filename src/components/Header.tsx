@@ -12,6 +12,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Logo from "../assets/logo.jpeg";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -20,17 +21,19 @@ import {
   getNotificationsByCustomerId,
   createNotification,
 } from "../store/actions/notificationActions";
+import { employeeService } from "../services/employeeService";
+import { Employee } from "../models/employee";
 
 interface Props {
   isAdmin: any;
 }
 
-const Header: React.FC<Props> = ({ isAdmin }) => {
-  //const [count, setCount] = useState(0);
+const Header: React.FC = () => {
+  const [isAdmin, setAdmin] = useState(true); //------false
   let count = 0;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, user_type } = useAppSelector((state) => state.auth);
   const { employee } = useAppSelector((state) => state.employee);
 
   const { all_notificationsById } = useAppSelector(
@@ -40,7 +43,21 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
+  const getLogedEmployee = async () => {
+    if (user) {
+      const logedEmployee: Employee = await employeeService.getLoggedEmployee(
+        user.id
+      );
+      if (logedEmployee.isAdmin) {
+        setAdmin(true);
+      }
+    }
+  };
+
   useEffect(() => {
+    if (user && user_type == "employee") {
+      getLogedEmployee();
+    }
   }, []);
 
   const countNotRead = () => {
@@ -147,22 +164,16 @@ const Header: React.FC<Props> = ({ isAdmin }) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position='static'>
+      <AppBar position='static' sx={{ height: 80, background: "#FF8C00" }}>
         <Toolbar>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ flexGrow: 1, fontFamily: "Nunito" }}
-          >
-            <Link
-              to={`/home`}
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              {" "}
-              Nagar CrossFit{" "}
-            </Link>
-          </Typography>
+          <Link to={`/home`} style={{ textDecoration: "none", color: "white" }}>
+            <img
+              src={Logo}
+              alt='logo'
+              style={{ maxHeight: 70, width: 150, marginTop: 4 }}
+            />
+          </Link>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Link
