@@ -1,7 +1,6 @@
-import { Button, Typography, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import SocialFollow from "../components/SocialFollow";
 import RecommendedLessons from "../components/RecommendedLessons";
@@ -22,15 +21,12 @@ const root: Object = {
 };
 
 const Home = () => {
-  const [isAdmin, setAdmin] = useState(true);
   const [customer, setCustomer] = useState<any>(null);
   const [employee, setEmployee] = useState<any>(null);
-  const dispatch = useAppDispatch();
   const { user, user_type } = useAppSelector((state) => state.auth);
-  //const { customer } = useAppSelector((state) => state.customer);
 
   const getCustomer = async () => {
-    console.log({ user });
+    //console.log({ user });
     if (user) {
       const logedCustomer: Customer = await customerService.getById(user.id);
       console.log({ logedCustomer });
@@ -39,11 +35,12 @@ const Home = () => {
   };
 
   const getEmployee = async () => {
-    console.log({ user });
+    // console.log({ user });
     if (user) {
       const logedEmployee: Employee = await employeeService.getLoggedEmployee(
         user.id
       );
+      // console.log("logedEmployee", logedEmployee);
       // if (logedEmployee.isAdmin) {
       ///  setAdmin(true);
       //}
@@ -55,12 +52,16 @@ const Home = () => {
     console.log("user_type", user_type);
     if (user && user_type === "customer") {
       getCustomer();
-    } else {
+    } else if (user && user_type === "employee") {
       getEmployee();
     }
   }, []);
 
   console.log("here");
+  // console.log({ employee });
+  //||
+  // (user_type == "employee" &&
+  //`Hello , ${employee.fName} ${employee.lName}`)
   return (
     <div style={root}>
       <Header />
@@ -87,12 +88,13 @@ const Home = () => {
               {(user_type == "customer" &&
                 `Hello , ${customer?.fName} ${customer?.lName}`) ||
                 (user_type == "employee" &&
-                  `Hello , ${employee.fName} ${employee.lName}`)}
+                  `Hello , ${employee?.fName} ${employee?.lName}`)}
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <RecommendedLessons />
+          {(user_type == "employee" && "") ||
+            (user_type == "customer" && <RecommendedLessons />)}
         </Grid>
         <Grid
           item
@@ -124,56 +126,3 @@ const Home = () => {
 };
 
 export default Home;
-//`Your subscription ends on: ${new Date(
-// customer.subEnd
-// ).toLocaleString()}`
-/*
-sx={{
-              display: "flex",
-              flexDirection: "column",
-              // marginBottom: "0px",
-              //marginTop: 3,
-              justifyContent: "center",
-              alignItems: "center",
-              //padding: "60px",
-            }}
-<Grid
-        container
-        spacing={20}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
-        <Grid item xs={12} md={5}>
-          <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
-            variant='h5'
-            component='div'
-          >
-            Lessons types
-          </Typography>
-
-          <Button variant='contained' onClick={() => setOpenLessonType(true)}>
-            Add Lesson Type
-          </Button>
-
-          <Demo>
-            <List dense={dense}>{lessonsTypes}</List>
-          </Demo>
-        </Grid>
-
-        <Grid item xs={12} md={5}>
-          <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
-            variant='h5'
-            component='div'
-          >
-            Lessons
-          </Typography>
-          <Button variant='contained' onClick={() => setOpenLesson(true)}>
-            Schedual a new Lesson
-          </Button>
-          <Demo>
-            <List dense={dense}>{renderLessons}</List>
-          </Demo>
-        </Grid>
-      </Grid>
-*/

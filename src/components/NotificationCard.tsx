@@ -5,9 +5,6 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { deleteNotification } from "../store/actions/notificationActions";
-
 interface Props {
   title: any;
   desc: any;

@@ -2,17 +2,18 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import { Button } from "@mui/material";
 import Header from "../components/Header";
 import React, { useState, useEffect } from "react";
-//import CustomEditor from "../components/customScheduler";
+import CustomEditor from "../components/CustomScheduler";
+import { useNavigate } from "react-router-dom";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-
 import { lessonService } from "../services/lessonService";
 import { FullLesson, Lesson } from "../models/lesson";
 import { deleteLesson } from "../store/actions/lessonActions";
-
-import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
-import { useNavigate } from "react-router-dom";
+import {
+  createCustomerToLesson,
+  deleteCustomerToLesson,
+} from "../store/actions/customerToLessonActions";
 
 // export const EVENTS = [
 //   {
@@ -84,14 +85,14 @@ import { useNavigate } from "react-router-dom";
 // ];
 
 const SchedulerPage: React.FC = () => {
-  const [optionId, setOptionId] = useState(0);
+  //const [optionId, setOptionId] = useState(0);
   const [lessonsEvents, setLessonsEvents] = useState<Array<any>>([]);
   const isAdmin = true;
 
   const dispatch = useAppDispatch();
-  const { all_lessons } = useAppSelector((state) => state.lesson);
+  //const { all_lessons } = useAppSelector((state) => state.lesson);
   const { user } = useAppSelector((state) => state.auth);
-  const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
+  // const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
   const navigate = useNavigate();
 
   const loadLessonsEvents = async () => {
@@ -127,21 +128,42 @@ const SchedulerPage: React.FC = () => {
     return newEvents;
   };
 
-  const handleConfirm = async (event: any, action: any): Promise<any> => {
+  const handleConfirm = async (
+    event: any,
+    action: any,
+    isRegister: any,
+    isUnsubscribe: any
+  ): Promise<any> => {
     console.log("user.id", user.id);
-    console.log("event", event);
+    console.log("event", event.event_id);
     console.log("action", action);
+    console.log("isUnsubscribe", isUnsubscribe);
 
-    if (action === "edit") {
-      if (event.option_id === 1) {
+    // if (action === "edit") {
+    /* if (event.option_id === 1) {
         const data = {
           lessonId: event.event_id,
           customerId: user.id,
         };
         dispatch(createCustomerToLesson(data));
-      }
-    } else if (action === "create") {
+      }*/
+    const data = {
+      lessonId: event.event_id,
+      customerId: user.id,
+    };
+    console.log("data", data.lessonId);
+
+    //if(isRegister === 1 && customers.length < max)
+    if (isRegister === 1) {
+      dispatch(createCustomerToLesson(data));
     }
+    //
+    else if (isUnsubscribe === 1) {
+      // console.log("data", data);
+      dispatch(deleteCustomerToLesson(data));
+    }
+    // } else if (action === "create") {
+    //}
   };
 
   const handleDelete = async (deletedId: any): Promise<any> => {
@@ -160,22 +182,9 @@ const SchedulerPage: React.FC = () => {
     <>
       <Header />
       <Scheduler
-        fields={[
-          {
-            name: "option_id",
-            type: "select",
-            // Should provide options with type:"select"
-            options: [
-              { id: 1, text: "Register", value: 1 },
-              { id: 2, text: "Dont Register", value: 2 },
-            ],
-            config: {
-              label: "Do you want to Register To Lesson?",
-              required: true,
-              errMsg: "Plz Select Choice",
-            },
-          },
-        ]}
+        customEditor={(scheduler) => (
+          <CustomEditor scheduler={scheduler} handleConfirm={handleConfirm} />
+        )}
         view='week'
         week={{
           weekDays: [0, 1, 2, 3, 4, 5],
@@ -189,7 +198,7 @@ const SchedulerPage: React.FC = () => {
           endHour: 22,
           step: 60,
         }}
-        onConfirm={handleConfirm}
+        // onConfirm={handleConfirm}
         onDelete={handleDelete}
         events={lessonsEvents}
         selectedDate={new Date()}

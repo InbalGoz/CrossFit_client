@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Modal, Button } from '@mui/material';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import React, { useState, useEffect } from "react";
+import { styled } from "@mui/material/styles";
+import { Box, Modal, Button } from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemText from "@mui/material/ListItemText";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 //import AssignmentIcon from '@mui/icons-material/Assignment';
-import LessonTypeForm from '../components/admin/LessonTypeForm';
-import LessonForm from '../components/admin/LessonForm';
-import EditIcon from '@mui/icons-material/Edit';
+import LessonTypeForm from "../components/admin/LessonTypeForm";
+import LessonForm from "../components/admin/LessonForm";
+import EditIcon from "@mui/icons-material/Edit";
 
 //redux
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   deleteLesson,
   getFullInfoLessons,
-} from '../store/actions/lessonActions';
+} from "../store/actions/lessonActions";
 import {
   getAllLessonTypes,
   deleteLessonType,
-} from '../store/actions/lessonTypeActions';
-import { FullLesson, Lesson } from '../models/lesson';
-import { LessonType } from '../models/lessonType';
+} from "../store/actions/lessonTypeActions";
+import { FullLesson, Lesson } from "../models/lesson";
+import { LessonType } from "../models/lessonType";
 
-const Demo = styled('div')(({ theme }) => ({
+const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 
 const style = {
-  position: 'absolute',
-  top: '48%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "48%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 700,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -58,9 +58,10 @@ const Lessons: React.FC = () => {
     null
   );
   const [choosenLesson, setChoosenLesson] = useState<FullLesson | null>(null);
+
   useEffect(() => {
     dispatch(getFullInfoLessons());
-
+    console.log("all_fullInfoLessons", all_fullInfoLessons);
     dispatch(getAllLessonTypes());
   }, []);
 
@@ -87,21 +88,20 @@ const Lessons: React.FC = () => {
           primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
           secondary={` Related categories : ${lesson.tags.map(
             (tag: any) => tag
-          )} ,  Date : ${new Date(`${lesson.startDate}`)
-            .toISOString()
-            .slice(0, 10)} ,
-          From: ${new Date(`${lesson.startDate}`).toLocaleTimeString('en', {
-            timeStyle: 'short',
+          )} ,
+           Number of participants: ${lesson.customerIds.length}  ,
+          Date : ${new Date(`${lesson.startDate}`).toISOString().slice(0, 10)} ,
+          From: ${new Date(`${lesson.startDate}`).toLocaleTimeString("en", {
+            timeStyle: "short",
             hour12: false,
-            timeZone: 'UTC',
-          })} to ${new Date(`${lesson.endDate}`).toLocaleTimeString('en', {
-            timeStyle: 'short',
+            timeZone: "UTC",
+          })} to ${new Date(`${lesson.endDate}`).toLocaleTimeString("en", {
+            timeStyle: "short",
             hour12: false,
-            timeZone: 'UTC',
+            timeZone: "UTC",
           })}
           `}
         />
-
         <IconButton onClick={() => handleEditLesson(lesson)}>
           <EditIcon />
         </IconButton>
@@ -168,11 +168,11 @@ const Lessons: React.FC = () => {
       <Grid
         container
         spacing={20}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Grid item xs={12} md={5}>
           <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
+            sx={{ mt: 6, mb: 2, fontFamily: "Nunito" }}
             variant='h5'
             component='div'
           >
@@ -190,7 +190,7 @@ const Lessons: React.FC = () => {
 
         <Grid item xs={12} md={5}>
           <Typography
-            sx={{ mt: 6, mb: 2, fontFamily: 'Nunito' }}
+            sx={{ mt: 6, mb: 2, fontFamily: "Nunito" }}
             variant='h5'
             component='div'
           >

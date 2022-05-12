@@ -23,11 +23,8 @@ import { logIn } from "../store/actions/authActions";
 const theme = createTheme();
 
 const Login: React.FC = () => {
-  const [newCustomer, setNewCustomer] = useState({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const allCustomers = useAppSelector(state => state.customer.all_customers);
-  //const oneCustomer = useAppSelector(state => state.customer.customer);
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
@@ -54,7 +51,6 @@ const Login: React.FC = () => {
     console.log(isAuthenticated);
     if (isAuthenticated && user) {
       navigate(`/home`);
-      //navigate(`/home/${customer.id}`);
     }
   }, [isAuthenticated]);
 

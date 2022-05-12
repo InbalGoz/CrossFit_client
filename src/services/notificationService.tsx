@@ -19,7 +19,6 @@ export const notificationService = {
 
 const BASE_URL = `${devConfig.base_url}/notifications`;
 
-//
 async function getAll(): Promise<Notification[]> {
   const res: Res = await axios.get(`${BASE_URL}`);
   return res.data.success

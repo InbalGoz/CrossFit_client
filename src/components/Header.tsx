@@ -3,7 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -11,30 +10,21 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.jpeg";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { logOut } from "../store/actions/authActions";
-import {
-  getNotificationsByCustomerId,
-  createNotification,
-} from "../store/actions/notificationActions";
 import { employeeService } from "../services/employeeService";
 import { Employee } from "../models/employee";
 
-interface Props {
-  isAdmin: any;
-}
-
 const Header: React.FC = () => {
-  const [isAdmin, setAdmin] = useState(true); //------false
+  const [isAdmin, setAdmin] = useState(false);
   let count = 0;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, user_type } = useAppSelector((state) => state.auth);
-  const { employee } = useAppSelector((state) => state.employee);
 
   const { all_notificationsById } = useAppSelector(
     (state) => state.notification
@@ -48,6 +38,7 @@ const Header: React.FC = () => {
       const logedEmployee: Employee = await employeeService.getLoggedEmployee(
         user.id
       );
+      console.log("logedEmployee header", logedEmployee);
       if (logedEmployee.isAdmin) {
         setAdmin(true);
       }
@@ -55,6 +46,7 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("user_type header", user_type);
     if (user && user_type == "employee") {
       getLogedEmployee();
     }
@@ -234,7 +226,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-
-/*{
-  (employee.isAdmin && renderAdminMenue) || (!employee.isAdmin && renderMenu);
-}*/

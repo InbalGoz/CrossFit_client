@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FullLesson, Lesson } from '../../models/lesson';
+import React, { useState, useEffect } from "react";
+import { FullLesson, Lesson } from "../../models/lesson";
 import {
   Container,
   Box,
@@ -13,30 +13,17 @@ import {
   FormControl,
   Select,
   MenuItem,
-} from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-//import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import momentTimezone from 'moment-timezone';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { he } from 'date-fns/locale';
+} from "@mui/material";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import Swal from "sweetalert2";
 
 //redux
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import {
-  createLesson,
-  editLesson,
-  getFullInfoLessons,
-} from '../../store/actions/lessonActions';
-import {
-  getAllLessonTypes,
-  getLessonType,
-} from '../../store/actions/lessonTypeActions';
-import {
-  getAllEmployees,
-  getEmployee,
-} from '../../store/actions/employeeActions';
-import Swal from 'sweetalert2';
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { createLesson, editLesson } from "../../store/actions/lessonActions";
+import { getAllLessonTypes } from "../../store/actions/lessonTypeActions";
+import { getAllEmployees } from "../../store/actions/employeeActions";
 
 interface Props {
   close: any;
@@ -44,12 +31,6 @@ interface Props {
 }
 
 const LessonForm: React.FC<Props> = ({ close, lesson }) => {
-  // const timeZoneFromServer = "Europe/Israel ";
-  // const { moment } = new AdapterMoment({ instance: momentTimezone });
-  // const dateWithTimeZone = moment().tz(timeZoneFromServer);
-
-  //momentTimezone.tz.setDefault("Europe/Israel");
-
   const dispatch = useAppDispatch();
   const all_employees = useAppSelector((state) => state.employee.all_employees);
   const all_lessonTypes = useAppSelector(
@@ -99,9 +80,9 @@ const LessonForm: React.FC<Props> = ({ close, lesson }) => {
       }
     } else {
       Swal.fire({
-        icon: 'error',
-        title: 'error',
-        text: 'Must fill all fields',
+        icon: "error",
+        title: "error",
+        text: "Must fill all fields",
       });
     }
     close();
@@ -138,15 +119,15 @@ const LessonForm: React.FC<Props> = ({ close, lesson }) => {
       <Box
         sx={{
           marginTop: 3,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Typography
           component='h1'
           variant='h5'
-          sx={{ color: '#8A2BE2', fontWeight: 'bold' }}
+          sx={{ color: "#8A2BE2", fontWeight: "bold" }}
         >
           Schedual new lesson:
         </Typography>
@@ -162,8 +143,6 @@ const LessonForm: React.FC<Props> = ({ close, lesson }) => {
                   //value={dateWithTimeZone}
                   value={formData.startDate}
                   onChange={(newValue: any) => {
-                    console.log('newValue', new Date(newValue));
-                    //setValue(newValue);
                     setFormData({
                       ...formData,
                       startDate: new Date(`${newValue}`),
@@ -235,7 +214,7 @@ const LessonForm: React.FC<Props> = ({ close, lesson }) => {
             onClick={handleSubmit}
             sx={{ mt: 3, mb: 2 }}
           >
-            {formData.id ? 'Edit' : 'Add'}
+            {formData.id ? "Edit" : "Add"}
           </Button>
         </Box>
       </Box>

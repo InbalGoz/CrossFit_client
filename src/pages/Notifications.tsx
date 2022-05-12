@@ -13,8 +13,6 @@ import {
 } from "../store/actions/notificationActions";
 
 const Notifications: React.FC = () => {
-  const [isAdmin, setAdmin] = useState(true);
-
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { all_notificationsById } = useAppSelector(

@@ -9,8 +9,6 @@ import Notifications from "./pages/Notifications";
 import SchedulerPage from "./pages/SchedulerPage";
 import "./App.css";
 
-import ListCmp from "./components/ListCmp";
-
 import PrivateRoute from "./utils/PrivateRoute";
 
 //redux

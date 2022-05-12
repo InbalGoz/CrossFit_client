@@ -14,7 +14,7 @@ import {
   Box,
 } from "@mui/material";
 
-//redux
+//Redux
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   getAllCustomers,
@@ -43,7 +43,7 @@ const CustomerTable: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const allCustomers = useAppSelector((state) => state.customer.all_customers);
-console.log({allCustomers});
+  //console.log({allCustomers});
   const cellStyle = { fontSize: "15pt" };
 
   //verify the customer
@@ -82,9 +82,13 @@ console.log({allCustomers});
       <TableCell style={cellStyle}>{customer.phone}</TableCell>
       <TableCell style={cellStyle}>{customer.email}</TableCell>
       <TableCell>
-     {  !customer.isVerified? <Button variant='contained' onClick={() => handleClick(customer.id)}>
-       verify
-        </Button>: 'verified' }
+        {!customer.isVerified ? (
+          <Button variant='contained' onClick={() => handleClick(customer.id)}>
+            verify
+          </Button>
+        ) : (
+          "verified"
+        )}
       </TableCell>
     </TableRow>
   ));

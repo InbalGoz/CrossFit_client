@@ -24,9 +24,8 @@ async function getAll(): Promise<Lesson[]> {
 }
 
 async function getRecommendedLessons(userId: number): Promise<Lesson[]> {
-  console.log("hiiii" , userId);
   const res: Res = await axios.get(`${BASE_URL}/recommended/${userId}`);
-  console.log({ res });
+ // console.log({ res });
 
   return res.data.success
     ? resService.handleSuccess(res)

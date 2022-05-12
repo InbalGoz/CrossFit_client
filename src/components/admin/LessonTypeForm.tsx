@@ -198,7 +198,6 @@ const LessonTypeForm = ({ close, lessonType }: any) => {
               fullWidth
               variant='contained'
               sx={{ mt: 3, mb: 2 }}
-              // onClick={handleAddLessonTypeClick}
             >
               {formData.id ? "Edit" : "Add"}
             </Button>

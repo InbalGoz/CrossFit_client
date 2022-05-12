@@ -1,16 +1,13 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
+/*import {
   faFacebook,
   faInstagram,
   faWhatsapp,
-} from "@fortawesome/free-brands-svg-icons";
+} from "@fortawesome/free-brands-svg-icons";*/
 import instegramIcon from "../assets/Instagram_logo_2016.svg.webp";
 import whatsappIcon from "../assets/whatsapp-icon.png";
 import faceBookIcon from "../assets/Facebook_Logo_2.png";
-import "./SocialFollow.css";
-
-// <img src={instegramIcon}></img>
 
 const SocialFollow = () => {
   return (
@@ -51,4 +48,3 @@ const SocialFollow = () => {
 };
 
 export default SocialFollow;
-//<FontAwesomeIcon icon={faWhatsapp} size='3x' />

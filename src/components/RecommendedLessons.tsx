@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { createCustomerToLesson } from "../store/actions/customerToLessonActions";
-import { createNotification } from "../store/actions/notificationActions";
 import { lessonService } from "../services/lessonService";
 import { Lesson } from "../models/lesson";
 import { useNavigate } from "react-router-dom";
@@ -89,7 +88,7 @@ const RecommendedLessons: React.FC = () => {
       />
     </ListItem>
   ));
-  //xs={12} md={5}
+
   return (
     <>
       <Grid

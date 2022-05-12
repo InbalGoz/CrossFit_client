@@ -8,28 +8,23 @@ import {
   TextField,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TopBar from "../components/TopBar";
 import { Link as ToLink, useNavigate } from "react-router-dom";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-//import { Customer } from "../models/customer";
 import Swal from "sweetalert2";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { register } from "../store/actions/authActions";
-import { customerSlice } from "../store/slices/customerSlice";
 
 const theme = createTheme();
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  //const oneCustomer = useAppSelector(state => state.customer.customer);
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
@@ -77,7 +72,6 @@ const Register: React.FC = () => {
       counter++;
     }
 
-    //console.log("counter", counter);
     if (counter > 0) {
       return false;
     } else {
@@ -114,9 +108,8 @@ const Register: React.FC = () => {
     console.log("isAuthenticated", isAuthenticated);
     if (isAuthenticated && user) {
       navigate(`/home`);
-      //navigate(`/home/${customer.id}`);
     }
-  }, [isAuthenticated]); //isAuthenticated, dispatch
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -247,8 +240,3 @@ const Register: React.FC = () => {
 };
 
 export default Register;
-
-/*
- <Link href="#" variant="body2">
-                <ToLink to='/login' style={{ textDecoration: 'none' , color:'blue'}}> Already have an account? Sign in</ToLink>
-                </Link>*/
