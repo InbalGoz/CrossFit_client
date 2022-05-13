@@ -105,7 +105,7 @@ const Register: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
+    // console.log("isAuthenticated", isAuthenticated);
     if (isAuthenticated && user) {
       navigate(`/home`);
     }

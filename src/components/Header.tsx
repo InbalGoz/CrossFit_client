@@ -38,7 +38,7 @@ const Header: React.FC = () => {
       const logedEmployee: Employee = await employeeService.getLoggedEmployee(
         user.id
       );
-      console.log("logedEmployee header", logedEmployee);
+      //console.log("logedEmployee header", logedEmployee);
       if (logedEmployee.isAdmin) {
         setAdmin(true);
       }
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("user_type header", user_type);
+    //console.log("user_type header", user_type);
     if (user && user_type == "employee") {
       getLogedEmployee();
     }

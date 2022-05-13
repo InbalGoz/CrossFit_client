@@ -1,8 +1,8 @@
-import axios from 'axios';
-import devConfig from '../env/dev';
-import { LessonType } from '../models/lessonType';
-import { resService } from './resService';
-import { Res } from '../models/res';
+import axios from "axios";
+import devConfig from "../env/dev";
+import { LessonType } from "../models/lessonType";
+import { resService } from "./resService";
+import { Res } from "../models/res";
 
 export const lessonTypeService = {
   createLessonType,
@@ -33,6 +33,7 @@ async function getLessonType(lessonType_id: number): Promise<LessonType> {
   const res: Res = await axios.get(`${BASE_URL}`, {
     params: { lessonType_id },
   });
+
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);
@@ -40,7 +41,7 @@ async function getLessonType(lessonType_id: number): Promise<LessonType> {
 
 async function editLessonType(lessonType: LessonType) {
   const res: Res = await axios.put(`${BASE_URL}/${lessonType.id}`, lessonType);
-  console.log({res});
+  // console.log({res});
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);

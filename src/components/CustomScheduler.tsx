@@ -9,6 +9,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Scheduler } from "@aldabil/react-scheduler";
+import { info } from "console";
 
 interface CustomEditorProps {
   scheduler: any;
@@ -26,27 +27,25 @@ const CustomScheduler: React.FC<CustomEditorProps> = ({
   const [isRegister, setIsRegister] = useState<any>({
     register: event?.register || "",
   });
-  const [isUnsubscribe, setIsUnsubscribe] = useState<any>({
-    unsubscribe: event?.unsubscribe || "",
-  });
+  // const [isUnsubscribe, setIsUnsubscribe] = useState<any>({
+  //  unsubscribe: event?.unsubscribe || "",
+  //});//
   const [error, setError] = useState<any>(null);
 
   const handRegisterleChange = (event: any) => {
     setIsRegister({ ...isRegister, register: event.target.value });
   };
-  const handleUnsubscribeChange = (event: any) => {
-    setIsUnsubscribe({ ...isUnsubscribe, unsubscribe: event.target.value });
-  };
+  // const handleUnsubscribeChange = (event: any) => {
+  //  setIsUnsubscribe({ ...isUnsubscribe, unsubscribe: event.target.value });
+  // };
 
-  const handleSubmit = async (action: any) => {
-    console.log("isUnsubscribe", isUnsubscribe.unsubscribe);
-    handleConfirm(
-      event,
-      action,
-      isRegister.register,
-      isUnsubscribe.unsubscribe
-    );
-    scheduler.close();
+  const handleSubmit = async () => {
+    try {
+      handleConfirm(event, isRegister.register);
+      scheduler.close();
+    } catch (err) {
+      console.log("error");
+    }
   };
 
   return (
@@ -64,24 +63,8 @@ const CustomScheduler: React.FC<CustomEditorProps> = ({
             label='Choose Employee:'
             onChange={handRegisterleChange}
           >
-            <MenuItem value={1}>Yes</MenuItem>
-            <MenuItem value={2}>No</MenuItem>
-          </Select>
-        </FormControl>
-
-        <FormControl fullWidth>
-          <InputLabel id='demo-simple-select-label'>
-            Want to Unsubscribe?
-          </InputLabel>
-          <Select
-            value={isUnsubscribe.unsubscribe}
-            labelId='demo-simple-select-label'
-            id='demo-simple-select'
-            label='Choose Employee:'
-            onChange={handleUnsubscribeChange}
-          >
-            <MenuItem value={1}>Yes</MenuItem>
-            <MenuItem value={2}>No</MenuItem>
+            <MenuItem value={1}>Register</MenuItem>
+            <MenuItem value={2}>Unsubscribe</MenuItem>
           </Select>
         </FormControl>
       </div>

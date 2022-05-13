@@ -16,12 +16,12 @@ const RecommendedLessons: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
 
   const getRecommendedLessons = async () => {
-    console.log({ user });
+    //console.log({ user });
 
     if (user) {
       const recommendedLessons: Lesson[] =
         await lessonService.getRecommendedLessons(user.id);
-      console.log("recommendedLessons", recommendedLessons);
+      // console.log("recommendedLessons", recommendedLessons);
       setLessons(recommendedLessons || []);
     }
   };
@@ -35,7 +35,7 @@ const RecommendedLessons: React.FC = () => {
   }
 
   const handleAddToLesson = (lesson_id: any, lesson_title: any) => {
-    console.log("user.id recomended", user.id);
+    // console.log("user.id recomended", user.id);
     // if(customers.length < max)
     const data = {
       lessonId: lesson_id,

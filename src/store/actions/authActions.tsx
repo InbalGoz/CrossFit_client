@@ -1,11 +1,11 @@
-import { customerSlice } from '../slices/customerSlice';
-import { AnyAction, ThunkAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { Customer } from '../../models/customer';
-import { customerService } from '../../services/customerService';
-import { authSlice } from '../slices/authSlice';
-import { Employee } from '../../models/employee';
-import { authService } from '../../services/authService';
+import { customerSlice } from "../slices/customerSlice";
+import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import { Customer } from "../../models/customer";
+import { customerService } from "../../services/customerService";
+import { authSlice } from "../slices/authSlice";
+import { Employee } from "../../models/employee";
+import { authService } from "../../services/authService";
 
 export const customerActions = customerSlice.actions;
 export const authActions = authSlice.actions;
@@ -36,7 +36,7 @@ export const register = (
     const res = await customerService.registerCustomer(formData);
 
     if (!res) {
-      console.log('not registerd');
+      //console.log('not registerd');
     } else {
       dispatch(authActions.registration(res));
     }
@@ -50,8 +50,8 @@ export const logIn = (
   return async (dispatch, getState) => {
     const res: { token: string; user: Customer | Employee; type: string } =
       await authService.login(formData);
-    console.log({ res });
-    localStorage.setItem('token', res.token);
+    //console.log({ res });
+    localStorage.setItem("token", res.token);
     dispatch(authSlice.actions.setUser(res));
   };
 };

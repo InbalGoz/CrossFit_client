@@ -48,7 +48,7 @@ const Login: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(isAuthenticated);
+    // console.log(isAuthenticated);
     if (isAuthenticated && user) {
       navigate(`/home`);
     }

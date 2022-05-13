@@ -25,7 +25,7 @@ async function getLoggedUser(
 }
 
 async function login(formData: any) {
-  console.log({ formData });
+  //console.log({ formData });
 
   const res: Res = await axios.get(`${BASE_URL}/login`, {
     params: {

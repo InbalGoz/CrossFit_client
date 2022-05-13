@@ -48,7 +48,6 @@ const style = {
 
 const Lessons: React.FC = () => {
   const dispatch = useAppDispatch();
-  // const [fullInfolessons, setFullInfolessons] = useState<Array<Object>>([]);
   const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
   const { all_fullInfoLessons } = useAppSelector((state) => state.lesson);
   const dense = false;
@@ -61,52 +60,51 @@ const Lessons: React.FC = () => {
 
   useEffect(() => {
     dispatch(getFullInfoLessons());
-    console.log("all_fullInfoLessons", all_fullInfoLessons);
     dispatch(getAllLessonTypes());
   }, []);
 
   const renderLessons = all_fullInfoLessons.map((lesson: any, index) => (
-    <>
-      <ListItem
-        key={index}
-        secondaryAction={
-          <IconButton
-            edge='end'
-            aria-label='delete'
-            onClick={() => handleDelteLesson(lesson.id)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        }
-      >
-        <ListItemAvatar>
-          <Avatar>
-            <FitnessCenterIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
-          secondary={` Related categories : ${lesson.tags.map(
-            (tag: any) => tag
-          )} ,
-           Number of participants: ${lesson.customerIds.length}  ,
+    <ListItem
+      key={index}
+      secondaryAction={
+        <IconButton
+          edge='end'
+          aria-label='delete'
+          onClick={() => handleDelteLesson(lesson.id)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      }
+    >
+      <ListItemAvatar>
+        <Avatar>
+          <FitnessCenterIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
+        secondary={` Related categories : ${lesson.tags.map(
+          (tag: any) => tag
+        )} ,
+           Number of participants: ${
+             (lesson.customerIds && lesson.customerIds.length) || 0
+           }  ,
           Date : ${new Date(`${lesson.startDate}`).toISOString().slice(0, 10)} ,
           From: ${new Date(`${lesson.startDate}`).toLocaleTimeString("en", {
             timeStyle: "short",
             hour12: false,
             timeZone: "UTC",
           })} to ${new Date(`${lesson.endDate}`).toLocaleTimeString("en", {
-            timeStyle: "short",
-            hour12: false,
-            timeZone: "UTC",
-          })}
+          timeStyle: "short",
+          hour12: false,
+          timeZone: "UTC",
+        })}
           `}
-        />
-        <IconButton onClick={() => handleEditLesson(lesson)}>
-          <EditIcon />
-        </IconButton>
-      </ListItem>
-    </>
+      />
+      <IconButton onClick={() => handleEditLesson(lesson)}>
+        <EditIcon />
+      </IconButton>
+    </ListItem>
   ));
 
   const handleDelteLesson = async (lesson_id: any) => {

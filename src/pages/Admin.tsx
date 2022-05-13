@@ -8,7 +8,7 @@ const Admin = () => {
   const { adminActions } = useParams();
 
   useEffect(() => {
-    console.log("action", adminActions);
+    //console.log("action", adminActions);
   }, []);
 
   return (

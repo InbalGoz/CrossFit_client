@@ -35,7 +35,7 @@ async function getRecommendedLessons(userId: number): Promise<Lesson[]> {
 async function getFullInfoLessons(): Promise<FullLesson[]> {
   const res: Res = await axios.get(`${BASE_URL}/fullInfo`);
 
-  console.log('serviceeee', res);
+ // console.log('serviceeee', res);
   return res.data.success
     ? resService.handleSuccess(res)
     : resService.handleErr(res);

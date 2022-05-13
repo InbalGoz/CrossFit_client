@@ -50,11 +50,11 @@ export const customerSlice = createSlice({
     // },
     verifyCustomer(state, action: PayloadAction<Customer>) {
       const copy = [...state.all_customers];
-      console.log(action.payload);
+      // console.log(action.payload);
       const idx = copy.findIndex((c) => c.id === action.payload.id);
       if (idx !== -1) {
         copy.splice(idx, 1, action.payload);
-        console.log({ copy, idx });
+        // console.log({ copy, idx });
         state.all_customers = copy;
       }
     },
@@ -68,7 +68,7 @@ export const customerSlice = createSlice({
     //   state.isAuthenticated = true;
     // },
     login(state, action) {
-      console.log("all_customers action.payload", action.payload);
+      // console.log("all_customers action.payload", action.payload);
 
       state.all_customers = [...state.all_customers, action.payload];
 

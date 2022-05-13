@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Header from "../components/Header";
 import SocialFollow from "../components/SocialFollow";
 import RecommendedLessons from "../components/RecommendedLessons";
-import backgroundImage from "../assets/backGroundImage.jpeg";
+import backgroundImage from "../assets/gym_2.png";
 
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -29,7 +29,7 @@ const Home = () => {
     //console.log({ user });
     if (user) {
       const logedCustomer: Customer = await customerService.getById(user.id);
-      console.log({ logedCustomer });
+      // console.log({ logedCustomer });
       setCustomer(logedCustomer || null);
     }
   };
@@ -49,7 +49,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log("user_type", user_type);
+    // console.log("user_type", user_type);
     if (user && user_type === "customer") {
       getCustomer();
     } else if (user && user_type === "employee") {
@@ -57,7 +57,7 @@ const Home = () => {
     }
   }, []);
 
-  console.log("here");
+  // console.log("here");
   // console.log({ employee });
   //||
   // (user_type == "employee" &&
@@ -70,7 +70,7 @@ const Home = () => {
         spacing={20}
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={5}>
           <Box
             sx={{
               display: "flex",

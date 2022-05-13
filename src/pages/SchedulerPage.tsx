@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 //redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { lessonService } from "../services/lessonService";
+import { lessonTypeService } from "../services/lessonTypeService";
+import { LessonType } from "../models/lessonType";
+import { employeeService } from "../services/employeeService";
+import { Employee } from "../models/employee";
 import { FullLesson, Lesson } from "../models/lesson";
 import { deleteLesson } from "../store/actions/lessonActions";
 import {
@@ -87,38 +91,53 @@ import {
 const SchedulerPage: React.FC = () => {
   //const [optionId, setOptionId] = useState(0);
   const [lessonsEvents, setLessonsEvents] = useState<Array<any>>([]);
-  const isAdmin = true;
-
+  const [isAdmin, setAdmin] = useState(false);
   const dispatch = useAppDispatch();
-  //const { all_lessons } = useAppSelector((state) => state.lesson);
-  const { user } = useAppSelector((state) => state.auth);
-  // const { all_lessonTypes } = useAppSelector((state) => state.lessonType);
+  const { user, user_type } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const loadLessonsEvents = async () => {
     const newfullInfolessons: FullLesson[] =
       await lessonService.getFullInfoLessons();
 
-    console.log("Scheduler after get full lessons", newfullInfolessons);
+    // console.log("Scheduler after get full lessons", newfullInfolessons);
     const newArr = await getEvents(newfullInfolessons);
-    console.log("lessonsEvents hhhh", newArr);
+    //  console.log("lessonsEvents hhhh", newArr);
     setLessonsEvents(newArr);
   };
 
+  const getLogedEmployee = async () => {
+    if (user) {
+      const logedEmployee: Employee = await employeeService.getLoggedEmployee(
+        user.id
+      );
+      //console.log("logedEmployee header", logedEmployee);
+      if (logedEmployee.isAdmin) {
+        setAdmin(true);
+      }
+    }
+  };
+
   useEffect(() => {
+    if (user && user_type == "employee") {
+      getLogedEmployee();
+    }
     loadLessonsEvents();
   }, []);
+
   if (!user) {
     navigate("/");
     return <div>loading</div>;
   }
 
   const getEvents = (newfullInfolessons: any) => {
+    console.log({ newfullInfolessons });
     const newEvents = newfullInfolessons.map((lesson_event: any) => {
       const tempStartDate = new Date(`${lesson_event.startDate}`);
       const tempEndDate = new Date(`${lesson_event.endDate}`);
+
       lesson_event = {
-        event_id: lesson_event.id,
+        event_id: lesson_event.lessonId,
         title: lesson_event.title,
         start: tempStartDate,
         end: tempEndDate,
@@ -128,17 +147,7 @@ const SchedulerPage: React.FC = () => {
     return newEvents;
   };
 
-  const handleConfirm = async (
-    event: any,
-    action: any,
-    isRegister: any,
-    isUnsubscribe: any
-  ): Promise<any> => {
-    console.log("user.id", user.id);
-    console.log("event", event.event_id);
-    console.log("action", action);
-    console.log("isUnsubscribe", isUnsubscribe);
-
+  const handleConfirm = async (event: any, isRegister: any): Promise<any> => {
     // if (action === "edit") {
     /* if (event.option_id === 1) {
         const data = {
@@ -151,14 +160,27 @@ const SchedulerPage: React.FC = () => {
       lessonId: event.event_id,
       customerId: user.id,
     };
-    console.log("data", data.lessonId);
 
-    //if(isRegister === 1 && customers.length < max)
+    //  if(isRegister === 1 && customers.length < max){}
+
+    const lesson_event: Lesson = await lessonService.getLesson(event.event_id);
+    const lessonType_event: LessonType = await lessonTypeService.getLessonType(
+      lesson_event.lessonTypeId
+    );
+    //lesson_event.lessonTypeId
+    console.log("lesson_event.customers.length", lesson_event);
+    console.log("lessonType_event.max", lessonType_event);
+
+    // if (
+    //  isRegister === 1 &&
+    //  lesson_event.customers &&
+    //  lesson_event.customers.length < lessonType_event.max
+    // )
     if (isRegister === 1) {
       dispatch(createCustomerToLesson(data));
     }
     //
-    else if (isUnsubscribe === 1) {
+    else if (isRegister === 2) {
       // console.log("data", data);
       dispatch(deleteCustomerToLesson(data));
     }
