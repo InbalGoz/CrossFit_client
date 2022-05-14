@@ -22,6 +22,11 @@ const RecommendedLessons: React.FC = () => {
       const recommendedLessons: Lesson[] =
         await lessonService.getRecommendedLessons(user.id);
       // console.log("recommendedLessons", recommendedLessons);
+      // const lessonWithEmployeeName = recommendedLessons.map(l => {
+      //   const currentEmployee = all_employees.find(e => e.id === l.employeeId)
+      //  console.log({currentEmployee});
+      //   return { ...l, name: currentEmployee?.fName + ' ' + currentEmployee?.lName }
+      // })
       setLessons(recommendedLessons || []);
     }
   };
@@ -54,6 +59,7 @@ const RecommendedLessons: React.FC = () => {
 
     // dispatch(createNotification(registerNotification));
   };
+  console.log({ lessons });
   const lessonsListItems = lessons.map((lesson: any, index: any) => (
     <ListItem
       key={index}
@@ -69,7 +75,7 @@ const RecommendedLessons: React.FC = () => {
     >
       <ListItemText
         sx={{ marginLeft: 4 }}
-        primary={`${lesson.title} lesson with ${lesson.employeeFName} ${lesson.employeeLName}`}
+        primary={`${lesson.title} lesson with ${lesson.name} `}
         secondary={` Related categories : ${lesson.tags.map(
           (tag: any) => tag
         )} ,  Date : ${new Date(`${lesson.startDate}`)
@@ -77,14 +83,14 @@ const RecommendedLessons: React.FC = () => {
           .slice(0, 10)} ,
         From:
         ${new Date(`${lesson.startDate}`).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })} to : ${new Date(`${lesson.endDate}`).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })}`}
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })} to : ${new Date(`${lesson.endDate}`).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}`}
       />
     </ListItem>
   ));

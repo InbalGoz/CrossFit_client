@@ -23,6 +23,7 @@ const SocialFollow = () => {
       <a
         href='https://www.facebook.com'
         className='facebook social'
+        target='_blank'
         style={{ color: "#4968ad", margin: "0 1rem" }}
       >
         <img src={faceBookIcon} width='50' height='50' />
@@ -31,6 +32,7 @@ const SocialFollow = () => {
       <a
         href='https://www.instagram.com'
         className='instagram_social'
+        target='_blank'
         style={{ color: "#517fa4" }}
       >
         <img src={instegramIcon} width='50' height='50' />
@@ -39,6 +41,7 @@ const SocialFollow = () => {
       <a
         href='https://wa.me/972505661676'
         className='whatsapp social'
+        target='_blank'
         style={{ color: "green", margin: "0 1rem" }}
       >
         <img src={whatsappIcon} width='50' height='50' />

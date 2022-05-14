@@ -3,8 +3,11 @@ import { customerToLessonSlice } from "../slices/customerToLessonSlice";
 import { RootState } from "../store";
 import { CustomerToLesson } from "../../models/customerToLesson";
 import { customerToLessonService } from "../../services/customerToLessonService";
+import { lessonSlice } from "../slices/lessonsSlice";
+import { getFullInfoLessons } from "./lessonActions";
 
 export const customerToLessonActions = customerToLessonSlice.actions;
+export const lessonActions = lessonSlice.actions;
 
 export const getAllLessons = (): ThunkAction<
   void,
@@ -33,9 +36,10 @@ export const createCustomerToLesson = (
   return async (dispatch, getState) => {
     const res = await customerToLessonService.createCTL(data);
 
-    // console.log('res', res);
+    console.log('res', res);
     if (res) {
-      dispatch(customerToLessonActions.createCustomerToLesson(res));
+      // dispatch(customerToLessonActions.createCustomerToLesson(res));
+      dispatch(getFullInfoLessons());
     }
   };
 };
@@ -45,6 +49,7 @@ export const deleteCustomerToLesson = (
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
     const res = await customerToLessonService.deleteCTL(data);
-    dispatch(customerToLessonActions.deleteCustomerToLesson(res));
+    // dispatch(customerToLessonActions.deleteCustomerToLesson(res));
+    dispatch(getFullInfoLessons());
   };
 };

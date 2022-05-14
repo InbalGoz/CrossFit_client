@@ -27,6 +27,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (token) {
       dispatch(getLoggedUser(token));
+      
     }
 
     // log user out from all tabs if they log out in one tab
