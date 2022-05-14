@@ -62,10 +62,11 @@ export const createLesson = (
 };
 
 export const editLesson = (
-  lesson: Lesson
+  lessonId: any
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch, getState) => {
-    const res = await lessonService.editLesson(lesson);
+    const res = await lessonService.editLesson(lessonId);
+    console.log("res action", res);
     dispatch(lessonActions.editLesson(res));
   };
 };

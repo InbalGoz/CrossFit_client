@@ -19,7 +19,7 @@ function handleErr(res: Res) {
 }
 
 function handleSuccess(res: Res) {
- //console.log("res.data.data" , res.data.data)
+ console.log("res.data.data" , res.data.data)
   
   /*Swal.fire({ 
     icon: 'error',

@@ -29,10 +29,12 @@ async function getAll(): Promise<LessonType[]> {
     : resService.handleErr(res);
 }
 
-async function getLessonType(lessonType_id: number): Promise<LessonType> {
-  const res: Res = await axios.get(`${BASE_URL}`, {
-    params: { lessonType_id },
-  });
+async function getLessonType(id: any): Promise<LessonType> {
+  //const res: Res = await axios.get(`${BASE_URL}`, {
+  //  params: { id },
+  //});
+
+  const res: Res = await axios.get(`${BASE_URL}/${id}`);
 
   return res.data.success
     ? resService.handleSuccess(res)
