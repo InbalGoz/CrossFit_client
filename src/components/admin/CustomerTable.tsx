@@ -43,6 +43,7 @@ const CustomerTable: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const allCustomers = useAppSelector((state) => state.customer.all_customers);
+  
   //console.log({allCustomers});
   const cellStyle = { fontSize: "15pt" };
 

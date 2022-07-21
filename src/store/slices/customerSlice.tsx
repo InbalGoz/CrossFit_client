@@ -33,7 +33,9 @@ export const customerSlice = createSlice({
   initialState,
   reducers: {
     setCustomers(state, action: PayloadAction<Customer[]>) {
-      state.all_customers = action.payload;
+      const customers = action.payload
+      customers.sort((a, b) => a.isVerified ? 1 : -1)
+      state.all_customers = customers;
     },
     // getCustomer(state, action: PayloadAction<Customer>) {
     //  state.customer = action.payload;
